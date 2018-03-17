@@ -2,7 +2,6 @@
 {
     public class ConfigInfo
     { 
-        public int GovInteractChannelId { get; set; }
         public int ApplyDateLimit { get; set; } // 办理时限
         public int ApplyAlertDate { get; set; } // 预警
         public int ApplyYellowAlertDate { get; set; } // 黄牌

@@ -15,12 +15,12 @@ namespace SS.GovInteract.Pages
 
         public static string GetRedirectUrl(int siteId, int channelId)
         {
-            return Main.Instance.PluginApi.GetPluginUrl($"{nameof(ModalAdinistrators)}.aspx?siteId={siteId}&channelId={channelId}");
+            return $"{nameof(ModalAdinistrators)}.aspx?siteId={siteId}&channelId={channelId}";
         }
 
         public static string GetOpenWindowString(int siteId,int channelId)
         {  
-           return Utils.GetOpenLayerString("负责人员设置", Main.Instance.PluginApi.GetPluginUrl($"{nameof(ModalAdinistrators)}.aspx?siteId={siteId}&channelId={channelId}"), 0, 0);
+           return Utils.GetOpenLayerString("负责人员设置", $"{nameof(ModalAdinistrators)}.aspx?siteId={siteId}&channelId={channelId}", 0, 0);
         }
 
         public void Page_Load(object sender, EventArgs e)

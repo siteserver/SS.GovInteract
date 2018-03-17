@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic; 
-
+﻿using System.Collections.Generic; 
 using SiteServer.Plugin;
 using SS.GovInteract.Model; 
 
@@ -8,46 +6,36 @@ namespace SS.GovInteract.Core
 {
     public class InteractManager
     {
-        public static void Initialize(int siteId)
-        {
-            var configInfo = Main.Instance.GetConfigInfo(siteId);
-            if (configInfo.GovInteractChannelId > 0)
-            { 
-                var nodeInfo = Main.Instance.ChannelApi.GetChannelInfo(siteId, configInfo.GovInteractChannelId);
-                if (nodeInfo == null || nodeInfo.ContentModelPluginId != Main.Instance.Id)
-                {
-                    configInfo.GovInteractChannelId = 0;
-                } 
-            }  
+        //public static void Initialize(int siteId)
+        //{
+        //    var channelInfoList = GetInteractChannelInfoList(siteId);
 
-            if (configInfo.GovInteractChannelId == 0)
-            {
-                var nodeInfo = Main.Instance.ChannelApi.NewInstance(siteId);
-                nodeInfo.ContentModelPluginId = Main.Instance.Id;
-                nodeInfo.ChannelName = "互动交流";
-                configInfo.GovInteractChannelId = Main.Instance.ChannelApi.Insert(siteId, nodeInfo);
-                Main.Instance.ConfigApi.SetConfig(siteId, configInfo); 
-            }
-        }
+        //    if (channelInfoList.Count == 0)
+        //    {
+        //        var channelInfo = Main.Instance.ChannelApi.NewInstance(siteId);
+        //        channelInfo.ParentId = siteId;
+        //        channelInfo.ContentModelPluginId = Main.Instance.Id;
+        //        channelInfo.ChannelName = "互动交流";
+        //        Main.Instance.ChannelApi.Insert(siteId, channelInfo);
+        //    }
+        //}
 
-        public static List<IChannelInfo> GetNodeInfoList(int siteId)
+        public static List<IChannelInfo> GetInteractChannelInfoList(int siteId)
         {
-            var nodeInfoList = new List<IChannelInfo>();
-            var configInfo = Main.Instance.GetConfigInfo(siteId);
-            if (configInfo.GovInteractChannelId > 0)
+            var channelInfoList = new List<IChannelInfo>();
+
+            var channelIdList = Main.Instance.ChannelApi.GetChannelIdList(siteId);
+            foreach (var channelId in channelIdList)
             {
-                var channelIdList = Main.Instance.ChannelApi.GetChannelIdList(siteId);
-                foreach (var channelId in channelIdList)
+                var channelInfo = Main.Instance.ChannelApi.GetChannelInfo(siteId, channelId);
+                if (channelInfo.ContentModelPluginId == Main.Instance.Id)
                 {
-                    var nodeInfo = Main.Instance.ChannelApi.GetChannelInfo(siteId, channelId);
-                    if (nodeInfo.ContentModelPluginId == Main.Instance.Id)
-                    {
-                        nodeInfoList.Add(nodeInfo);
-                    }
+                    channelInfoList.Add(channelInfo);
                 }
             }
-            return nodeInfoList;
-        } 
+
+            return channelInfoList;
+        }
 
         public static void AddDefaultTypeInfos(int siteId, int channelId)
         {

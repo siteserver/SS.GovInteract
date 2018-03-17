@@ -15,12 +15,12 @@ namespace SS.GovInteract.Pages
 
         public static string GetOpenWindowStringToAdd(int siteId, int channelId)
         {
-            return Utils.GetOpenLayerString("添加办件类型", Main.Instance.PluginApi.GetPluginUrl($"{nameof(ModalTypeAdd)}.aspx?siteId={siteId}&channelId={channelId}"), 450, 350);
+            return Utils.GetOpenLayerString("添加办件类型", $"{nameof(ModalTypeAdd)}.aspx?siteId={siteId}&channelId={channelId}", 450, 350);
         }
 
         public static string GetOpenWindowStringToEdit(int siteId, int channelId, int id)
         {
-            return Utils.GetOpenLayerString("修改办件类型", Main.Instance.PluginApi.GetPluginUrl($"{nameof(ModalTypeAdd)}.aspx?siteId={siteId}&channelId={channelId}&id={id}"), 450, 350);
+            return Utils.GetOpenLayerString("修改办件类型", $"{nameof(ModalTypeAdd)}.aspx?siteId={siteId}&channelId={channelId}&id={id}", 450, 350);
         }
 
         public void Page_Load(object sender, EventArgs e)

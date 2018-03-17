@@ -15,7 +15,7 @@ namespace SS.GovInteract.Pages
 
         public static string GetRedirectUrl(int siteId, int channelId)
         {
-            return Main.Instance.PluginApi.GetPluginUrl($"{nameof(ModalTypeList)}.aspx?siteId={siteId}&channelId={channelId}");
+            return $"{nameof(ModalTypeList)}.aspx?siteId={siteId}&channelId={channelId}";
         }
 
         public static string GetOpenWindowStringToList(int siteId,int channelId)

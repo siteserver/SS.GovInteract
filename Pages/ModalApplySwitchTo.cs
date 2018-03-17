@@ -1,0 +1,90 @@
+﻿using SS.GovInteract.Core;
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
+using SS.GovInteract.Model;
+
+namespace SS.GovInteract.Pages
+{
+	public class ModalApplySwitchTo : PageBase
+    {
+        public Literal LtlMessage;
+
+        protected TextBox tbSwitchToRemark;
+        public HtmlControl divAddDepartment;
+        public Literal ltlDepartmentName;
+        public Literal ltlUserName;
+
+        private int _channelId;
+        private List<int> _idArrayList;
+
+	    public static string GetOpenWindowString(int siteId, int channelId)
+	    {
+            return LayerUtils.GetOpenScript("转办办件", $"{nameof(ModalApplySwitchTo)}.aspx?siteId={siteId}&channelId={channelId}", 500, 500);
+	    }
+
+	    public void Page_Load(object sender, EventArgs e)
+        {
+            _channelId = Utils.ToInt(Request.QueryString["channelId"]);
+            _idArrayList = Utils.StringCollectionToIntList(Request.QueryString["IDCollection"]);
+
+			if (!IsPostBack)
+			{
+                divAddDepartment.Attributes.Add("onclick", ModalDepartmentSelect.GetOpenWindowString(SiteId, _channelId));
+                ltlDepartmentName.Text = DepartmentManager.GetDepartmentName(AuthRequest.AdminInfo.DepartmentId);
+                ltlUserName.Text = AuthRequest.AdminInfo.DisplayName;
+			}
+		}
+
+        public void Submit_OnClick(object sender, EventArgs e)
+        {
+			var isChanged = false;
+				
+            try
+            {
+                var switchToDepartmentID = Utils.ToInt(Request.Form["switchToDepartmentID"]);
+                if (switchToDepartmentID == 0)
+                {
+                    LtlMessage.Text = Utils.GetMessageHtml("转办失败，必须选择转办部门！", false);
+                    return;
+                }
+                var switchToDepartmentName = DepartmentManager.GetDepartmentName(switchToDepartmentID);
+
+                foreach (int contentID in _idArrayList)
+                {
+                    var contentInfo = Main.Instance.ContentApi.GetContentInfo(SiteId, _channelId, contentID);
+                    var state = EGovInteractStateUtils.GetEnumType(contentInfo.GetString(ContentAttribute.State));
+
+                    if (state != EGovInteractState.Denied && state != EGovInteractState.Checked)
+                    {
+                        contentInfo.Set(ContentAttribute.DepartmentId, switchToDepartmentID.ToString());
+                        Main.Instance.ContentApi.Update(SiteId, contentInfo.ChannelId, contentInfo);
+
+                        if (!string.IsNullOrEmpty(tbSwitchToRemark.Text))
+                        {
+                            var remarkInfo = new RemarkInfo(0, SiteId, contentInfo.ChannelId, contentID, ERemarkTypeUtils.GetValue(ERemarkType.SwitchTo), tbSwitchToRemark.Text, AuthRequest.AdminInfo.DepartmentId, AuthRequest.AdminName, DateTime.Now);
+                            Main.RemarkDao.Insert(remarkInfo);
+                        }
+
+                        ApplyManager.LogSwitchTo(SiteId, contentInfo.ChannelId, contentID, switchToDepartmentName, AuthRequest.AdminName, AuthRequest.AdminInfo.DepartmentId);
+                    }
+                }
+
+                isChanged = true;
+            }
+			catch(Exception ex)
+			{
+                LtlMessage.Text = Utils.GetMessageHtml(ex.Message, false);
+                isChanged = false;
+			}
+
+			if (isChanged)
+			{
+                LayerUtils.Close(Page);
+            }
+		}
+
+	}
+}

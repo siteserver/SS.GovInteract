@@ -36,8 +36,8 @@
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="SiteServer.Plugin, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\SiteServer.Plugin.1.4.0\lib\net45\SiteServer.Plugin.dll</HintPath>
+    <Reference Include="SiteServer.Plugin, Version=1.4.42.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\SiteServer.Plugin.1.4.42-beta\lib\net45\SiteServer.Plugin.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -51,21 +51,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\DateTimeTextBox.cs" />
     <Compile Include="Controls\SqlPager.cs" />
+    <Compile Include="Core\AlertUtils.cs" />
     <Compile Include="Core\CacheUtils.cs" />
     <Compile Include="Core\DepartmentManager.cs" />
     <Compile Include="Core\ApplyManager.cs" />
+    <Compile Include="Core\EGovInteractState.cs" />
     <Compile Include="Core\InteractManager.cs" />
-    <Compile Include="Core\MenuManager.cs" />
+    <Compile Include="Core\LayerUtils.cs" />
+    <Compile Include="Core\Permissions.cs" />
     <Compile Include="Model\AdministratorInfo.cs" />
     <Compile Include="Model\ChannelInfo.cs" />
     <Compile Include="Model\ContentAttribute.cs" />
     <Compile Include="Model\DepartmentInfo.cs" />
+    <Compile Include="Model\EBoolean.cs" />
     <Compile Include="Model\ECharset.cs" />
+    <Compile Include="Model\EDateFormatType.cs" />
     <Compile Include="Model\ELimitType.cs" />
     <Compile Include="Model\ELogType.cs" />
     <Compile Include="Model\EPermissionType.cs" />
     <Compile Include="Model\ERemarkType.cs" />
+    <Compile Include="Model\ETimeFormatType.cs" />
     <Compile Include="Model\LogInfo.cs" />
     <Compile Include="Model\PermissionsInfo.cs" />
     <Compile Include="Model\RemarkInfo.cs" />
@@ -74,6 +81,27 @@
     <Compile Include="Main.cs" />
     <Compile Include="Model\ConfigInfo.cs" />
     <Compile Include="Model\TypeInfo.cs" />
+    <Compile Include="Pages\ModalApplyRedo.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\ModalApplySwitchTo.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\ModalApplyTranslate.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\ModalApplyComment.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\ModalApplyFlow.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\ModalApplyView.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\ModalApplyReply.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Pages\ModalTypeAdd.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -92,10 +120,40 @@
     <Compile Include="Pages\PageBase.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="Pages\PageBaseList.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\PageCheck.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\PageAccept.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\PageListCheck.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\PageListReply.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\PageListAccept.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\PageReply.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\PageMain.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\PageInit.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Pages\PageDetailConfiguration.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Pages\PageCommonConfiguration.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\PageListAll.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -174,6 +232,7 @@
     <Content Include="assets\plugin-utils\css\plugin-utils.css" />
     <Content Include="assets\plugin-utils\fonts\fontawesome-webfont.svg" />
     <Content Include="assets\plugin-utils\fonts\ionicons.svg" />
+    <Content Include="assets\sweetalert\sweetalert.min.js" />
     <Content Include="assets\tree\brand.gif" />
     <Content Include="assets\tree\category.gif" />
     <Content Include="assets\tree\content.gif" />

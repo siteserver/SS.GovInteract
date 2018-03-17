@@ -9,8 +9,6 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Xml;
 using SS.GovInteract.Model;
-using SiteServer.Plugin;
-using SS.GovInteract.Provider;
 
 namespace SS.GovInteract.Core
 {
@@ -425,8 +423,11 @@ namespace SS.GovInteract.Core
             while (elementIe.MoveNext())
             {
                 var attr = (XmlAttribute)elementIe.Current;
-                var attributeName = attr.Name;
-                attributes.Add(attributeName, attr.Value);
+                if (attr != null)
+                {
+                    var attributeName = attr.Name;
+                    attributes.Add(attributeName, attr.Value);
+                }
             }
         }
 
@@ -513,14 +514,17 @@ namespace SS.GovInteract.Core
                         while (elementIe.MoveNext())
                         {
                             var attr = (XmlAttribute)elementIe.Current;
-                            var attributeName = attr.Name.ToLower();
-                            if (attributeName == "href")
+                            if (attr != null)
                             {
-                                attributes.Add(attr.Name, "javascript:;");
-                            }
-                            else if (attributeName != "onclick")
-                            {
-                                attributes.Add(attr.Name, attr.Value);
+                                var attributeName = attr.Name.ToLower();
+                                if (attributeName == "href")
+                                {
+                                    attributes.Add(attr.Name, "javascript:;");
+                                }
+                                else if (attributeName != "onclick")
+                                {
+                                    attributes.Add(attr.Name, attr.Value);
+                                }
                             }
                         }
                         attributes.Add("onclick", clickString);
@@ -845,16 +849,39 @@ namespace SS.GovInteract.Core
             return objStr.Replace("_sqlquote_", "'").Replace("_sqldoulbeline_", "--").Replace("_sqlleftparenthesis_", "\\(").Replace("_sqlrightparenthesis_", "\\)");
         }
 
-        public static int ToInt(string str)
+        public static int ToInt(string str, int defaultVal = 0)
         {
             int i;
-            return int.TryParse(str, out i) ? i : 0;
+            return int.TryParse(str, out i) ? i : defaultVal;
         } 
 
         public static bool ToBool(string str)
         {
             bool i;
             return bool.TryParse(str, out i) && i;
+        }
+
+        public static DateTime ToDateTime(string dateTimeStr)
+        {
+            return ToDateTime(dateTimeStr, DateTime.Now);
+        }
+
+        public static DateTime ToDateTime(string dateTimeStr, DateTime defaultValue)
+        {
+            var datetime = defaultValue;
+            if (!string.IsNullOrEmpty(dateTimeStr))
+            {
+                if (!DateTime.TryParse(dateTimeStr.Trim(), out datetime))
+                {
+                    datetime = defaultValue;
+                }
+                return datetime;
+            }
+            if (datetime <= DateTime.MinValue)
+            {
+                datetime = DateTime.Now;
+            }
+            return datetime;
         }
 
         public static string MaxLengthText(string inputString, int maxLength)
@@ -879,74 +906,77 @@ namespace SS.GovInteract.Core
                     var isOneBytesChar = false;
                     var lastChar = ' ';
 
-                    foreach (var singleChar in retval.ToCharArray())
+                    if (retval != null)
                     {
-                        builder.Append(singleChar);
-
-                        if (IsTwoBytesChar(singleChar))
+                        foreach (var singleChar in retval.ToCharArray())
                         {
-                            length += 2;
-                            if (length >= totalLength)
+                            builder.Append(singleChar);
+
+                            if (IsTwoBytesChar(singleChar))
                             {
-                                lastChar = singleChar;
-                                break;
+                                length += 2;
+                                if (length >= totalLength)
+                                {
+                                    lastChar = singleChar;
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                length += 1;
+                                if (length == totalLength)
+                                {
+                                    isOneBytesChar = true;//已经截取到需要的字数，再多截取一位
+                                }
+                                else if (length > totalLength)
+                                {
+                                    lastChar = singleChar;
+                                    break;
+                                }
+                                else
+                                {
+                                    isOneBytesChar = !isOneBytesChar;
+                                }
+                            }
+                        }
+                        if (isOneBytesChar && length > totalLength)
+                        {
+                            builder.Length--;
+                            var theStr = builder.ToString();
+                            retval = builder.ToString();
+                            if (char.IsLetter(lastChar))
+                            {
+                                for (var i = theStr.Length - 1; i > 0; i--)
+                                {
+                                    var theChar = theStr[i];
+                                    if (!IsTwoBytesChar(theChar) && char.IsLetter(theChar))
+                                    {
+                                        retval = retval.Substring(0, i - 1);
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+                                }
+                                //int index = retval.LastIndexOfAny(new char[] { ' ', '\t', '\n', '\v', '\f', '\r', '\x0085' });
+                                //if (index != -1)
+                                //{
+                                //    retval = retval.Substring(0, index);
+                                //}
                             }
                         }
                         else
                         {
-                            length += 1;
-                            if (length == totalLength)
-                            {
-                                isOneBytesChar = true;//已经截取到需要的字数，再多截取一位
-                            }
-                            else if (length > totalLength)
-                            {
-                                lastChar = singleChar;
-                                break;
-                            }
-                            else
-                            {
-                                isOneBytesChar = !isOneBytesChar;
-                            }
+                            retval = builder.ToString();
                         }
-                    }
-                    if (isOneBytesChar && length > totalLength)
-                    {
-                        builder.Length--;
-                        var theStr = builder.ToString();
-                        retval = builder.ToString();
-                        if (char.IsLetter(lastChar))
+
+                        var isCut = decodedInputString != retval;
+                        retval = HttpUtility.HtmlEncode(retval);
+
+                        if (isCut && endString != null)
                         {
-                            for (var i = theStr.Length - 1; i > 0; i--)
-                            {
-                                var theChar = theStr[i];
-                                if (!IsTwoBytesChar(theChar) && char.IsLetter(theChar))
-                                {
-                                    retval = retval.Substring(0, i - 1);
-                                }
-                                else
-                                {
-                                    break;
-                                }
-                            }
-                            //int index = retval.LastIndexOfAny(new char[] { ' ', '\t', '\n', '\v', '\f', '\r', '\x0085' });
-                            //if (index != -1)
-                            //{
-                            //    retval = retval.Substring(0, index);
-                            //}
+                            retval += endString;
                         }
-                    }
-                    else
-                    {
-                        retval = builder.ToString();
-                    }
-
-                    var isCut = decodedInputString != retval;
-                    retval = HttpUtility.HtmlEncode(retval);
-
-                    if (isCut && endString != null)
-                    {
-                        retval += endString;
                     }
                 }
             }
@@ -1049,6 +1079,135 @@ namespace SS.GovInteract.Core
                 if (builder.Length != 0) builder.Remove(builder.Length - separatorStr.Length, separatorStr.Length);
             }
             return builder.ToString();
+        }
+
+        public static int GetStartCount(char startChar, string content)
+        {
+            if (content == null)
+            {
+                return 0;
+            }
+            var count = 0;
+
+            foreach (var theChar in content)
+            {
+                if (theChar == startChar)
+                {
+                    count++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return count;
+        }
+
+        public static int GetStartCount(string startString, string content)
+        {
+            if (content == null)
+            {
+                return 0;
+            }
+            var count = 0;
+
+            while (true)
+            {
+                if (content.StartsWith(startString))
+                {
+                    count++;
+                    content = content.Remove(0, startString.Length);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return count;
+        }
+
+        public static bool Contains(string text, string inner)
+        {
+            return text?.IndexOf(inner, StringComparison.Ordinal) >= 0;
+        }
+
+        public static string GetRedirectStringWithCheckBoxValue(string redirectUrl, string checkBoxServerId, string checkBoxClientId, string emptyAlertText)
+        {
+            return
+                $@"if (!_alertCheckBoxCollection(document.getElementsByName('{checkBoxClientId}'), '{emptyAlertText}')){{_goto('{redirectUrl}' + '&{checkBoxServerId}=' + _getCheckBoxCollectionValue(document.getElementsByName('{checkBoxClientId}')));}};return false;";
+        }
+
+        public static string GetRedirectStringWithCheckBoxValueAndAlert(string redirectUrl, string checkBoxServerId, string checkBoxClientId, string emptyAlertText, string confirmAlertText)
+        {
+            return
+                $@"_confirmCheckBoxCollection(document.getElementsByName('{checkBoxClientId}'), '{emptyAlertText}', '{confirmAlertText}', '{redirectUrl}' + '&{checkBoxServerId}=' + _getCheckBoxCollectionValue(document.getElementsByName('{checkBoxClientId}')));return false;";
+        }
+
+        public static string GetRedirectStringWithConfirm(string redirectUrl, string confirmString)
+        {
+            return $@"_confirm('{confirmString}', '{redirectUrl}');return false;";
+        }
+
+        public static string GetRedirectString(string redirectUrl)
+        {
+            return $@"window.location.href='{redirectUrl}';return false;";
+        }
+
+        public static string GetDateAndTimeString(DateTime datetime, EDateFormatType dateFormat, ETimeFormatType timeFormat)
+        {
+            return $"{GetDateString(datetime, dateFormat)} {GetTimeString(datetime, timeFormat)}";
+        }
+
+        public static string GetDateAndTimeString(DateTime datetime)
+        {
+            return GetDateAndTimeString(datetime, EDateFormatType.Day, ETimeFormatType.ShortTime);
+        }
+
+        public static string GetDateString(DateTime datetime)
+        {
+            return GetDateString(datetime, EDateFormatType.Day);
+        }
+
+        public static string GetDateString(DateTime datetime, EDateFormatType dateFormat)
+        {
+            var format = string.Empty;
+            if (dateFormat == EDateFormatType.Year)
+            {
+                format = "yyyy年MM月";
+            }
+            else if (dateFormat == EDateFormatType.Month)
+            {
+                format = "MM月dd日";
+            }
+            else if (dateFormat == EDateFormatType.Day)
+            {
+                format = "yyyy-MM-dd";
+            }
+            else if (dateFormat == EDateFormatType.Chinese)
+            {
+                format = "yyyy年M月d日";
+            }
+            return datetime.ToString(format);
+        }
+
+        public static string GetTimeString(DateTime datetime)
+        {
+            return GetTimeString(datetime, ETimeFormatType.ShortTime);
+        }
+
+        public static string GetTimeString(DateTime datetime, ETimeFormatType timeFormat)
+        {
+            var retval = string.Empty;
+            if (timeFormat == ETimeFormatType.LongTime)
+            {
+                retval = datetime.ToLongTimeString();
+            }
+            else if (timeFormat == ETimeFormatType.ShortTime)
+            {
+                retval = datetime.ToShortTimeString();
+            }
+            return retval;
         }
     }
 }

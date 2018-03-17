@@ -18,7 +18,7 @@ namespace SS.GovInteract.Pages
 
         public static string GetOpenWindowString(int siteId, int channelId)
         {
-            return Utils.GetOpenLayerString("负责部门设置", Main.Instance.PluginApi.GetPluginUrl($"{nameof(ModalDepartmentSelect)}.aspx?siteId={siteId}&channelId={channelId}"), 700, 0);
+            return Utils.GetOpenLayerString("负责部门设置", $"{nameof(ModalDepartmentSelect)}.aspx?siteId={siteId}&channelId={channelId}", 700, 0);
         } 
 
         public void Page_Load(object sender, EventArgs e)
@@ -83,15 +83,15 @@ namespace SS.GovInteract.Pages
             }
 
             var check = "";
-            if (departmentIdList.Contains(departmentInfo.DepartmentId))
+            if (departmentIdList.Contains(departmentInfo.Id))
             {
                check = "checked";
             } 
 
             itemBuilder.Append($@"
 <span class=""checkbox checkbox-primary"" style=""padding-left: 0px;"">
-    <input type=""checkbox"" id=""DepartmentIDCollection_{departmentInfo.DepartmentId}"" name=""DepartmentIDCollection"" value=""{departmentInfo.DepartmentId}"" {check} />
-    <label for=""DepartmentIDCollection_{departmentInfo.DepartmentId}""> {departmentInfo.DepartmentName} </label>
+    <input type=""checkbox"" id=""DepartmentIDCollection_{departmentInfo.Id}"" name=""DepartmentIDCollection"" value=""{departmentInfo.Id}"" {check} />
+    <label for=""DepartmentIDCollection_{departmentInfo.Id}""> {departmentInfo.DepartmentName} </label>
 </span>
 ");
 

@@ -22,7 +22,7 @@ namespace SS.GovInteract.Pages
 
         public static string GetRedirectUrl(int siteId)
         {
-            return Main.Instance.PluginApi.GetPluginUrl($"{nameof(PageCommonConfiguration)}.aspx?siteId={siteId}");
+            return $"{nameof(PageCommonConfiguration)}.aspx?siteId={siteId}";
         }
 
         public void Page_Load(object sender, EventArgs e)

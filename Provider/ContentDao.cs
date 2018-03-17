@@ -16,56 +16,6 @@ namespace SS.GovInteract.Provider
         {  
             new TableColumn
             {
-                AttributeName = ContentAttribute.State,
-                DataType = DataType.VarChar,
-                DataLength = 10,
-                InputStyle = new InputStyle
-                {
-                    InputType = InputType.Radio,
-                    DisplayName = "状态",
-                    IsRequired = true,
-                    ListItems = new List<ListItem>
-                    {
-                        new ListItem
-                        {
-                            Text= "保持不变",
-                            Value = "-100",
-                            Selected = true
-                        },
-                        new ListItem
-                        {
-                            Text= "草稿",
-                            Value = "-99",
-                            Selected = false
-                        },
-                        new ListItem
-                        {
-                            Text= "待审核",
-                            Value = "0",
-                            Selected = false
-                        },
-                        new ListItem
-                        {
-                            Text= "终审通过",
-                            Value = "1",
-                            Selected = false
-                        }
-                    }
-                }
-            },
-            new TableColumn
-            {
-                AttributeName = ContentAttribute.IpAddress,
-                DataType = DataType.VarChar,
-                DataLength = 50,
-                InputStyle = new InputStyle
-                {
-                    InputType = InputType.Text,
-                    DisplayName = "IP地址",
-                }
-            }, 
-            new TableColumn
-            {
                 AttributeName = ContentAttribute.RealName,
                 DataType = DataType.VarChar,
                 DataLength = 200,
@@ -293,7 +243,7 @@ namespace SS.GovInteract.Provider
                 InputStyle = new InputStyle
                 {
                     InputType = InputType.File,
-                    DisplayName = "附件",
+                    DisplayName = "附件"
                 }
             },
             new TableColumn
@@ -303,8 +253,20 @@ namespace SS.GovInteract.Provider
                 InputStyle = new InputStyle
                 {
                     InputType = InputType.Customize,
-                    DisplayName = "提交对象",
+                    DisplayName = "提交部门"
                 }
+            },
+            new TableColumn
+            {
+                AttributeName = ContentAttribute.State,
+                DataType = DataType.VarChar,
+                DataLength = 50
+            },
+            new TableColumn
+            {
+                AttributeName = ContentAttribute.IpAddress,
+                DataType = DataType.VarChar,
+                DataLength = 50
             }
         };
 
@@ -316,84 +278,126 @@ namespace SS.GovInteract.Provider
             ConnectionString = Main.Instance.ConnectionString;
             Helper = Main.Instance.DataApi;
         }
+        
+//        public static string GetDepartmentsHtml(int siteId, int channelId, IAttributes attributes)
+//        {
+//            var pairList = new List<KeyValuePair<string, DropDownList>>();
 
-        public static Dictionary<string, Func<int, int, IAttributes, string>> ContentFormCustomized
-            => new Dictionary<string, Func<int, int, IAttributes, string>>
-            {
-                {
-                    ContentAttribute.DepartmentId, GetDepartmentIdHtml
-                }
-            };
+//            var ddlDepartmentId = new DropDownList
+//            {
+//                ID = "DepartmentID",
+//                CssClass = "form-control"
+//            };
+              
+//            var departmentInfoList = Main.DepartmentDao.GetDepartmentInfoList();
+//            var isLastNodeArray = new bool[departmentInfoList.Count];
+//            foreach (var departmentInfo in departmentInfoList)
+//            {
+//                var listItem = new ListItem(Utils.GetSelectOptionText(departmentInfo.DepartmentName, departmentInfo.ParentsCount, departmentInfo.IsLastNode, isLastNodeArray),
+//                    departmentInfo.Id.ToString());
+//                ddlDepartmentId.Items.Add(listItem);
+//            }
+//            Utils.SelectSingleItem(ddlDepartmentId, attributes.GetString(nameof(ContentAttribute.DepartmentId)));
+//            pairList.Add(new KeyValuePair<string, DropDownList>("提交部门", ddlDepartmentId));
 
-        public static string GetDepartmentIdHtml(int siteId, int channelId, IAttributes attributes)
+//            var builder = new StringBuilder();
+//            builder.Append(@"<div class=""row"">");
+//            var count = 0;
+//            foreach (var keyValuePair in pairList)
+//            {
+//                if (count > 1)
+//                {
+//                    builder.Append(@"</div><div class=""row m-t-10"">");
+//                    count = 0;
+//                }
+//                builder.Append($@"
+//<div class=""col-xs-2 control-label"">{keyValuePair.Key}</div>
+//<div class=""col-xs-4"">
+//    {Utils.GetControlRenderHtml(keyValuePair.Value)}
+//</div>
+//");
+//                count++;
+//            }
+//            builder.Append("</div>"); 
+
+//            return builder.ToString();
+//        }
+
+        //public static void ContentFormSubmited(int siteId, int channelId, IContentInfo contentInfo, IAttributes form)
+        //{
+        //    var departmentId = form.GetInt("DepartmentID"); 
+        //    if (departmentId == 0)
+        //    {
+        //        throw new Exception("请选择正确的提交对象");
+        //    } 
+        //    contentInfo.Set(nameof(ContentAttribute.DepartmentId), departmentId.ToString()); 
+        //}
+
+        public void UpdateState(int siteId, int channelId, int contentId, IContentInfo contentInfo, EGovInteractState state)
         {
-            var departmentId = attributes.GetString(nameof(ContentAttribute.DepartmentId));
+            contentInfo.Set(ContentAttribute.State, EGovInteractStateUtils.GetValue(state));
+            contentInfo.CheckedLevel = 0;
 
-            return $@"
-<div class=""form-group"">
-    <label class=""col-sm-1 control-label"">提交对象</label>
-    <div class=""col-sm-6"">
-        {GetDepartmentsHtml(siteId, channelId, attributes)}
-    </div>
-    <div class=""col-sm-5"">
-    </div>
-</div> 
-";
+            contentInfo.IsChecked = state == EGovInteractState.Checked;
+            Main.Instance.ContentApi.Update(siteId, channelId, contentInfo);
         }
 
-        public static string GetDepartmentsHtml(int siteId, int channelId, IAttributes attributes)
+        public void UpdateDepartmentId(int siteId, int channelId, int contentId, int departmentId)
         {
-            var pairList = new List<KeyValuePair<string, DropDownList>>();
+            var contentInfo = Main.Instance.ContentApi.GetContentInfo(siteId, channelId, contentId);
+            contentInfo.Set(ContentAttribute.DepartmentId, departmentId.ToString());
+            Main.Instance.ContentApi.Update(siteId, channelId, contentInfo);
+        }
 
-            var ddlDepartmentId = new DropDownList
-            {
-                ID = "DepartmentID",
-                CssClass = "form-control"
-            };
-              
-            var departmentInfoList = Main.DepartmentDao.GetDepartmentInfoList();
-            var isLastNodeArray = new bool[departmentInfoList.Count];
-            foreach (var departmentInfo in departmentInfoList)
-            {
-                var listItem = new ListItem(Utils.GetSelectOptionText(departmentInfo.DepartmentName, departmentInfo.ParentsCount, departmentInfo.IsLastNode, isLastNodeArray),
-                    departmentInfo.DepartmentId.ToString());
-                ddlDepartmentId.Items.Add(listItem);
-            }
-            Utils.SelectSingleItem(ddlDepartmentId, attributes.GetString(nameof(ContentAttribute.DepartmentId)));
-            pairList.Add(new KeyValuePair<string, DropDownList>("提交对象", ddlDepartmentId)); 
+        public IContentInfo GetContentInfo(int siteId, int channelId, string queryCode)
+        {
+            var list = Main.Instance.ContentApi.GetContentInfoList(siteId, channelId, $"{ContentAttribute.QueryCode} = '{queryCode}'", string.Empty, 0, 0);
+            if (list != null && list.Count > 0) return list[0];
+            return null;
+        }
 
-            var builder = new StringBuilder();
-            builder.Append(@"<div class=""row"">");
-            var count = 0;
-            foreach (var keyValuePair in pairList)
+        public string GetSelectStringByState(int siteId, int channelId, params EGovInteractState[] states)
+        {
+            var builder = new StringBuilder($"SELECT * FROM {TableName} WHERE {nameof(IContentInfo.SiteId)} = {siteId} AND {nameof(IContentInfo.ChannelId)} = {channelId} AND (");
+            
+            foreach (var state in states)
             {
-                if (count > 1)
-                {
-                    builder.Append(@"</div><div class=""row m-t-10"">");
-                    count = 0;
-                }
-                builder.Append($@"
-<div class=""col-xs-2 control-label"">{keyValuePair.Key}</div>
-<div class=""col-xs-4"">
-    {Utils.GetControlRenderHtml(keyValuePair.Value)}
-</div>
-");
-                count++;
+                builder.Append($" {ContentAttribute.State} = '{EGovInteractStateUtils.GetValue(state)}' OR");
             }
-            builder.Append("</div>"); 
+            builder.Length -= 2;
+            builder.Append(")");
 
             return builder.ToString();
         }
 
-
-        public static void ContentFormSubmited(int siteId, int channelId, IContentInfo contentInfo, IAttributes form)
+        public string GetSelectString(int siteId, int channelId)
         {
-            var departmentId = form.GetInt("DepartmentID"); 
-            if (departmentId == 0)
+            return $"SELECT * FROM {TableName} WHERE {nameof(IContentInfo.SiteId)} = {siteId} AND {nameof(IContentInfo.ChannelId)} = {channelId}";
+        }
+
+        public string GetSelectString(int siteId, int channelId, string state, string dateFrom, string dateTo, string keyword)
+        {
+            var builder = new StringBuilder($"SELECT * FROM {TableName} WHERE {nameof(IContentInfo.SiteId)} = {siteId} AND {nameof(IContentInfo.ChannelId)} = {channelId}");
+
+            if (!string.IsNullOrEmpty(state))
             {
-                throw new Exception("请选择正确的提交对象");
-            } 
-            contentInfo.Set(nameof(ContentAttribute.DepartmentId), departmentId.ToString()); 
+                builder.Append($" AND ({ContentAttribute.State} = '{state}')");
+            }
+            if (!string.IsNullOrEmpty(dateFrom))
+            {
+                builder.Append($" AND ({nameof(IContentInfo.AddDate)} >= '{dateFrom}')");
+            }
+            if (!string.IsNullOrEmpty(dateTo))
+            {
+                builder.Append($" AND ({nameof(IContentInfo.AddDate)} <= '{dateTo}')");
+            }
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                var filterKeyword = Utils.FilterSql(keyword);
+                builder.Append($" AND (Title LIKE '{filterKeyword}' OR Content LIKE '{filterKeyword}')");
+            }
+
+            return builder.ToString();
         }
     }
 }

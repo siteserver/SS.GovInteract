@@ -18,7 +18,7 @@ namespace SS.GovInteract.Pages
 
         public static string GetRedirectUrl(int siteId)
         {
-            return Main.Instance.PluginApi.GetPluginUrl($"{nameof(PageDetailConfiguration)}.aspx?siteId={siteId}");
+            return $"{nameof(PageDetailConfiguration)}.aspx?siteId={siteId}";
         }
 
         public void Page_Load(object sender, EventArgs e)
@@ -28,17 +28,17 @@ namespace SS.GovInteract.Pages
             if (!IsPostBack)
             {
                 var channelIdList = Main.Instance.ChannelApi.GetChannelIdList(SiteId);
-                var nodeInfoList = new ArrayList();
+                var channelInfoList = new ArrayList();
                 foreach (var channelId in channelIdList)
                 { 
-                    var nodeInfo = Main.Instance.ChannelApi.GetChannelInfo(SiteId, channelId);
-                    if (nodeInfo != null & nodeInfo.ContentModelPluginId == Main.Instance.Id)
+                    var channelInfo = Main.Instance.ChannelApi.GetChannelInfo(SiteId, channelId);
+                    if (channelInfo != null & channelInfo.ContentModelPluginId == Main.Instance.Id)
                     {
-                        nodeInfoList.Add(nodeInfo);
+                        channelInfoList.Add(channelInfo);
                     }
                 }
 
-                RptContents.DataSource = nodeInfoList; 
+                RptContents.DataSource = channelInfoList; 
                 RptContents.ItemDataBound += RptContents_ItemDataBound;
                 RptContents.DataBind();
             }
@@ -48,14 +48,14 @@ namespace SS.GovInteract.Pages
         {
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             { 
-                var nodeInfo = (IChannelInfo)e.Item.DataItem;
+                var channelInfo = (IChannelInfo)e.Item.DataItem;
                 var ltlName = (Literal)e.Item.FindControl("ltlName");
                 var ltlAction = (Literal)e.Item.FindControl("ltlAction");
-                ltlName.Text = nodeInfo.ChannelName;
-                ltlAction.Text = $@"<a href='javascript:;' onclick=""{ModalDepartmentSelect.GetOpenWindowString(SiteId, nodeInfo.Id)}"">负责部门设置</a> &nbsp;&nbsp;&nbsp;&nbsp;
-                                    <a href='javascript:;' onclick=""{ModalAdinistrators.GetOpenWindowString(SiteId, nodeInfo.Id)}"">负责人员设置</a> &nbsp;&nbsp;&nbsp;&nbsp;
+                ltlName.Text = channelInfo.ChannelName;
+                ltlAction.Text = $@"<a href='javascript:;' onclick=""{ModalDepartmentSelect.GetOpenWindowString(SiteId, channelInfo.Id)}"">负责部门设置</a> &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <a href='javascript:;' onclick=""{ModalAdinistrators.GetOpenWindowString(SiteId, channelInfo.Id)}"">负责人员设置</a> &nbsp;&nbsp;&nbsp;&nbsp;
                                     <a href='#'>邮件/短信发送</a> &nbsp;&nbsp;&nbsp;&nbsp;
-                                    <a href='javascript:;' onclick=""{ModalTypeList.GetOpenWindowStringToList(SiteId, nodeInfo.Id)}"">办件类型管理</a> 
+                                    <a href='javascript:;' onclick=""{ModalTypeList.GetOpenWindowStringToList(SiteId, channelInfo.Id)}"">办件类型管理</a> 
                                     ";  
             }  
         }

@@ -28,7 +28,7 @@ namespace SS.GovInteract.Provider
 
             var parameters = new[]
             {
-                _helper.GetParameter(nameof(DepartmentInfo.DepartmentId), departmentId)
+                _helper.GetParameter(nameof(DepartmentInfo.Id), departmentId)
             };
 
             using (var rdr = _helper.ExecuteReader(_connectionString, sqlString, parameters))
@@ -62,7 +62,7 @@ namespace SS.GovInteract.Provider
             var departmentInfo = new DepartmentInfo();
 
             var i = 0;
-            departmentInfo.DepartmentId = rdr.IsDBNull(i) ? 0 : rdr.GetInt32(i);
+            departmentInfo.Id = rdr.IsDBNull(i) ? 0 : rdr.GetInt32(i);
             i++;
             departmentInfo.DepartmentName = rdr.IsDBNull(i) ? string.Empty : rdr.GetString(i);
             i++;
@@ -206,7 +206,7 @@ WHERE (ParentsPath LIKE '{departmentId},%') OR
             var departmentInfoList = GetDepartmentInfoList();
             foreach (var departmentInfo in departmentInfoList)
             {
-                var pair = new KeyValuePair<int, DepartmentInfo>(departmentInfo.DepartmentId, departmentInfo);
+                var pair = new KeyValuePair<int, DepartmentInfo>(departmentInfo.Id, departmentInfo);
                 list.Add(pair);
             }
 

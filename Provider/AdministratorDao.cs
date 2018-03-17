@@ -20,13 +20,13 @@ namespace SS.GovInteract.Provider
         public ArrayList GetUserNameArrayList(int departmentId, bool isAll)
         {
             var arraylist = new ArrayList();
-            string sqlSelect = $"SELECT UserName FROM siteserver_Administrator WHERE DepartmentId = {departmentId}";
+            string sqlSelect = $"SELECT UserName FROM siteserver_Administrator WHERE Id = {departmentId}";
             if (isAll)
             {
                 var departmentIdList = Main.DepartmentDao.GetDepartmentIdListForDescendant(departmentId);
                 departmentIdList.Add(departmentId);
                 sqlSelect =
-                    $"SELECT UserName FROM siteserver_Administrator WHERE DepartmentId IN ({Utils.ObjectCollectionToString(departmentIdList)})";
+                    $"SELECT UserName FROM siteserver_Administrator WHERE Id IN ({Utils.ObjectCollectionToString(departmentIdList)})";
             }
 
             using (var rdr = _helper.ExecuteReader(_connectionString, sqlSelect))
@@ -44,7 +44,7 @@ namespace SS.GovInteract.Provider
         {
             AdministratorInfo info = null;
 
-            string sqlString = "SELECT UserName, DisplayName, DepartmentId FROM siteserver_Administrator WHERE UserName = @UserName";
+            string sqlString = "SELECT UserName, DisplayName, Id FROM siteserver_Administrator WHERE UserName = @UserName";
             var parameters = new[]
             {
                 _helper.GetParameter("UserName", userName)
