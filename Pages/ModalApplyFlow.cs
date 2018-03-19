@@ -1,6 +1,5 @@
 ﻿using SS.GovInteract.Core;
 using System;
-using System.Collections.Specialized;
 using System.Text;
 using System.Web.UI.WebControls;
 using SS.GovInteract.Model;
@@ -9,10 +8,8 @@ namespace SS.GovInteract.Pages
 {
 	public class ModalApplyFlow : PageBase
 	{
-        public Literal LtlMessage;
-        public Literal ltlFlows;
+        public Literal LtlFlows;
 
-        private int _channelId;
         private int _contentId;
 
         public static string GetOpenWindowString(int siteId, int channelId, int contentId)
@@ -22,40 +19,36 @@ namespace SS.GovInteract.Pages
 
 		public void Page_Load(object sender, EventArgs e)
         {
-            _channelId = Utils.ToInt(Request.QueryString["channelId"]);
             _contentId = Utils.ToInt(Request.QueryString["contentId"]);
 
-            if (!IsPostBack)
-			{
-                if (_contentId > 0)
+            if (IsPostBack) return;
+
+            if (_contentId > 0)
+            {
+                var logInfoList = Main.LogDao.GetLogInfoList(SiteId, _contentId);
+                var builder = new StringBuilder();
+
+                var count = logInfoList.Count;
+                var i = 1;
+                foreach (var logInfo in logInfoList)
                 {
-                    var logInfoArrayList = Main.LogDao.GetLogInfoArrayList(SiteId, _contentId);
-                    var builder = new StringBuilder();
-
-                    var count = logInfoArrayList.Count;
-                    var i = 1;
-                    foreach (LogInfo logInfo in logInfoArrayList)
+                    if (logInfo.DepartmentId > 0)
                     {
-                        if (logInfo.DepartmentId > 0)
-                        {
-                            builder.Append(
-                                $@"<tr class=""info""><td class=""center""> {DepartmentManager.GetDepartmentName(
-                                    logInfo.DepartmentId)} {ELogTypeUtils.GetText(ELogTypeUtils.GetEnumType(logInfo.LogType))}<br />{Utils
-                                    .GetDateAndTimeString(logInfo.AddDate)} </td></tr>");
-                        }
-                        else
-                        {
-                            builder.Append(
-                                $@"<tr class=""info""><td class=""center""> {ELogTypeUtils.GetText(
-                                    ELogTypeUtils.GetEnumType(logInfo.LogType))}<br />{Utils.GetDateAndTimeString(logInfo.AddDate)} </td></tr>");
-                        }
-                        if (i++ < count) builder.Append(@"<tr><td class=""center""><img src=""../pic/flow.gif"" /></td></tr>");
+                        builder.Append(
+                            $@"<tr class=""info""><td class=""text-center""> {DepartmentManager.GetDepartmentName(
+                                logInfo.DepartmentId)} {ELogTypeUtils.GetText(ELogTypeUtils.GetEnumType(logInfo.LogType))}<br />{Utils
+                                .GetDateAndTimeString(logInfo.AddDate)} </td></tr>");
                     }
-                    ltlFlows.Text = builder.ToString();
+                    else
+                    {
+                        builder.Append(
+                            $@"<tr class=""info""><td class=""text-center""> {ELogTypeUtils.GetText(
+                                ELogTypeUtils.GetEnumType(logInfo.LogType))}<br />{Utils.GetDateAndTimeString(logInfo.AddDate)} </td></tr>");
+                    }
+                    if (i++ < count) builder.Append(@"<tr><td class=""text-center""><img src=""assets/images/flow.gif"" /></td></tr>");
                 }
-
-				
-			}
-		}
+                LtlFlows.Text = builder.ToString();
+            }
+        }
 	}
 }

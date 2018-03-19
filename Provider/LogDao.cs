@@ -158,24 +158,24 @@ namespace SS.GovInteract.Provider
             return enumerable;
         }
 
-        public ArrayList GetLogInfoArrayList(int siteId, int contentId)
+        public List<LogInfo> GetLogInfoList(int siteId, int contentId)
         {
-            var arraylist = new ArrayList();
+            var list = new List<LogInfo>();
 
             string sqlString =
                 $"SELECT {nameof(LogInfo.Id)}, {nameof(LogInfo.SiteId)}, {nameof(LogInfo.ChannelId)}, {nameof(LogInfo.ContentId)}, {nameof(LogInfo.DepartmentId)}, {nameof(LogInfo.UserName)}, {nameof(LogInfo.LogType)}, {nameof(LogInfo.IpAddress)}, {nameof(LogInfo.AddDate)}, {nameof(LogInfo.Summary)} FROM {TableName} WHERE {nameof(LogInfo.SiteId)} = {siteId} AND {nameof(LogInfo.ContentId)} = {contentId} ORDER BY {nameof(LogInfo.Id)}";
-
 
             using (var rdr = _helper.ExecuteReader(_connectionString, sqlString))
             {
                 while (rdr.Read())
                 { 
                     var logInfo = GetLogInfo(rdr);
-                    arraylist.Add(logInfo);
+                    list.Add(logInfo);
                 }
                 rdr.Close();
             }
-            return arraylist;
+
+            return list;
         }
 
         public string GetSelectCommend(int siteId)
@@ -248,19 +248,10 @@ namespace SS.GovInteract.Provider
         {
             if (rdr == null) return null;
             var i = 0;
-            return new LogInfo
-            {
-                Id = _helper.GetInt(rdr, i++),
-                SiteId = _helper.GetInt(rdr, i++),
-                ChannelId = _helper.GetInt(rdr, i++),
-                ContentId = _helper.GetInt(rdr, i++),
-                DepartmentId = _helper.GetInt(rdr, i++),
-                UserName = _helper.GetString(rdr, i++),
-                LogType = _helper.GetString(rdr, i++),
-                IpAddress = _helper.GetString(rdr, i++),
-                AddDate = _helper.GetDateTime(rdr, i),
-                Summary = _helper.GetString(rdr, i)
-            };
+            return new LogInfo(_helper.GetInt(rdr, i++), _helper.GetInt(rdr, i++), _helper.GetInt(rdr, i++),
+                _helper.GetInt(rdr, i++), _helper.GetInt(rdr, i++), _helper.GetString(rdr, i++),
+                _helper.GetString(rdr, i++), _helper.GetString(rdr, i++), _helper.GetDateTime(rdr, i++),
+                _helper.GetString(rdr, i));
         }
     }
 }

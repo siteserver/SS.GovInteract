@@ -22,39 +22,39 @@ namespace SS.GovInteract.Model
         {
             if (type == EPermissionType.GovInteractView)
             {
-                return "GovInteractView";
+                return "View";
             }
             else if (type == EPermissionType.GovInteractAdd)
             {
-                return "GovInteractAdd";
+                return "Add";
             }
             else if(type == EPermissionType.GovInteractEdit)
             {
-                return "GovInteractEdit";
+                return "Edit";
             }
             else if(type == EPermissionType.GovInteractDelete)
             {
-                return "GovInteractDelete";
+                return "Delete";
             }
             else if(type == EPermissionType.GovInteractSwitchToTranslate)
             {
-                return "GovInteractSwitchToTranslate";
+                return "SwitchToTranslate";
             }
             else if (type == EPermissionType.GovInteractComment)
             {
-                return "GovInteractComment";
+                return "Comment";
             }
             else if (type == EPermissionType.GovInteractAccept)
             {
-                return "GovInteractAccept";
+                return "Accept";
             }
             else if (type == EPermissionType.GovInteractReply)
             {
-                return "GovInteractReply";
+                return "Reply";
             }
             else if (type == EPermissionType.GovInteractCheck)
             {
-                return "GovInteractCheck";
+                return "Check";
             }
             throw new Exception();
         }

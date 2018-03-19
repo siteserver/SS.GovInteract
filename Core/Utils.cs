@@ -22,7 +22,7 @@ namespace SS.GovInteract.Core
         public static string GetMessageHtml(string message, bool isSuccess)
         {
             return isSuccess
-                ? $@"<div class=""alert alert-success"" role=""alert"">{message}</div>"
+                ? $@"<div class=""alert alert-primary"" role=""alert"">{message}</div>"
                 : $@"<div class=""alert alert-danger"" role=""alert"">{message}</div>";
         }
 

@@ -55,9 +55,9 @@ namespace SS.GovInteract.Pages
                 foreach (int contentID in _idArrayList)
                 {
                     var contentInfo = Main.Instance.ContentApi.GetContentInfo(SiteId, _channelId, contentID);
-                    var state = EGovInteractStateUtils.GetEnumType(contentInfo.GetString(ContentAttribute.State));
+                    var state = EStateUtils.GetEnumType(contentInfo.GetString(ContentAttribute.State));
 
-                    if (state != EGovInteractState.Denied && state != EGovInteractState.Checked)
+                    if (state != EState.Denied && state != EState.Checked)
                     {
                         contentInfo.Set(ContentAttribute.DepartmentId, switchToDepartmentID.ToString());
                         Main.Instance.ContentApi.Update(SiteId, contentInfo.ChannelId, contentInfo);

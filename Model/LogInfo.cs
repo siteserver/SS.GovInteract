@@ -24,21 +24,6 @@ namespace SS.GovInteract.Model
 
         public string Summary { get; set; }
 
-        public LogInfo()
-        {
-            Id = 0;
-            SiteId = 0;
-            ChannelId = 0;
-            ContentId = 0;
-            DepartmentId = 0;
-            UserName = string.Empty;
-            LogType = string.Empty;
-            IpAddress = string.Empty;
-            AddDate = DateTime.Now; 
-            Summary = string.Empty;
-            Summary = string.Empty;
-        }
-
         public LogInfo(int id, int siteId, int channelId, int contentId, int departmentId, string userName, string logType,string ipAddress, DateTime addDate, string summary)
         {
             Id = id;

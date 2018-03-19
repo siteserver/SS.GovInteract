@@ -1,5 +1,6 @@
 ﻿using System;
 using SS.GovInteract.Core;
+using SS.GovInteract.Model;
 
 namespace SS.GovInteract.Pages
 {
@@ -17,7 +18,7 @@ namespace SS.GovInteract.Pages
 
         protected override string GetSelectString()
         {
-            return Main.ContentDao.GetSelectStringByState(SiteId, _channelId, EGovInteractState.Accepted, EGovInteractState.Redo);
+            return Main.ContentDao.GetSelectStringByState(SiteId, ChannelId, EState.Accepted, EState.Redo);
         }
 
         private string _pageUrl;
@@ -27,7 +28,7 @@ namespace SS.GovInteract.Pages
             {
                 if (string.IsNullOrEmpty(_pageUrl))
                 {
-                    _pageUrl = GetRedirectUrl(SiteId, _channelId);
+                    _pageUrl = GetRedirectUrl(SiteId, ChannelId);
                 }
                 return _pageUrl;
             }

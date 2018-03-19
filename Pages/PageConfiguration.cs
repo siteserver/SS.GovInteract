@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Web;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 using SS.GovInteract.Core;
 using SS.GovInteract.Model;
 
 namespace SS.GovInteract.Pages
 {
-    public class PageCommonConfiguration : PageBase
+    public class PageConfiguration : PageBase
     {
         public Literal LtlMessage;
         public TextBox TbApplyDateLimit; // 办理时限
@@ -22,7 +20,7 @@ namespace SS.GovInteract.Pages
 
         public static string GetRedirectUrl(int siteId)
         {
-            return $"{nameof(PageCommonConfiguration)}.aspx?siteId={siteId}";
+            return $"{nameof(PageConfiguration)}.aspx?siteId={siteId}";
         }
 
         public void Page_Load(object sender, EventArgs e)

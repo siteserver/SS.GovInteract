@@ -51,15 +51,15 @@ namespace SS.GovInteract.Pages
                 foreach (int contentID in _idArrayList)
                 {
                     var contentInfo = Main.Instance.ContentApi.GetContentInfo(SiteId, _channelId, contentID);
-                    var state = EGovInteractStateUtils.GetEnumType(contentInfo.GetString(ContentAttribute.State));
+                    var state = EStateUtils.GetEnumType(contentInfo.GetString(ContentAttribute.State));
 
-                    if (state == EGovInteractState.Replied || state == EGovInteractState.Redo)
+                    if (state == EState.Replied || state == EState.Redo)
                     {
                         var remarkInfo = new RemarkInfo(0, SiteId, contentInfo.ChannelId, contentInfo.Id, ERemarkTypeUtils.GetValue(ERemarkType.Redo), tbRedoRemark.Text, AuthRequest.AdminInfo.DepartmentId, AuthRequest.AdminName, DateTime.Now);
                         Main.RemarkDao.Insert(remarkInfo);
 
                         ApplyManager.Log(SiteId, contentInfo.ChannelId, contentID, ELogTypeUtils.GetValue(ELogType.Redo), AuthRequest.AdminName, AuthRequest.AdminInfo.DepartmentId);
-                        contentInfo.Set(ContentAttribute.State, EGovInteractStateUtils.GetValue(EGovInteractState.Redo));
+                        contentInfo.Set(ContentAttribute.State, EStateUtils.GetValue(EState.Redo));
                         Main.Instance.ContentApi.Update(SiteId, contentInfo.ChannelId, contentInfo);
                     }
                 }

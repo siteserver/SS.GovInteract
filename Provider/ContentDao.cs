@@ -333,12 +333,14 @@ namespace SS.GovInteract.Provider
         //    contentInfo.Set(nameof(ContentAttribute.DepartmentId), departmentId.ToString()); 
         //}
 
-        public void UpdateState(int siteId, int channelId, int contentId, IContentInfo contentInfo, EGovInteractState state)
+        public void UpdateState(int siteId, int channelId, int contentId, EState state)
         {
-            contentInfo.Set(ContentAttribute.State, EGovInteractStateUtils.GetValue(state));
+            var contentInfo = Main.Instance.ContentApi.GetContentInfo(siteId, channelId, contentId);
+
+            contentInfo.Set(ContentAttribute.State, EStateUtils.GetValue(state));
             contentInfo.CheckedLevel = 0;
 
-            contentInfo.IsChecked = state == EGovInteractState.Checked;
+            contentInfo.IsChecked = state == EState.Checked;
             Main.Instance.ContentApi.Update(siteId, channelId, contentInfo);
         }
 
@@ -356,13 +358,17 @@ namespace SS.GovInteract.Provider
             return null;
         }
 
-        public string GetSelectStringByState(int siteId, int channelId, params EGovInteractState[] states)
+        public string GetSelectStringByState(int siteId, int channelId, params EState[] states)
         {
             var builder = new StringBuilder($"SELECT * FROM {TableName} WHERE {nameof(IContentInfo.SiteId)} = {siteId} AND {nameof(IContentInfo.ChannelId)} = {channelId} AND (");
             
             foreach (var state in states)
             {
-                builder.Append($" {ContentAttribute.State} = '{EGovInteractStateUtils.GetValue(state)}' OR");
+                builder.Append($" {ContentAttribute.State} = '{EStateUtils.GetValue(state)}' OR");
+                if (state == EState.New)
+                {
+                    builder.Append($" {ContentAttribute.State} = '' OR");
+                }
             }
             builder.Length -= 2;
             builder.Append(")");
@@ -398,6 +404,50 @@ namespace SS.GovInteract.Provider
             }
 
             return builder.ToString();
+        }
+
+        public int GetCountByDepartmentId(int siteId, int departmentId, DateTime begin, DateTime end)
+        {
+            string sqlString =
+                $"SELECT COUNT(*) AS TotalNum FROM {TableName} WHERE SiteId = {siteId} AND DepartmentId = {departmentId} AND (AddDate BETWEEN '{begin.ToShortDateString()}' AND '{end.AddDays(1).ToShortDateString()}')";
+            return Dao.GetIntResult(sqlString);
+        }
+
+        public int GetCountByDepartmentId(int siteId, int departmentId)
+        {
+            string sqlString =
+                $"SELECT COUNT(*) AS TotalNum FROM {TableName} WHERE SiteId = {siteId} AND DepartmentId = {departmentId}";
+            return Dao.GetIntResult(sqlString);
+        }
+
+        public int GetCountByDepartmentId(int siteId, int departmentId, int channelId, DateTime begin, DateTime end)
+        {
+            var sqlString = channelId == 0
+                ? $"SELECT COUNT(*) AS TotalNum FROM {TableName} WHERE SiteId = {siteId} AND DepartmentId = {departmentId} AND (AddDate BETWEEN '{begin.ToShortDateString()}' AND '{end.AddDays(1).ToShortDateString()}')"
+                : $"SELECT COUNT(*) AS TotalNum FROM {TableName} WHERE SiteId = {siteId} AND ChannelId = {channelId} AND DepartmentId = {departmentId} AND (AddDate BETWEEN '{begin.ToShortDateString()}' AND '{end.AddDays(1).ToShortDateString()}')";
+            return Dao.GetIntResult(sqlString);
+        }
+
+        public int GetCountByDepartmentIdAndState(int siteId, int departmentId, EState state)
+        {
+            string sqlString =
+                $"SELECT COUNT(*) AS TotalNum FROM {TableName} WHERE SiteId = {siteId} AND DepartmentId = {departmentId} AND State = '{EStateUtils.GetValue(state)}'";
+            return Dao.GetIntResult(sqlString);
+        }
+
+        public int GetCountByDepartmentIdAndState(int siteId, int departmentId, EState state, DateTime begin, DateTime end)
+        {
+            string sqlString =
+                $"SELECT COUNT(*) AS TotalNum FROM {TableName} WHERE SiteId = {siteId} AND DepartmentId = {departmentId} AND State = '{EStateUtils.GetValue(state)}' AND (AddDate BETWEEN '{begin.ToShortDateString()}' AND '{end.AddDays(1).ToShortDateString()}')";
+            return Dao.GetIntResult(sqlString);
+        }
+
+        public int GetCountByDepartmentIdAndState(int siteId, int departmentId, int channelId, EState state, DateTime begin, DateTime end)
+        {
+            var sqlString = channelId == 0
+                ? $"SELECT COUNT(*) AS TotalNum FROM {TableName} WHERE SiteId = {siteId} AND DepartmentId = {departmentId} AND State = '{EStateUtils.GetValue(state)}' AND (AddDate BETWEEN '{begin.ToShortDateString()}' AND '{end.AddDays(1).ToShortDateString()}')"
+                : $"SELECT COUNT(*) AS TotalNum FROM {TableName} WHERE SiteId = {siteId} AND DepartmentId = {departmentId} AND ChannelId = {channelId} AND State = '{EStateUtils.GetValue(state)}' AND (AddDate BETWEEN '{begin.ToShortDateString()}' AND '{end.AddDays(1).ToShortDateString()}')";
+            return Dao.GetIntResult(sqlString);
         }
     }
 }

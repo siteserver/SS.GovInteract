@@ -2,18 +2,26 @@
 using System.Collections.Generic;
 using System.Web;
 using System.Web.UI;
+using System.Web.UI.WebControls;
 using SiteServer.Plugin;
 using SS.GovInteract.Core;
+using SS.GovInteract.Model;
 
 namespace SS.GovInteract.Pages
 {
     public class PageBase : Page
     {
+        public Literal LtlMessage;
+
         public int SiteId { get; private set; }
 
         public List<IChannelInfo> ChannelInfoList { get; private set; }
 
         public IRequest AuthRequest { get; private set; }
+
+        private ConfigInfo _configInfo;
+
+        public ConfigInfo ConfigInfo => _configInfo ?? (_configInfo = Main.Instance.GetConfigInfo(SiteId));
 
         protected override void OnInit(EventArgs e)
         {

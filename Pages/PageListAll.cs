@@ -1,6 +1,5 @@
 ﻿using SS.GovInteract.Core;
 using System;
-using System.Collections.Specialized;
 using System.Web.UI.WebControls;
 using SS.GovInteract.Controls;
 using SS.GovInteract.Model;
@@ -9,11 +8,11 @@ namespace SS.GovInteract.Pages
 {
     public class PageListAll : PageBaseList
     {
-        public DropDownList ddlTaxis;
-        public DropDownList ddlState;
-        public DateTimeTextBox tbDateFrom;
-        public DateTimeTextBox tbDateTo;
-        public TextBox tbKeyword;
+        public DropDownList DdlTaxis;
+        public DropDownList DdlState;
+        public DateTimeTextBox TbDateFrom;
+        public DateTimeTextBox TbDateTo;
+        public TextBox TbKeyword;
 
         public static string GetRedirectUrl(int siteId, int channelId)
         {
@@ -24,22 +23,22 @@ namespace SS.GovInteract.Pages
         {
             if (IsPostBack) return;
 
-            EBooleanUtils.AddListItems(ddlTaxis, "倒序", "正序");
+            EBooleanUtils.AddListItems(DdlTaxis, "倒序", "正序");
             if (Request.QueryString["isTaxisDESC"] != null)
             {
                 var isTaxisDesc = Utils.ToBool(Request.QueryString["isTaxisDESC"]);
-                Utils.SelectSingleItemIgnoreCase(ddlTaxis, isTaxisDesc.ToString());
+                Utils.SelectSingleItemIgnoreCase(DdlTaxis, isTaxisDesc.ToString());
             }
             var listItem = new ListItem("全部", string.Empty);
-            ddlState.Items.Add(listItem);
-            EGovInteractStateUtils.AddListItems(ddlState);
+            DdlState.Items.Add(listItem);
+            EStateUtils.AddListItems(DdlState);
             if (Request.QueryString["state"] != null)
             {
-                Utils.SelectSingleItemIgnoreCase(ddlState, Request.QueryString["state"]);
+                Utils.SelectSingleItemIgnoreCase(DdlState, Request.QueryString["state"]);
             }
-            tbDateFrom.Text = Request.QueryString["dateFrom"];
-            tbDateTo.Text = Request.QueryString["dateTo"];
-            tbKeyword.Text = Request.QueryString["keyword"];
+            TbDateFrom.Text = Request.QueryString["dateFrom"];
+            TbDateTo.Text = Request.QueryString["dateTo"];
+            TbKeyword.Text = Request.QueryString["keyword"];
         }
 
         public void Search_OnClick(object sender, EventArgs e)
@@ -51,12 +50,9 @@ namespace SS.GovInteract.Pages
         {
             if (Request.QueryString["state"] != null || Request.QueryString["dateFrom"] != null || Request.QueryString["dateTo"] != null || Request.QueryString["keyword"] != null)
             {
-                return Main.ContentDao.GetSelectString(SiteId, _channelId, Request.QueryString["state"], Request.QueryString["dateFrom"], Request.QueryString["dateTo"], Request.QueryString["keyword"]);
+                return Main.ContentDao.GetSelectString(SiteId, ChannelId, Request.QueryString["state"], Request.QueryString["dateFrom"], Request.QueryString["dateTo"], Request.QueryString["keyword"]);
             }
-            else
-            {
-                return Main.ContentDao.GetSelectString(SiteId, _channelId);
-            }
+            return Main.ContentDao.GetSelectString(SiteId, ChannelId);
         }
 
         protected string GetSortMode()
@@ -77,7 +73,7 @@ namespace SS.GovInteract.Pages
             {
                 if (string.IsNullOrEmpty(_pageUrl))
                 {
-                    return GetRedirectUrl(SiteId, _channelId) + $"&isTaxisDESC={ddlTaxis.SelectedValue}&state={ddlState.SelectedValue}&dateFrom={tbDateFrom.Text}&dateTo={tbDateTo.Text}&keyword={tbKeyword.Text}&page={Utils.ToInt(Request.QueryString["page"], 1)}";
+                    _pageUrl = GetRedirectUrl(SiteId, ChannelId) + $"&isTaxisDESC={DdlTaxis.SelectedValue}&state={DdlState.SelectedValue}&dateFrom={TbDateFrom.Text}&dateTo={TbDateTo.Text}&keyword={TbKeyword.Text}&page={Utils.ToInt(Request.QueryString["page"], 1)}";
                 }
                 return _pageUrl;
             }

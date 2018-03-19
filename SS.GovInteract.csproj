@@ -36,8 +36,8 @@
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="SiteServer.Plugin, Version=1.4.42.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\SiteServer.Plugin.1.4.42-beta\lib\net45\SiteServer.Plugin.dll</HintPath>
+    <Reference Include="SiteServer.Plugin, Version=1.4.45.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\SiteServer.Plugin.1.4.45-beta\lib\net45\SiteServer.Plugin.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -57,7 +57,7 @@
     <Compile Include="Core\CacheUtils.cs" />
     <Compile Include="Core\DepartmentManager.cs" />
     <Compile Include="Core\ApplyManager.cs" />
-    <Compile Include="Core\EGovInteractState.cs" />
+    <Compile Include="Model\EState.cs" />
     <Compile Include="Core\InteractManager.cs" />
     <Compile Include="Core\LayerUtils.cs" />
     <Compile Include="Core\Permissions.cs" />
@@ -120,13 +120,16 @@
     <Compile Include="Pages\PageBase.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="Pages\PageBaseContent.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Pages\PageBaseList.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Pages\PageCheck.cs">
+    <Compile Include="Pages\PageContentCheck.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Pages\PageAccept.cs">
+    <Compile Include="Pages\PageContentAccept.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Pages\PageListCheck.cs">
@@ -138,7 +141,7 @@
     <Compile Include="Pages\PageListAccept.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Pages\PageReply.cs">
+    <Compile Include="Pages\PageContentReply.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Pages\PageMain.cs">
@@ -147,10 +150,10 @@
     <Compile Include="Pages\PageInit.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Pages\PageDetailConfiguration.cs">
+    <Compile Include="Pages\PageConfigurationChannel.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Pages\PageCommonConfiguration.cs">
+    <Compile Include="Pages\PageConfiguration.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Pages\PageListAll.cs">
@@ -160,6 +163,7 @@
     <Compile Include="Provider\ChannelDao.cs" />
     <Compile Include="Provider\ContentDao.cs" />
     <Compile Include="Provider\AdministratorDao.cs" />
+    <Compile Include="Provider\Dao.cs" />
     <Compile Include="Provider\DepartmentDao.cs" />
     <Compile Include="Provider\RemarkDao.cs" />
     <Compile Include="Provider\PermissionsDao.cs" />
@@ -184,12 +188,14 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="assets\css\bootstrap.min.css" />
     <Content Include="assets\css\components.css" />
     <Content Include="assets\css\core.css" />
     <Content Include="assets\css\ionicons.min.css" />
     <Content Include="assets\css\menu.css" />
     <Content Include="assets\css\pages.css" />
     <Content Include="assets\css\responsive.css" />
+    <Content Include="assets\css\siteserver.min.css" />
     <Content Include="assets\css\style.css" />
     <Content Include="assets\datePicker\calendar.js" />
     <Content Include="assets\datePicker\lang\en.js" />
@@ -204,11 +210,7 @@
     <Content Include="assets\datePicker\skin\whyGreen\img.gif" />
     <Content Include="assets\datePicker\WdatePicker.js" />
     <Content Include="assets\fonts\ionicons.svg" />
-    <Content Include="assets\images\channel_alipay.gif" />
-    <Content Include="assets\images\channel_jdpay.gif" />
-    <Content Include="assets\images\channel_weixin.gif" />
-    <Content Include="assets\images\close.png" />
-    <Content Include="assets\images\pay_cut.png" />
+    <Content Include="assets\images\flow.gif" />
     <Content Include="assets\js\bootstrap.min.js" />
     <Content Include="assets\js\device.min.js" />
     <Content Include="assets\js\jquery.min.js" />
@@ -276,14 +278,29 @@
     <Content Include="assets\tree\tree_plusbottom.gif" />
     <Content Include="assets\tree\tree_plusmiddle.gif" />
     <Content Include="assets\tree\vote.gif" />
+    <Content Include="index.html" />
     <Content Include="logo.png" />
     <Content Include="modalAdinistrators.aspx" />
+    <Content Include="modalApplyFlow.aspx" />
+    <Content Include="modalApplyReply.aspx" />
+    <Content Include="modalApplyView.aspx" />
     <Content Include="modalDepartmentSelect.aspx" />
     <Content Include="modalTypeAdd.aspx" />
     <Content Include="modalTypeList.aspx" />
     <Content Include="pageAnalysis.aspx" />
-    <Content Include="pageCommonConfiguration.aspx" />
-    <Content Include="pageDetailConfiguration.aspx" />
+    <Content Include="pageBlank.html" />
+    <Content Include="pageConfiguration.aspx" />
+    <Content Include="pageConfigurationChannel.aspx" />
+    <Content Include="pageContentAccept.aspx" />
+    <Content Include="pageContentCheck.aspx" />
+    <Content Include="pageContentReply.aspx" />
+    <Content Include="pageInit.aspx" />
+    <Content Include="pageListAccept.aspx" />
+    <Content Include="pageListAll.aspx" />
+    <Content Include="pageListCheck.aspx" />
+    <Content Include="pageListReply.aspx" />
+    <Content Include="pageMain.aspx" />
+    <Content Include="pageTree.aspx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

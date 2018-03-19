@@ -7,10 +7,9 @@ using SS.GovInteract.Model;
 
 namespace SS.GovInteract.Pages
 {
-	public class PageCheck : PageBase
-	{
-	    public Literal LtlMessage;
-        public TextBox tbRedoRemark;
+	public class PageContentCheck : PageBaseContent
+    {
+        public TextBox TbRedoRemark;
 
         private int _channelId;
         private int _contentId;
@@ -18,7 +17,7 @@ namespace SS.GovInteract.Pages
 
         public static string GetRedirectUrl(int siteId, int channelId, int contentId, string listPageUrl)
         {
-            return $"{nameof(PageCheck)}.aspx?siteId={siteId}&channelId={channelId}&contentId={contentId}&returnUrl={HttpUtility.UrlEncode(listPageUrl)}";
+            return $"{nameof(PageContentCheck)}.aspx?siteId={siteId}&channelId={channelId}&contentId={contentId}&returnUrl={HttpUtility.UrlEncode(listPageUrl)}";
         }
 
         public void Page_Load(object sender, EventArgs e)
@@ -30,7 +29,7 @@ namespace SS.GovInteract.Pages
 
         public void Redo_OnClick(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(tbRedoRemark.Text))
+            if (string.IsNullOrEmpty(TbRedoRemark.Text))
             {
                 LtlMessage.Text = Utils.GetMessageHtml("要求返工失败，必须填写意见！", false);
                 return;
@@ -39,12 +38,12 @@ namespace SS.GovInteract.Pages
             {
                 var contentInfo = Main.Instance.ContentApi.GetContentInfo(SiteId, _channelId, _contentId);
 
-                var remarkInfo = new RemarkInfo(0, SiteId, contentInfo.ChannelId, contentInfo.Id, ERemarkTypeUtils.GetValue(ERemarkType.Redo), tbRedoRemark.Text, AuthRequest.AdminInfo.DepartmentId, AuthRequest.AdminName, DateTime.Now);
+                var remarkInfo = new RemarkInfo(0, SiteId, contentInfo.ChannelId, contentInfo.Id, ERemarkTypeUtils.GetValue(ERemarkType.Redo), TbRedoRemark.Text, AuthRequest.AdminInfo.DepartmentId, AuthRequest.AdminName, DateTime.Now);
                 Main.RemarkDao.Insert(remarkInfo);
 
                 ApplyManager.Log(SiteId, contentInfo.ChannelId, contentInfo.Id, ELogTypeUtils.GetValue(ELogType.Redo), AuthRequest.AdminName, AuthRequest.AdminInfo.DepartmentId);
 
-                contentInfo.Set(ContentAttribute.State, EGovInteractStateUtils.GetValue(EGovInteractState.Redo));
+                contentInfo.Set(ContentAttribute.State, EStateUtils.GetValue(EState.Redo));
                 Main.Instance.ContentApi.Update(SiteId, contentInfo.ChannelId, contentInfo);
 
                 LtlMessage.Text = Utils.GetMessageHtml("要求返工成功", true);
@@ -70,7 +69,7 @@ namespace SS.GovInteract.Pages
 
                 ApplyManager.Log(SiteId, contentInfo.ChannelId, contentInfo.Id, ELogTypeUtils.GetValue(ELogType.Check), AuthRequest.AdminName, AuthRequest.AdminInfo.DepartmentId);
 
-                contentInfo.Set(ContentAttribute.State, EGovInteractStateUtils.GetValue(EGovInteractState.Checked));
+                contentInfo.Set(ContentAttribute.State, EStateUtils.GetValue(EState.Checked));
                 Main.Instance.ContentApi.Update(SiteId, contentInfo.ChannelId, contentInfo);
 
                 LtlMessage.Text = Utils.GetMessageHtml("审核申请成功", true);

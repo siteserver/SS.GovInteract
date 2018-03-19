@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Specialized;
 using System.Web;
 using System.Web.UI.WebControls;
 using SS.GovInteract.Core;
@@ -7,11 +6,10 @@ using SS.GovInteract.Model;
 
 namespace SS.GovInteract.Pages
 {
-    public class PageAccept : PageBase
-	{
-        public Literal LtlMessage;
-        public TextBox tbAcceptRemark;
-        public TextBox tbDenyReply;
+    public class PageContentAccept : PageBaseContent
+    {
+        public TextBox TbAcceptRemark;
+        public TextBox TbDenyReply;
 
         private int _channelId;
         private int _contentId;
@@ -19,7 +17,7 @@ namespace SS.GovInteract.Pages
 
         public static string GetRedirectUrl(int siteId, int channelId, int contentId, string listPageUrl)
         {
-            return $"{nameof(PageAccept)}.aspx?siteId={siteId}&channelId={channelId}&contentId={contentId}&returnUrl={HttpUtility.UrlEncode(listPageUrl)}";
+            return $"{nameof(PageContentAccept)}.aspx?siteId={siteId}&channelId={channelId}&contentId={contentId}&returnUrl={HttpUtility.UrlEncode(listPageUrl)}";
         }
 
         public void Page_Load(object sender, EventArgs e)
@@ -33,12 +31,12 @@ namespace SS.GovInteract.Pages
         {
             var contentInfo = Main.Instance.ContentApi.GetContentInfo(SiteId, _channelId, _contentId);
 
-            var remarkInfo = new RemarkInfo(0, SiteId, contentInfo.ChannelId, contentInfo.Id, ERemarkTypeUtils.GetValue(ERemarkType.Accept), tbAcceptRemark.Text, AuthRequest.AdminInfo.DepartmentId, AuthRequest.AdminName, DateTime.Now);
+            var remarkInfo = new RemarkInfo(0, SiteId, contentInfo.ChannelId, contentInfo.Id, ERemarkTypeUtils.GetValue(ERemarkType.Accept), TbAcceptRemark.Text, AuthRequest.AdminInfo.DepartmentId, AuthRequest.AdminName, DateTime.Now);
             Main.RemarkDao.Insert(remarkInfo);
 
             ApplyManager.Log(SiteId, contentInfo.ChannelId, contentInfo.Id, ELogTypeUtils.GetValue(ELogType.Accept), AuthRequest.AdminName, AuthRequest.AdminInfo.DepartmentId);
 
-            contentInfo.Set(ContentAttribute.State, EGovInteractStateUtils.GetValue(EGovInteractState.Accepted));
+            contentInfo.Set(ContentAttribute.State, EStateUtils.GetValue(EState.Accepted));
             Main.Instance.ContentApi.Update(SiteId, contentInfo.ChannelId, contentInfo);
 
             LtlMessage.Text = Utils.GetMessageHtml("申请受理成功", true);
@@ -53,7 +51,7 @@ namespace SS.GovInteract.Pages
 
         public void Deny_OnClick(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(tbDenyReply.Text))
+            if (string.IsNullOrEmpty(TbDenyReply.Text))
             {
                 LtlMessage.Text = Utils.GetMessageHtml("拒绝失败，必须填写拒绝理由", false);
                 return;
@@ -63,21 +61,13 @@ namespace SS.GovInteract.Pages
 
             Main.ReplyDao.DeleteByContentId(SiteId, contentInfo.Id);
 
-            var replyInfo = new ReplyInfo
-            {
-                SiteId = SiteId,
-                ChannelId = contentInfo.ChannelId,
-                ContentId = contentInfo.Id,
-                Reply = tbDenyReply.Text,
-                DepartmentId = AuthRequest.AdminInfo.DepartmentId,
-                UserName = AuthRequest.AdminName,
-                AddDate = DateTime.Now
-            };
+            var replyInfo = new ReplyInfo(0, SiteId, contentInfo.ChannelId, contentInfo.Id, TbDenyReply.Text,
+                string.Empty, AuthRequest.AdminInfo.DepartmentId, AuthRequest.AdminName, DateTime.Now);
             Main.ReplyDao.Insert(replyInfo);
 
             ApplyManager.Log(SiteId, contentInfo.ChannelId, contentInfo.Id, ELogTypeUtils.GetValue(ELogType.Deny), AuthRequest.AdminName, AuthRequest.AdminInfo.DepartmentId);
 
-            contentInfo.Set(ContentAttribute.State, EGovInteractStateUtils.GetValue(EGovInteractState.Denied));
+            contentInfo.Set(ContentAttribute.State, EStateUtils.GetValue(EState.Denied));
             Main.Instance.ContentApi.Update(SiteId, contentInfo.ChannelId, contentInfo);
 
             LtlMessage.Text = Utils.GetMessageHtml("拒绝申请成功", true);

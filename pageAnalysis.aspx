@@ -1,90 +1,85 @@
-﻿<%@ Page Language="C#" Inherits="SS.Reward.Pages.PageRecords" %>
-<%@ Register TagPrefix="ctrl" Namespace="SS.Reward.Controls" Assembly="SS.Reward" %>
-  <!DOCTYPE html>
-  <html>
+<%@ Page Language="C#" Inherits="SS.GovInteract.Pages.PageAnalysis" %>
+  <%@ Register TagPrefix="bairong" Namespace="SS.GovInteract.Controls" Assembly="SS.GovInteract" %>
+    <!DOCTYPE html>
+    <html>
 
-  <head>
-    <meta charset="utf-8">
-    <link href="assets/plugin-utils/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="assets/plugin-utils/css/plugin-utils.css" rel="stylesheet" type="text/css" />
-    <link href="assets/plugin-utils/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-    <script src="assets/plugin-utils/js/jquery.min.js"></script>
-    <script src="assets/plugin-utils/js/bootstrap.min.js"></script>
-    <script src="assets/js/sweetalert.min.js"></script>
-  </head>
+    <head>
+      <meta charset="utf-8">
+      <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+      <link href="assets/css/ionicons.min.css" rel="stylesheet" type="text/css" />
+      <link href="assets/css/siteserver.min.css" rel="stylesheet" type="text/css" />
+    </head>
 
-  <body>
-    <form runat="server">
+    <body>
 
-      <!-- container start -->
-      <div class="container">
-        <div class="m-b-25"></div>
+      <form class="m-l-15 m-r-15 m-t-15" runat="server">
 
-        <div class="row">
-          <div class="col-sm-12">
-            <div class="card-box">
-              <h4 class="text-dark  header-title m-t-0">
-                <asp:Literal id="LtlPageTitle" runat="server"></asp:Literal>
-              </h4>
-              <p class="text-muted m-b-25 font-13"></p>
-              <asp:Literal id="LtlMessage" runat="server" />
+        <div class="card-box">
+          <h4 class="m-t-0 m-b-20 header-title">
+            数据统计分析
+          </h4>
 
-              <table class="table table-bordered table-hover m-0">
-                <thead>
-                  <tr class="info thead">
-                    <th>标题</th>
-                    <th>留言</th>
-                    <th>金额</th>
-                    <th>状态</th>
-                    <th class="text-center" style="width:160px;">时间</th>
-                    <th width="20" class="text-center">
-                        <input onclick="var checked = this.checked;$(':checkbox').each(function(){$(this)[0].checked = checked;checked ? $(this).parents('tr').addClass('success') : $(this).parents('tr').removeClass('success')});"
-                        type="checkbox" />
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <asp:Repeater ID="RptContents" runat="server">
-                    <itemtemplate>
-                        <tr onClick="$(this).toggleClass('success');$(this).find(':checkbox')[0].checked = $(this).hasClass('success');">
-                        <td>
-                          <asp:Literal ID="ltlTitle" runat="server"></asp:Literal>
-                        </td>
-                        <td>
-                          <asp:Literal ID="ltlMessage" runat="server"></asp:Literal>
-                        </td>
-                        <td>
-                          <asp:Literal ID="ltlAmount" runat="server"></asp:Literal>
-                        </td>
-                        <td>
-                          <asp:Literal ID="ltlStatus" runat="server"></asp:Literal>
-                        </td>
-                        <td class="text-center">
-                          <asp:Literal ID="ltlAddDate" runat="server"></asp:Literal>
-                        </td>
-                        <td class="text-center">
-                            <input type="checkbox" name="idCollection" value='<%#DataBinder.Eval(Container.DataItem, "Id")%>' />
-                        </td>
-                      </tr>
-                    </itemtemplate>
-                  </asp:Repeater>
-                </tbody>
+          <div class="form-inline" role="form">
 
-
-              </table>
-
-              <div class="m-b-25"></div>
-
-              <ctrl:sqlPager id="SpContents" runat="server" class="table table-pager" />
-              <asp:Button class="btn" id="BtnDelete" Text="删 除" runat="server" />
-
+            <div class="form-group">
+              <label for="DdlTaxis" class="mr-sm-2">开始时间</label>
+              <bairong:DateTimeTextBox id="TbStartDate" class="form-control" Columns="30" runat="server" />
             </div>
+
+            <div class="form-group m-l-10">
+              <label for="DdlState" class="mr-sm-2">结束时间</label>
+              <bairong:DateTimeTextBox id="TbEndDate" class="form-control" Columns="30" runat="server" />
+            </div>
+
+            <div class="form-group m-l-10">
+              <label for="TbDateFrom" class="mr-sm-2">互动交流分类</label>
+              <asp:DropDownList ID="DdlChannelId" AutoPostBack="true" OnSelectedIndexChanged="Analysis_OnClick" class="form-control" runat="server"></asp:DropDownList>
+            </div>
+
+            <asp:Button OnClick="Analysis_OnClick" Text="统 计" class="btn btn-success m-l-10 btn-md" runat="server"></asp:Button>
           </div>
+
+          <div class="table-responsive m-t-20" data-pattern="priority-columns">
+            <table id="contents" class="table">
+              <thead>
+                <tr class="thead">
+                  <th>统计对象</th>
+                  <th>办件总数</th>
+                  <th>已回复</th>
+                  <th>未回复</th>
+                  <th>回复率</th>
+                </tr>
+              </thead>
+              <tbody>
+                <asp:Repeater ID="RptContents" runat="server">
+                  <itemtemplate>
+                    <asp:Literal id="ltlTrHtml" runat="server"></asp:Literal>
+                    <td>
+                      <asp:Literal id="ltlTarget" runat="server"></asp:Literal>
+                    </td>
+                    <td>
+                      <asp:Literal id="ltlTotalCount" runat="server"></asp:Literal>
+                    </td>
+                    <td>
+                      <asp:Literal id="ltlDoCount" runat="server"></asp:Literal>
+                    </td>
+                    <td>
+                      <asp:Literal id="ltlUndoCount" runat="server"></asp:Literal>
+                    </td>
+                    <td>
+                      <asp:Literal id="ltlBar" runat="server"></asp:Literal>
+                    </td>
+                    </tr>
+                  </itemtemplate>
+                </asp:Repeater>
+
+              </tbody>
+            </table>
+          </div>
+
         </div>
-      </div>
-      <!-- container end -->
 
-    </form>
-  </body>
+      </form>
+    </body>
 
-  </html>
+    </html>

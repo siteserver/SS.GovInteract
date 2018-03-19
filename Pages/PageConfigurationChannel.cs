@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections;
-using System.Web;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 using SiteServer.Plugin;
-using SS.GovInteract.Core;
 using SS.GovInteract.Model;
 
 namespace SS.GovInteract.Pages
 {
-    public class PageDetailConfiguration : PageBase
+    public class PageConfigurationChannel : PageBase
     {
         public Literal LtlMessage;
         public Repeater RptContents; // 分类列表 
@@ -18,7 +15,7 @@ namespace SS.GovInteract.Pages
 
         public static string GetRedirectUrl(int siteId)
         {
-            return $"{nameof(PageDetailConfiguration)}.aspx?siteId={siteId}";
+            return $"{nameof(PageConfigurationChannel)}.aspx?siteId={siteId}";
         }
 
         public void Page_Load(object sender, EventArgs e)

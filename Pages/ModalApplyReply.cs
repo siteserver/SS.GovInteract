@@ -1,6 +1,5 @@
 ﻿using SiteServer.Plugin;
 using System;
-using System.Collections.Specialized;
 using System.Web;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
@@ -11,11 +10,10 @@ namespace SS.GovInteract.Pages
 {
 	public class ModalApplyReply : PageBase
 	{
-        public Literal LtlMessage;
-        protected TextBox tbReply;
-        public Literal ltlDepartmentName;
-        public Literal ltlUserName;
-        public HtmlInputFile htmlFileUrl;
+        protected TextBox TbReply;
+        public Literal LtlDepartmentName;
+        public Literal LtlUserName;
+        public HtmlInputFile HtmlFileUrl;
 
         private int _channelId;
         private int _contentId;
@@ -23,7 +21,7 @@ namespace SS.GovInteract.Pages
 
 	    public static string GetOpenWindowString(int siteId, int channelId, int contentId)
 	    {
-            return LayerUtils.GetOpenScript("回复办件", $"{nameof(ModalApplyReply)}.aspx?siteId={siteId}&channelId={channelId}&contentId={contentId}", 600, 450);
+            return LayerUtils.GetOpenScript("回复办件", $"{nameof(ModalApplyReply)}.aspx?siteId={siteId}&channelId={channelId}&contentId={contentId}");
 	    }
 
 	    public void Page_Load(object sender, EventArgs e)
@@ -35,8 +33,8 @@ namespace SS.GovInteract.Pages
 
 			if (!IsPostBack)
 			{
-                ltlDepartmentName.Text = DepartmentManager.GetDepartmentName(AuthRequest.AdminInfo.DepartmentId);
-                ltlUserName.Text = AuthRequest.AdminInfo.DisplayName;
+                LtlDepartmentName.Text = DepartmentManager.GetDepartmentName(AuthRequest.AdminInfo.DepartmentId);
+                LtlUserName.Text = AuthRequest.AdminInfo.DisplayName;
 			}
 		}
 
@@ -45,18 +43,10 @@ namespace SS.GovInteract.Pages
 			var isChanged = false;
 
             Main.ReplyDao.DeleteByContentId(SiteId, _contentInfo.Id);
-            var fileUrl = UploadFile(htmlFileUrl.PostedFile);
+            var fileUrl = UploadFile(HtmlFileUrl.PostedFile);
 
-            var replyInfo = new ReplyInfo
-            {
-                SiteId = SiteId,
-                ChannelId = _contentInfo.ChannelId,
-                ContentId = _contentInfo.Id,
-                Reply = tbReply.Text,
-                DepartmentId = AuthRequest.AdminInfo.DepartmentId,
-                UserName = AuthRequest.AdminName,
-                AddDate = DateTime.Now
-            };
+            var replyInfo = new ReplyInfo(0, SiteId, _contentInfo.ChannelId, _contentInfo.Id, TbReply.Text, string.Empty,
+                AuthRequest.AdminInfo.DepartmentId, AuthRequest.AdminName, DateTime.Now);
             Main.ReplyDao.Insert(replyInfo);
 
             ApplyManager.Log(SiteId, _contentInfo.ChannelId, _contentInfo.Id, ELogTypeUtils.GetValue(ELogType.Reply), AuthRequest.AdminName, AuthRequest.AdminInfo.DepartmentId);
@@ -65,7 +55,7 @@ namespace SS.GovInteract.Pages
                 _contentInfo.Set(ContentAttribute.DepartmentId, AuthRequest.AdminInfo.DepartmentId.ToString());
                 Main.Instance.ContentApi.Update(SiteId, _contentInfo.ChannelId, _contentInfo);
             }
-            _contentInfo.Set(ContentAttribute.State, EGovInteractStateUtils.GetValue(EGovInteractState.Replied));
+            _contentInfo.Set(ContentAttribute.State, EStateUtils.GetValue(EState.Replied));
             Main.Instance.ContentApi.Update(SiteId, _contentInfo.ChannelId, _contentInfo);
 
             isChanged = true;

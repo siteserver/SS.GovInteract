@@ -189,18 +189,9 @@ namespace SS.GovInteract.Provider
         {
             if (rdr == null) return null;
             var i = 0;
-            return new ReplyInfo
-            {
-                Id = _helper.GetInt(rdr, i++),
-                SiteId = _helper.GetInt(rdr, i++),
-                ChannelId = _helper.GetInt(rdr, i++),
-                ContentId = _helper.GetInt(rdr, i++),
-                Reply = _helper.GetString(rdr, i++),
-                FileUrl = _helper.GetString(rdr, i++),
-                DepartmentId = _helper.GetInt(rdr, i++),
-                UserName = _helper.GetString(rdr, i++),
-                AddDate = _helper.GetDateTime(rdr, i)
-            };
+            return new ReplyInfo(_helper.GetInt(rdr, i++), _helper.GetInt(rdr, i++), _helper.GetInt(rdr, i++),
+                _helper.GetInt(rdr, i++), _helper.GetString(rdr, i++), _helper.GetString(rdr, i++),
+                _helper.GetInt(rdr, i++), _helper.GetString(rdr, i++), _helper.GetDateTime(rdr, i));
         }
     }
 }
