@@ -1,4 +1,4 @@
-namespace SS.GovInteract.Model
+﻿namespace SS.GovInteract.Model
 {
 	public class ChannelInfo
     {
