@@ -57,6 +57,7 @@
     <Compile Include="Core\CacheUtils.cs" />
     <Compile Include="Core\DepartmentManager.cs" />
     <Compile Include="Core\ApplyManager.cs" />
+    <Compile Include="Core\SqlUtils.cs" />
     <Compile Include="Model\EState.cs" />
     <Compile Include="Core\InteractManager.cs" />
     <Compile Include="Core\LayerUtils.cs" />

@@ -705,7 +705,7 @@ namespace SS.GovInteract.Controls
             {
                 orderString = $"ORDER BY {SortField} {SortMode}";
             }
-            var cmdText = Utils.GetPageSqlString(SelectCommand, orderString, ItemsPerPage, CurrentPageIndex, countInfo.PageCount, countInfo.RecordsInLastPage);
+            var cmdText = SqlUtils.GetPageSqlString(SelectCommand, orderString, ItemsPerPage, CurrentPageIndex, countInfo.PageCount, countInfo.RecordsInLastPage);
 
             var conn = Main.Instance.DataApi.GetConnection(Main.Instance.ConnectionString);
             var cmd = Main.Instance.DataApi.GetCommand();
