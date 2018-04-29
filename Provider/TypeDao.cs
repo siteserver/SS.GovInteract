@@ -225,7 +225,7 @@ namespace SS.GovInteract.Provider
 
         public bool UpdateTaxisToUp(int typeId, int channelId)
         { 
-            string sqlString = _helper.ToTopSqlString(TableName, $"{nameof(TypeInfo.Id)}, {nameof(TypeInfo.Taxis)}", $"WHERE (({nameof(TypeInfo.Taxis)} > (SELECT {nameof(TypeInfo.Taxis)} FROM {TableName} WHERE {nameof(TypeInfo.Id)} = {typeId})) AND {nameof(TypeInfo.ChannelId)} ={channelId})", $"ORDER BY {nameof(TypeInfo.Taxis)}", 1);
+            string sqlString = _helper.GetPageSqlString(TableName, $"{nameof(TypeInfo.Id)}, {nameof(TypeInfo.Taxis)}", $"WHERE (({nameof(TypeInfo.Taxis)} > (SELECT {nameof(TypeInfo.Taxis)} FROM {TableName} WHERE {nameof(TypeInfo.Id)} = {typeId})) AND {nameof(TypeInfo.ChannelId)} ={channelId})", $"ORDER BY {nameof(TypeInfo.Taxis)}", 0, 1);
 
             var higherId = 0;
             var higherTaxis = 0;
@@ -254,7 +254,7 @@ namespace SS.GovInteract.Provider
         public bool UpdateTaxisToDown(int typeId, int channelId)
         {
             //var sqlString = SqlUtils.GetTopSqlString("wcm_GovInteractType", "TypeID, Taxis", $"WHERE ((Taxis < (SELECT Taxis FROM wcm_GovInteractType WHERE TypeID = {typeId})) AND ChannelId = {channelId}) ORDER BY Taxis DESC", 1);
-            string sqlString = _helper.ToTopSqlString(TableName, $"{nameof(TypeInfo.Id)}, {nameof(TypeInfo.Taxis)}", $"WHERE (({nameof(TypeInfo.Taxis)} < (SELECT {nameof(TypeInfo.Taxis)} FROM {TableName} WHERE {nameof(TypeInfo.Id)} = {typeId})) AND {nameof(TypeInfo.ChannelId)} ={channelId})", $"ORDER BY {nameof(TypeInfo.Taxis)} DESC", 1);
+            string sqlString = _helper.GetPageSqlString(TableName, $"{nameof(TypeInfo.Id)}, {nameof(TypeInfo.Taxis)}", $"WHERE (({nameof(TypeInfo.Taxis)} < (SELECT {nameof(TypeInfo.Taxis)} FROM {TableName} WHERE {nameof(TypeInfo.Id)} = {typeId})) AND {nameof(TypeInfo.ChannelId)} ={channelId})", $"ORDER BY {nameof(TypeInfo.Taxis)} DESC", 0, 1);
 
             var lowerId = 0;
             var lowerTaxis = 0;

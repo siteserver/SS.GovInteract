@@ -3,16 +3,19 @@
   <metadata>
     <id>SS.GovInteract</id>
     <version>$version$</version>
-    <title>互动交流插件</title>
+    <title>电子政务互动交流插件</title>
     <authors>SiteServer CMS</authors>
     <owners>siteserver</owners>
     <licenseUrl>https://github.com/siteserver/SS.GovInteract/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/siteserver/SS.GovInteract</projectUrl>
-    <iconUrl>https://github.com/siteserver/SS.GovInteract/raw/master/logo.png</iconUrl>
+    <iconUrl>http://plugins.siteserver.cn/ss.govinteract/logo.svg</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <releaseNotes>Bug fixes and performance improvements</releaseNotes>
-    <description>SiteServer CMS 互动交流插件</description>
+    <description>SiteServer CMS 电子政务互动交流插件</description>
     <copyright>Copyright ©2018 SiteServer CMS</copyright>
     <tags>SiteServer CMS GovInteract Plugin</tags>
   </metadata>
+  <files>
+    <file src="assets\fonts\**" target="Content\assets\fonts"/>
+  </files>
 </package>
