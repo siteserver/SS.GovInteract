@@ -87,8 +87,7 @@ namespace SS.GovInteract
                         new Menu
                         {
                             Text = "新增办件",
-                            Href = PageMain.GetRedirectUrl(siteId, FilesApi.GetAdminDirectoryUrl(
-                                    $"cms/pageContentAdd.aspx?siteId={siteId}"))
+                            Href = PageMain.GetRedirectUrl(siteId, $"@/cms/pageContentAdd.aspx?siteId={siteId}")
                         },
                         new Menu
                         {
