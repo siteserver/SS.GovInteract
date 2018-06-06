@@ -13,7 +13,7 @@ namespace SS.GovInteract.Pages
 
         private int _channelId;
         private int _contentId;
-        private string _listPageUrl;
+        private string _returnUrl;
 
         public static string GetRedirectUrl(int siteId, int channelId, int contentId, string listPageUrl)
         {
@@ -24,7 +24,7 @@ namespace SS.GovInteract.Pages
         {
             _channelId = Utils.ToInt(Request.QueryString["channelId"]);
             _contentId = Utils.ToInt(Request.QueryString["contentId"]);
-            _listPageUrl = Request.QueryString["listPageUrl"];
+            _returnUrl = Request.QueryString["returnUrl"];
         }
 
         public void Accept_OnClick(object sender, EventArgs e)
@@ -45,7 +45,7 @@ namespace SS.GovInteract.Pages
 
             if (!configInfo.ApplyIsOpenWindow)
             {
-                Response.Redirect(_listPageUrl);
+                Utils.Redirect(_returnUrl);
             }
         }
 
@@ -76,7 +76,7 @@ namespace SS.GovInteract.Pages
 
             if (!configInfo.ApplyIsOpenWindow)
             {
-                Response.Redirect(_listPageUrl);
+                Utils.Redirect(_returnUrl);
             }
         }
 	}

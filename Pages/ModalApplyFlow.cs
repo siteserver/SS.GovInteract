@@ -14,7 +14,7 @@ namespace SS.GovInteract.Pages
 
         public static string GetOpenWindowString(int siteId, int channelId, int contentId)
         {
-            return LayerUtils.GetOpenScript("流动轨迹", $"{nameof(ModalApplyFlow)}.aspx?siteId={siteId}&channelId={channelId}&contentId={contentId}", 300, 600);
+            return LayerUtils.GetOpenScript("流动轨迹", $"{nameof(ModalApplyFlow)}.aspx?siteId={siteId}&channelId={channelId}&contentId={contentId}", 300, 500);
         }
 
 		public void Page_Load(object sender, EventArgs e)
@@ -47,7 +47,13 @@ namespace SS.GovInteract.Pages
                     }
                     if (i++ < count) builder.Append(@"<tr><td class=""text-center""><img src=""assets/images/flow.gif"" /></td></tr>");
                 }
+
                 LtlFlows.Text = builder.ToString();
+
+                if (string.IsNullOrEmpty(LtlFlows.Text))
+                {
+                    LtlFlows.Text = @"<h3 style=""margin-top: 20px;text-align: center;"">暂无</h3>";
+                }
             }
         }
 	}

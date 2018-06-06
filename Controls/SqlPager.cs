@@ -748,7 +748,7 @@ namespace SS.GovInteract.Controls
             var pageList = (DropDownList)sender;
             var pageIndex = Convert.ToInt32(pageList.SelectedValue);
             var url = GetNavigationUrl(pageIndex + 1);
-            HttpContext.Current.Response.Redirect(url, true);
+            Utils.Redirect(url);
         }
     }
 }

@@ -58,17 +58,21 @@
         <table class="table table-striped">
           <tbody>
             <asp:Literal ID="LtlApplyAttributes" runat="server"></asp:Literal>
+          </tbody>
+        </table>
+        <hr />
+        <table class="table table-striped">
+          <tbody>
             <tr>
-              <th>提交时间</th>
-              <td>
-                <asp:Literal ID="LtlAddDate" runat="server"></asp:Literal>
+              <td colspan="6">
+                <asp:Literal ID="LtlContent" runat="server"></asp:Literal>
               </td>
+            </tr>
+            <tr>
               <th>查询号</th>
               <td>
                 <asp:Literal ID="LtlQueryCode" runat="server"></asp:Literal>
               </td>
-            </tr>
-            <tr>
               <th>状态</th>
               <td>
                 <asp:Literal ID="LtlState" runat="server"></asp:Literal>

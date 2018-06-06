@@ -167,15 +167,11 @@ namespace SS.GovInteract.Pages
             var ltlEditUrl = (Literal)e.Item.FindControl("ltlEditUrl");
 
             var limitType = ELimitType.Normal;
-            ltlTr.Text = @"<tr class=""bg-light"">";
+            ltlTr.Text = @"<tr>";
             var state = EStateUtils.GetEnumType(contentInfo.GetString(ContentAttribute.State));
 
             var textClass = string.Empty;
-            if (state == EState.Denied || state == EState.Checked)
-            {
-                ltlTr.Text = @"<tr class=""bg-primary text-white"">";
-            }
-            else
+            if (state != EState.Denied && state != EState.Checked)
             {
                 limitType = ApplyManager.GetLimitType(SiteId, contentInfo);
                 if (limitType == ELimitType.Alert)

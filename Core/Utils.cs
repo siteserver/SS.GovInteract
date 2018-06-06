@@ -612,5 +612,16 @@ namespace SS.GovInteract.Core
             }
             return retval;
         }
+
+        public static void Redirect(string url)
+        {
+            var response = HttpContext.Current.Response;
+            response.Clear();//这里是关键，清除在返回前已经设置好的标头信息，这样后面的跳转才不会报错
+            response.BufferOutput = true;//设置输出缓冲
+            if (!response.IsRequestBeingRedirected) //在跳转之前做判断,防止重复
+            {
+                response.Redirect(url, true);
+            }
+        }
     }
 }

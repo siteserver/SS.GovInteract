@@ -42,8 +42,7 @@ namespace SS.GovInteract.Pages
 
             if (channelInfoList.Count > 0)
             {
-                HttpContext.Current.Response.Redirect(_redirectUrl);
-                HttpContext.Current.Response.End();
+                Utils.Redirect(_redirectUrl);
             }
         }
 

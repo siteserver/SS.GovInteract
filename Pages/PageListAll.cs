@@ -43,7 +43,7 @@ namespace SS.GovInteract.Pages
 
         public void Search_OnClick(object sender, EventArgs e)
         {
-            Response.Redirect(PageUrl);
+            Utils.Redirect(PageUrl);
         }
 
         protected override string GetSelectString()

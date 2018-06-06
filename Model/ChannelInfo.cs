@@ -2,6 +2,8 @@
 {
 	public class ChannelInfo
     {
+        public int Id { get; set; }
+
         public int ChannelId { get; set; }
 
         public int SiteId { get; set; }
@@ -16,6 +18,7 @@
 
         public ChannelInfo()
         {
+            Id = 0;
             ChannelId = 0;
             SiteId = 0;
             ApplyStyleId = 0;
@@ -24,8 +27,9 @@
             Summary = string.Empty; 
         }
 
-        public ChannelInfo(int channelId, int siteId, int applyStyleId, int queryStyleId, string departmentIdCollection, string summary)
+        public ChannelInfo(int id, int channelId, int siteId, int applyStyleId, int queryStyleId, string departmentIdCollection, string summary)
         {
+            Id = id;
             ChannelId = channelId;
             SiteId = siteId;
             ApplyStyleId = applyStyleId;

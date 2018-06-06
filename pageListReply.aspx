@@ -8,6 +8,64 @@
       <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
       <link href="assets/css/ionicons.min.css" rel="stylesheet" type="text/css" />
       <link href="assets/css/siteserver.min.css" rel="stylesheet" type="text/css" />
+      <script src="assets/js/jquery.min.js" type="text/javascript"></script>
+      <script src="assets/sweetalert/sweetalert.min.js" type="text/javascript"></script>
+      <script src="assets/layer/layer.min.js" type="text/javascript"></script>
+
+      <script>
+        function loopRows(oTable, callBack) {
+          if (!oTable) return;
+          callBack = callBack || function () {};
+          var trs = oTable.rows;
+          var i = 0,
+            l = trs.length;
+          var flag = i < l;
+
+          while (flag ? i < l : i > l) {
+            var cur = trs[i];
+            try {
+              callBack(cur, i);
+            } catch (e) {
+              if (e == 'break') {
+                break;
+              }
+            }
+            flag ? i++ : i--;
+          }
+        }
+
+        function selectRows(layer, bcheck) {
+          for (var i = 0; i < layer.childNodes.length; i++) {
+            if (layer.childNodes[i].childNodes.length > 0) {
+              selectRows(layer.childNodes[i], bcheck);
+            } else {
+              if (layer.childNodes[i].type == "checkbox") {
+                layer.childNodes[i].checked = bcheck;
+                var cb = $(layer.childNodes[i]);
+                var tr = cb.closest('tr');
+                if (!tr.hasClass("thead")) {
+                  cb.is(':checked') ? tr.addClass('table-active') : tr.removeClass('table-active');
+                }
+              }
+            }
+          }
+        }
+
+        function chkSelect(e) {
+          var e = (e || event);
+          var el = this;
+          if (el.getElementsByTagName('input') && el.getElementsByTagName('input').length > 0) {
+            if ($(el).hasClass('thead')) return;
+            el.className = (el.className == 'table-active' ? '' : 'table-active');
+            el.getElementsByTagName('input')[0].checked = (el.className == 'table-active');
+          }
+        }
+        $(document).ready(function () {
+          loopRows(document.getElementById('contents'), function (cur) {
+            cur.onclick = chkSelect;
+          });
+        });
+      </script>
     </head>
 
     <body>
@@ -36,7 +94,7 @@
           </div>
 
           <div class="table-responsive" data-pattern="priority-columns">
-            <table class="table">
+            <table id="contents" class="table">
               <thead>
                 <tr>
                   <th class="text-center">编号</th>
@@ -46,9 +104,6 @@
                   <th class="text-center">办理部门</th>
                   <th class="text-center">期限</th>
                   <th class="text-center">状态</th>
-                  <th class="text-center">流动轨迹</th>
-                  <th class="text-center">快速查看</th>
-                  <th class="text-center">回复办件</th>
                   <th class="text-center"></th>
                   <th width="20" class="text-center">
                     <input onclick="_checkFormAll(this.checked)" type="checkbox" />
@@ -82,14 +137,8 @@
                     </td>
                     <td class="text-center">
                       <asp:Literal ID="ltlFlowUrl" runat="server"></asp:Literal>
-                    </td>
-                    <td class="text-center">
                       <asp:Literal ID="ltlViewUrl" runat="server"></asp:Literal>
-                    </td>
-                    <td class="text-center">
                       <asp:Literal ID="ltlReplyUrl" runat="server"></asp:Literal>
-                    </td>
-                    <td class="text-center">
                       <asp:Literal ID="ltlEditUrl" runat="server"></asp:Literal>
                     </td>
                     <td class="text-center">

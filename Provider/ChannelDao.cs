@@ -11,7 +11,12 @@ namespace SS.GovInteract.Provider
         public const string TableName = "ss_govinteract_channel";
 
         public static List<TableColumn> Columns => new List<TableColumn>
-        { 
+        {
+            new TableColumn
+            {
+                AttributeName = nameof(ChannelInfo.Id),
+                DataType = DataType.Integer
+            },
             new TableColumn
             {
                 AttributeName = nameof(ChannelInfo.ChannelId),
@@ -94,25 +99,13 @@ namespace SS.GovInteract.Provider
 
         public void Update(ChannelInfo channelInfo)
         {
-            string sqlString = $"UPDATE {TableName} SET {nameof(ChannelInfo.DepartmentIdCollection)} = @{nameof(ChannelInfo.DepartmentIdCollection)}, {nameof(ChannelInfo.Summary)} = @{nameof(ChannelInfo.Summary)} WHERE {nameof(ChannelInfo.ChannelId)} = @{nameof(ChannelInfo.ChannelId)}";
+            string sqlString = $"UPDATE {TableName} SET {nameof(ChannelInfo.DepartmentIdCollection)} = @{nameof(ChannelInfo.DepartmentIdCollection)}, {nameof(ChannelInfo.Summary)} = @{nameof(ChannelInfo.Summary)} WHERE {nameof(ChannelInfo.Id)} = @{nameof(ChannelInfo.Id)}";
 
             var parameters = new[]
             { 
                 _helper.GetParameter(nameof(ChannelInfo.DepartmentIdCollection), channelInfo.DepartmentIdCollection),
                 _helper.GetParameter(nameof(ChannelInfo.Summary), channelInfo.Summary),
-                _helper.GetParameter(nameof(ChannelInfo.ChannelId), channelInfo.ChannelId)
-            };
-
-            _helper.ExecuteNonQuery(_connectionString, sqlString, parameters);
-        }
-
-        public void Delete(int channelId)
-        {
-            string sqlString = $"DELETE FROM {TableName} WHERE {nameof(ChannelInfo.ChannelId)} = @{nameof(ChannelInfo.ChannelId)}";
-
-            var parameters = new[]
-            {
-                _helper.GetParameter(nameof(ChannelInfo.ChannelId), channelId)
+                _helper.GetParameter(nameof(ChannelInfo.Id), channelInfo.Id)
             };
 
             _helper.ExecuteNonQuery(_connectionString, sqlString, parameters);
@@ -122,15 +115,18 @@ namespace SS.GovInteract.Provider
         {
             ChannelInfo channelInfo = null;
 
-            string sqlString = $@"SELECT {nameof(ChannelInfo.ChannelId)}, 
+            var sqlString = $@"SELECT 
+                {nameof(ChannelInfo.Id)}, 
+                {nameof(ChannelInfo.ChannelId)}, 
                 {nameof(ChannelInfo.SiteId)}, 
                 {nameof(ChannelInfo.ApplyStyleId)} , 
                 {nameof(ChannelInfo.QueryStyleId)}, 
                 {nameof(ChannelInfo.DepartmentIdCollection)}, 
-                {nameof(ChannelInfo.Summary)} FROM {TableName} WHERE {nameof(ChannelInfo.ChannelId)} = @{nameof(ChannelInfo.ChannelId)}";
+                {nameof(ChannelInfo.Summary)} FROM {TableName} WHERE {nameof(ChannelInfo.SiteId)} = @{nameof(ChannelInfo.SiteId)} AND {nameof(ChannelInfo.ChannelId)} = @{nameof(ChannelInfo.ChannelId)}";
 
             var parameters = new[]
             {
+                _helper.GetParameter(nameof(ChannelInfo.SiteId), siteId),
                 _helper.GetParameter(nameof(ChannelInfo.ChannelId), channelId)
             };
 
@@ -145,7 +141,7 @@ namespace SS.GovInteract.Provider
 
             if (channelInfo == null)
             {
-                ChannelInfo theChannelInfo = new ChannelInfo(channelId, siteId, 0, 0, string.Empty, string.Empty);
+                var theChannelInfo = new ChannelInfo(0, channelId, siteId, 0, 0, string.Empty, string.Empty);
 
                 Insert(theChannelInfo);
 
@@ -162,102 +158,11 @@ namespace SS.GovInteract.Provider
             return channelInfo;
         }
 
-        public string GetSummary(int channelId)
-        {
-            string summary = string.Empty; 
-            string sqlString = $"SELECT {nameof(ChannelInfo.Summary)} FROM {TableName} WHERE {nameof(ChannelInfo.ChannelId)} = @{nameof(ChannelInfo.ChannelId)}";
-
-            var parameters = new[]
-            {
-                _helper.GetParameter(nameof(ChannelInfo.ChannelId), channelId)
-            };
-
-            using (var rdr = _helper.ExecuteReader(_connectionString, sqlString, parameters))
-            {
-                if (rdr.Read())
-                {
-                    summary = _helper.GetString(rdr, 0);
-                }
-                rdr.Close();
-            }
-            return summary;
-        }
-
-        public int GetApplyStyleId(int siteId, int channelId)
-        {
-            string sqlString = $"SELECT {nameof(ChannelInfo.ApplyStyleId)} FROM {TableName} WHERE {nameof(ChannelInfo.ChannelId)} = @{nameof(ChannelInfo.ChannelId)}";
-
-            var parameters = new[]
-            {
-                _helper.GetParameter(nameof(ChannelInfo.ChannelId), channelId)
-            };
-
-            int styleId = _helper.ExecuteInt(_connectionString, sqlString, parameters);
-
-            if (styleId == 0)
-            {
-                var theChannelInfo = new ChannelInfo(channelId, siteId, 0, 0, string.Empty, string.Empty);
-
-                Insert(theChannelInfo);
-
-                styleId = _helper.ExecuteInt(_connectionString, sqlString, parameters);
-            }
-
-            return styleId;
-        }
-
-        public int GetQueryStyleId(int siteId, int channelId)
-        { 
-            string sqlString = $"SELECT {nameof(ChannelInfo.QueryStyleId)} FROM {TableName} WHERE {nameof(ChannelInfo.ChannelId)} = @{nameof(ChannelInfo.ChannelId)}";
-
-            var parameters = new[]
-            {
-                _helper.GetParameter(nameof(ChannelInfo.ChannelId), channelId)
-            };
-
-            int styleId = _helper.ExecuteInt(_connectionString, sqlString, parameters);
-
-            if (styleId == 0)
-            {
-                var theChannelInfo = new ChannelInfo(channelId, siteId, 0, 0, string.Empty, string.Empty);
-
-                Insert(theChannelInfo);
-
-                styleId = _helper.ExecuteInt(_connectionString, sqlString, parameters);
-            }
-
-            return styleId; 
-        }
-
-        public int GetChannelIdByApplyStyleId(int applyStyleId)
-        {
-            string sqlString = $"SELECT {nameof(ChannelInfo.ChannelId)} FROM {TableName} WHERE {nameof(ChannelInfo.ApplyStyleId)} = @{nameof(ChannelInfo.ApplyStyleId)}";
-
-            var parameters = new[]
-            {
-                _helper.GetParameter(nameof(ChannelInfo.ApplyStyleId), applyStyleId)
-            };
-
-            return _helper.ExecuteInt(_connectionString, sqlString, parameters); 
-        }
-
-        public int GetChannelIdByQueryStyleId(int queryStyleId)
-        {
-            string sqlString = $"SELECT {nameof(ChannelInfo.ChannelId)} FROM {TableName} WHERE {nameof(ChannelInfo.QueryStyleId)} = @{nameof(ChannelInfo.QueryStyleId)}";
-
-            var parameters = new[]
-            {
-                _helper.GetParameter(nameof(ChannelInfo.QueryStyleId), queryStyleId)
-            };
-
-            return _helper.ExecuteInt(_connectionString, sqlString, parameters); 
-        }
-
         public bool IsExists(int channelId)
         {
             var exists = false;
 
-            string sqlString = $"SELECT {nameof(ChannelInfo.ChannelId)} FROM {TableName} WHERE {nameof(ChannelInfo.ChannelId)} = @{nameof(ChannelInfo.ChannelId)}";
+            var sqlString = $"SELECT {nameof(ChannelInfo.Id)} FROM {TableName} WHERE {nameof(ChannelInfo.ChannelId)} = @{nameof(ChannelInfo.ChannelId)}";
 
             var parameters = new[]
             {
@@ -283,8 +188,10 @@ namespace SS.GovInteract.Provider
             if (rdr == null)
                 return null;
             var i = 0;
+
             return new ChannelInfo
             {
+                Id = _helper.GetInt(rdr, i++),
                 ChannelId = _helper.GetInt(rdr, i++),
                 SiteId = _helper.GetInt(rdr, i++),
                 ApplyStyleId = _helper.GetInt(rdr, i++),

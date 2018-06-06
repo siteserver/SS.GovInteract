@@ -13,7 +13,7 @@ namespace SS.GovInteract.Pages
     {
         public Literal LtlTitle;
         public Literal LtlApplyAttributes;
-        public Literal LtlAddDate;
+        public Literal LtlContent;
         public Literal LtlQueryCode;
         public Literal LtlState;
         public Literal LtlDepartmentName;
@@ -95,7 +95,8 @@ namespace SS.GovInteract.Pages
             foreach (var tableColumn in tableColumns)
             {
                 if (tableColumn.InputStyle == null ||
-                    Utils.EqualsIgnoreCase(tableColumn.AttributeName, ContentAttribute.DepartmentId)) continue;
+                    Utils.EqualsIgnoreCase(tableColumn.AttributeName, ContentAttribute.DepartmentId) ||
+                    Utils.EqualsIgnoreCase(tableColumn.AttributeName, ContentAttribute.Content)) continue;
 
                 var value = _contentInfo.GetString(tableColumn.AttributeName);
                 if (Utils.EqualsIgnoreCase(tableColumn.AttributeName, ContentAttribute.TypeId))
@@ -137,7 +138,8 @@ namespace SS.GovInteract.Pages
 
             LtlTitle.Text = _contentInfo.Title;
             LtlApplyAttributes.Text = builder.ToString();
-            LtlAddDate.Text = Utils.GetDateAndTimeString(_contentInfo.AddDate);
+
+            LtlContent.Text = _contentInfo.GetString(ContentAttribute.Content);
             LtlQueryCode.Text = _contentInfo.GetString(ContentAttribute.QueryCode);
             LtlState.Text = EStateUtils.GetText(state);
             LtlDepartmentName.Text = _contentInfo.GetString(ContentAttribute.DepartmentName);

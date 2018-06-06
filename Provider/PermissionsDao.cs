@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data; 
 using SiteServer.Plugin;
 using SS.GovInteract.Core;
@@ -12,7 +11,12 @@ namespace SS.GovInteract.Provider
         public const string TableName = "ss_govinteract_permissions"; 
 
         public static List<TableColumn> Columns => new List<TableColumn>
-        { 
+        {
+            new TableColumn
+            {
+                AttributeName = nameof(PermissionsInfo.Id),
+                DataType = DataType.Integer
+            },
             new TableColumn
             {
                 AttributeName = nameof(PermissionsInfo.UserName),
@@ -62,7 +66,7 @@ namespace SS.GovInteract.Provider
 
             if (!Main.ChannelDao.IsExists(permissionsInfo.ChannelId))
             {
-                var channelInfo = new ChannelInfo(permissionsInfo.ChannelId, siteId, 0, 0, string.Empty, string.Empty);
+                var channelInfo = new ChannelInfo(0, permissionsInfo.ChannelId, siteId, 0, 0, string.Empty, string.Empty);
                 Main.ChannelDao.Insert(channelInfo);
             }
 
@@ -84,13 +88,12 @@ namespace SS.GovInteract.Provider
 
         public void Update(PermissionsInfo permissionsInfo)
         {
-            string sqlString = $"UPDATE {TableName} SET {nameof(PermissionsInfo.Permissions)} = @{nameof(PermissionsInfo.Permissions)} WHERE {nameof(PermissionsInfo.UserName)} = @{nameof(PermissionsInfo.UserName)} AND {nameof(PermissionsInfo.ChannelId)} = @{nameof(PermissionsInfo.ChannelId)}";
+            string sqlString = $"UPDATE {TableName} SET {nameof(PermissionsInfo.Permissions)} = @{nameof(PermissionsInfo.Permissions)} WHERE {nameof(PermissionsInfo.Id)} = @{nameof(PermissionsInfo.Id)}";
 
             var parameters = new[]
             {
-                _helper.GetParameter(nameof(PermissionsInfo.UserName), permissionsInfo.UserName),
-                _helper.GetParameter(nameof(PermissionsInfo.ChannelId), permissionsInfo.ChannelId),
-                _helper.GetParameter(nameof(PermissionsInfo.Permissions), permissionsInfo.Permissions)
+                _helper.GetParameter(nameof(PermissionsInfo.Permissions), permissionsInfo.Permissions),
+                _helper.GetParameter(nameof(PermissionsInfo.Id), permissionsInfo.Id)
             };
 
             _helper.ExecuteNonQuery(_connectionString, sqlString, parameters);
@@ -100,7 +103,7 @@ namespace SS.GovInteract.Provider
         {
             PermissionsInfo permissionsInfo = null;
 
-            string sqlString = $"SELECT {nameof(PermissionsInfo.UserName)}, {nameof(PermissionsInfo.ChannelId)}, {nameof(PermissionsInfo.Permissions)} FROM {TableName} WHERE {nameof(PermissionsInfo.UserName)} = @{nameof(PermissionsInfo.UserName)} AND {nameof(PermissionsInfo.ChannelId)} = @{nameof(PermissionsInfo.ChannelId)}";
+            string sqlString = $"SELECT {nameof(PermissionsInfo.Id)}, {nameof(PermissionsInfo.UserName)}, {nameof(PermissionsInfo.ChannelId)}, {nameof(PermissionsInfo.Permissions)} FROM {TableName} WHERE {nameof(PermissionsInfo.UserName)} = @{nameof(PermissionsInfo.UserName)} AND {nameof(PermissionsInfo.ChannelId)} = @{nameof(PermissionsInfo.ChannelId)}";
 
             var parameters = new[]
             {
@@ -120,37 +123,37 @@ namespace SS.GovInteract.Provider
             return permissionsInfo;
         }
 
-        public ArrayList GetPermissionsInfoArrayList(string userName)
+        public List<PermissionsInfo> GetPermissionsInfoList(string userName)
         {
-            var arraylist = new ArrayList();
+            var list = new List<PermissionsInfo>();
 
             var parameters = new[]
            {
                 _helper.GetParameter(nameof(PermissionsInfo.UserName), userName) 
            };
 
-            string sqlString = $"SELECT {nameof(PermissionsInfo.UserName)}, {nameof(PermissionsInfo.ChannelId)}, {nameof(PermissionsInfo.Permissions)} FROM {TableName} WHERE {nameof(PermissionsInfo.UserName)} = @{nameof(PermissionsInfo.UserName)}";
+            string sqlString = $"SELECT {nameof(PermissionsInfo.Id)}, {nameof(PermissionsInfo.UserName)}, {nameof(PermissionsInfo.ChannelId)}, {nameof(PermissionsInfo.Permissions)} FROM {TableName} WHERE {nameof(PermissionsInfo.UserName)} = @{nameof(PermissionsInfo.UserName)}";
 
             using (var rdr = _helper.ExecuteReader(_connectionString, sqlString, parameters))
             {
                 while (rdr.Read())
                 {
-                    PermissionsInfo permissionsInfo = GetPermissionsInfo(rdr);
-                    arraylist.Add(permissionsInfo);
+                    var permissionsInfo = GetPermissionsInfo(rdr);
+                    list.Add(permissionsInfo);
                 }
                 rdr.Close();
             }
 
-            return arraylist;
+            return list;
         }
 
         public Dictionary<int, List<string>> GetPermissionSortedList(string userName)
         {
             var sortedlist = new Dictionary<int, List<string>>();
 
-            var permissionsInfoArrayList = GetPermissionsInfoArrayList(userName);
+            var permissionsInfoList = GetPermissionsInfoList(userName);
 
-            foreach (PermissionsInfo permissionsInfo in permissionsInfoArrayList)
+            foreach (var permissionsInfo in permissionsInfoList)
             {
                 var list = new List<string>();
                 if (sortedlist[permissionsInfo.ChannelId] != null)
@@ -158,8 +161,8 @@ namespace SS.GovInteract.Provider
                     list = sortedlist[permissionsInfo.ChannelId];
                 }
 
-                var permissionArrayList = Utils.StringCollectionToStringList(permissionsInfo.Permissions);
-                foreach (string permission in permissionArrayList)
+                var permissionList = Utils.StringCollectionToStringList(permissionsInfo.Permissions);
+                foreach (var permission in permissionList)
                 {
                     if (!list.Contains(permission)) list.Add(permission);
                 }
@@ -173,11 +176,13 @@ namespace SS.GovInteract.Provider
         {
             if (rdr == null) return null;
             var i = 0;
+
             return new PermissionsInfo
             {
-                UserName = _helper.GetString(rdr, i++), 
+                Id = _helper.GetInt(rdr, i++),
+                UserName = _helper.GetString(rdr, i++),
                 ChannelId = _helper.GetInt(rdr, i++),
-                Permissions = _helper.GetString(rdr, i++) 
+                Permissions = _helper.GetString(rdr, i) 
             };
         }
     }

@@ -77,8 +77,8 @@
             <asp:Literal id="LtlTotalCount" runat="server" />)
           </h4>
 
-          <div class="form-inline" role="form">
-            <div class="form-group">
+          <div class="form-inline">
+            <div class="form-group m-l-10">
               <label for="DdlTaxis" class="mr-sm-2">排序</label>
               <asp:DropDownList ID="DdlTaxis" class="form-control" AutoPostBack="true" OnSelectedIndexChanged="Search_OnClick" runat="server"></asp:DropDownList>
             </div>
@@ -94,7 +94,8 @@
               <label for="TbDateTo" class="m-sm-2">至</label>
               <ctrl:DateTimeTextBox ID="TbDateTo" class="form-control" Columns="12" runat="server" />
             </div>
-
+          </div>
+          <div class="form-inline m-t-10">
             <div class="form-group m-l-10">
               <label for="TbKeyword" class="mr-sm-2">关键字</label>
               <asp:TextBox ID="TbKeyword" class="form-control" runat="server"></asp:TextBox>
@@ -128,7 +129,7 @@
             </div>
           </div>
 
-          <div class="table-responsive" data-pattern="priority-columns">
+          <div class="table-responsive">
             <table id="contents" class="table">
               <thead>
                 <tr class="thead">
@@ -139,9 +140,6 @@
                   <th class="text-center">办理部门</th>
                   <th class="text-center">期限</th>
                   <th class="text-center">状态</th>
-                  <th class="text-center">流动轨迹</th>
-                  <th class="text-center">快速查看</th>
-                  <th class="text-center">回复办件</th>
                   <th class="text-center"></th>
                   <th width="20" class="text-center">
                     <input onclick="selectRows(document.getElementById('contents'), this.checked);" type="checkbox" />
@@ -175,14 +173,8 @@
                     </td>
                     <td class="text-center">
                       <asp:Literal ID="ltlFlowUrl" runat="server"></asp:Literal>
-                    </td>
-                    <td class="text-center">
                       <asp:Literal ID="ltlViewUrl" runat="server"></asp:Literal>
-                    </td>
-                    <td class="text-center">
                       <asp:Literal ID="ltlReplyUrl" runat="server"></asp:Literal>
-                    </td>
-                    <td class="text-center">
                       <asp:Literal ID="ltlEditUrl" runat="server"></asp:Literal>
                     </td>
                     <td class="text-center">
