@@ -18,7 +18,7 @@ namespace SS.GovInteract.Provider
             {
                 AttributeName = ContentAttribute.RealName,
                 DataType = DataType.VarChar,
-                DataLength = 200,
+                DataLength = 255,
                 InputStyle = new InputStyle
                 {
                     InputType = InputType.Text,
@@ -29,7 +29,7 @@ namespace SS.GovInteract.Provider
             {
                 AttributeName = ContentAttribute.Organization,
                 DataType = DataType.VarChar,
-                DataLength = 200,
+                DataLength = 255,
                 InputStyle = new InputStyle
                 {
                     InputType = InputType.Text,
@@ -40,7 +40,7 @@ namespace SS.GovInteract.Provider
             {
                 AttributeName = ContentAttribute.CardType,
                 DataType = DataType.VarChar,
-                DataLength = 200,
+                DataLength = 255,
                 InputStyle = new InputStyle
                 {
                     InputType = InputType.SelectOne,
@@ -79,7 +79,7 @@ namespace SS.GovInteract.Provider
             {
                 AttributeName = ContentAttribute.CardNo,
                 DataType = DataType.VarChar,
-                DataLength = 200,
+                DataLength = 255,
                 InputStyle = new InputStyle
                 {
                     InputType = InputType.Text,
@@ -112,7 +112,7 @@ namespace SS.GovInteract.Provider
             {
                 AttributeName = ContentAttribute.Address,
                 DataType = DataType.VarChar,
-                DataLength = 500,
+                DataLength = 255,
                 InputStyle = new InputStyle
                 {
                     InputType = InputType.Text,
@@ -123,7 +123,7 @@ namespace SS.GovInteract.Provider
             {
                 AttributeName = ContentAttribute.Email,
                 DataType = DataType.VarChar,
-                DataLength = 200,
+                DataLength = 255,
                 InputStyle = new InputStyle
                 {
                     InputType = InputType.Text,
@@ -202,7 +202,7 @@ namespace SS.GovInteract.Provider
             {
                 AttributeName = ContentAttribute.IsPublic,
                 DataType = DataType.VarChar,
-                DataLength = 10,
+                DataLength = 18,
                 InputStyle = new InputStyle
                 {
                     InputType = InputType.Radio,
@@ -239,7 +239,7 @@ namespace SS.GovInteract.Provider
             {
                 AttributeName = ContentAttribute.FileUrl,
                 DataType = DataType.VarChar,
-                DataLength = 200,
+                DataLength = 255,
                 InputStyle = new InputStyle
                 {
                     InputType = InputType.File,
@@ -260,7 +260,7 @@ namespace SS.GovInteract.Provider
             {
                 AttributeName = ContentAttribute.DepartmentName,
                 DataType = DataType.VarChar,
-                DataLength = 200,
+                DataLength = 255,
                 InputStyle = new InputStyle
                 {
                     InputType = InputType.Hidden,
@@ -271,7 +271,7 @@ namespace SS.GovInteract.Provider
             {
                 AttributeName = ContentAttribute.QueryCode,
                 DataType = DataType.VarChar,
-                DataLength = 200,
+                DataLength = 255,
                 InputStyle = new InputStyle
                 {
                     InputType = InputType.Hidden,
