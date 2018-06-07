@@ -264,7 +264,7 @@ namespace SS.GovInteract.Provider
                 InputStyle = new InputStyle
                 {
                     InputType = InputType.Hidden,
-                    DisplayName = "部门名称"
+                    DisplayName = "提交部门"
                 }
             },
             new TableColumn

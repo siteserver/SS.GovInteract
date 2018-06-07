@@ -14,9 +14,6 @@ namespace SS.GovInteract.Pages
         public Literal LtlTitle;
         public Literal LtlApplyAttributes;
         public Literal LtlContent;
-        public Literal LtlQueryCode;
-        public Literal LtlState;
-        public Literal LtlDepartmentName;
 
         public PlaceHolder PhReply;
         public Literal LtlDepartmentAndUserName;
@@ -95,6 +92,11 @@ namespace SS.GovInteract.Pages
             foreach (var tableColumn in tableColumns)
             {
                 if (tableColumn.InputStyle == null ||
+                    Utils.EqualsIgnoreCase(tableColumn.AttributeName, nameof(IContentInfo.Title)) ||
+                    Utils.EqualsIgnoreCase(tableColumn.AttributeName, nameof(IContentInfo.IsHot)) ||
+                    Utils.EqualsIgnoreCase(tableColumn.AttributeName, nameof(IContentInfo.IsColor)) ||
+                    Utils.EqualsIgnoreCase(tableColumn.AttributeName, nameof(IContentInfo.IsRecommend)) ||
+                    Utils.EqualsIgnoreCase(tableColumn.AttributeName, nameof(IContentInfo.IsTop)) ||
                     Utils.EqualsIgnoreCase(tableColumn.AttributeName, ContentAttribute.DepartmentId) ||
                     Utils.EqualsIgnoreCase(tableColumn.AttributeName, ContentAttribute.Content)) continue;
 
@@ -114,6 +116,10 @@ namespace SS.GovInteract.Pages
                         value =
                             $@"<a href=""{value}"" target=""_blank"">{value}</a>";
                     }
+                }
+                else if (Utils.EqualsIgnoreCase(tableColumn.AttributeName, ContentAttribute.State))
+                {
+                    value = EStateUtils.GetText(state);
                 }
 
                 if (isSingle)
@@ -140,9 +146,6 @@ namespace SS.GovInteract.Pages
             LtlApplyAttributes.Text = builder.ToString();
 
             LtlContent.Text = _contentInfo.GetString(ContentAttribute.Content);
-            LtlQueryCode.Text = _contentInfo.GetString(ContentAttribute.QueryCode);
-            LtlState.Text = EStateUtils.GetText(state);
-            LtlDepartmentName.Text = _contentInfo.GetString(ContentAttribute.DepartmentName);
 
             if (PhReply != null)
             {
