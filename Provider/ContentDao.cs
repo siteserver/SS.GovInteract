@@ -13,7 +13,7 @@ namespace SS.GovInteract.Provider
         public const string TableName = "ss_govinteract_content";
 
         public static List<TableColumn> Columns => new List<TableColumn>
-        {  
+        {
             new TableColumn
             {
                 AttributeName = ContentAttribute.RealName,
@@ -258,15 +258,47 @@ namespace SS.GovInteract.Provider
             },
             new TableColumn
             {
+                AttributeName = ContentAttribute.DepartmentName,
+                DataType = DataType.VarChar,
+                DataLength = 200,
+                InputStyle = new InputStyle
+                {
+                    InputType = InputType.Hidden,
+                    DisplayName = "部门名称"
+                }
+            },
+            new TableColumn
+            {
+                AttributeName = ContentAttribute.QueryCode,
+                DataType = DataType.VarChar,
+                DataLength = 200,
+                InputStyle = new InputStyle
+                {
+                    InputType = InputType.Hidden,
+                    DisplayName = "查询码"
+                }
+            },
+            new TableColumn
+            {
                 AttributeName = ContentAttribute.State,
                 DataType = DataType.VarChar,
-                DataLength = 50
+                DataLength = 50,
+                InputStyle = new InputStyle
+                {
+                    InputType = InputType.Hidden,
+                    DisplayName = "状态"
+                }
             },
             new TableColumn
             {
                 AttributeName = ContentAttribute.IpAddress,
                 DataType = DataType.VarChar,
-                DataLength = 50
+                DataLength = 50,
+                InputStyle = new InputStyle
+                {
+                    InputType = InputType.Hidden,
+                    DisplayName = "IP地址"
+                }
             }
         };
 

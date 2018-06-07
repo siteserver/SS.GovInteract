@@ -1,16 +1,12 @@
-﻿using System.Collections.Generic;
-
-namespace SS.GovInteract.Model
+﻿namespace SS.GovInteract.Model
 {
-    public class ContentAttribute
+    public static class ContentAttribute
     {
-        //hidden
         public const string DepartmentName = "DepartmentName";
         public const string QueryCode = "QueryCode";
         public const string State = "State";
-        public const string IpAddress = "IpAddress"; 
+        public const string IpAddress = "IpAddress";
 
-        //basic
         public const string RealName = "RealName";
         public const string Organization = "Organization";
         public const string CardType = "CardType";
@@ -29,56 +25,5 @@ namespace SS.GovInteract.Model
 
         //extend
         public const string TranslateFromChannelId = "TranslateFromChannelId";
-
-        //不存在
-        public const string Reply = "Reply";
-        public const string ReplyDepartment = "ReplyDepartment";
-        public const string ReplyUserName = "ReplyUserName";
-        public const string ReplyDate = "ReplyDate";
-        public const string ReplyFileUrl = "ReplyFileUrl";
-        public const string NavigationUrl = "NavigationUrl";
-        public const string CountOfPhotos = "CountOfPhotos";			//商品图片数
-
-        public static List<string> AllAttributes
-        {
-            get
-            {
-                var arraylist = new List<string>();
-                arraylist.AddRange(HiddenAttributes);
-                arraylist.AddRange(SystemAttributes);
-                return arraylist;
-            }
-        }
-
-        private static List<string> _hiddenAttributes;
-        public static List<string> HiddenAttributes => _hiddenAttributes ?? (_hiddenAttributes = new List<string>(ContentAttribute.HiddenAttributes)
-        {
-            DepartmentName.ToLower(),
-            QueryCode,
-            State.ToLower(),
-            IpAddress.ToLower()
-        });
-
-        private static List<string> _systemAttributes;
-        public static List<string> SystemAttributes => _systemAttributes ?? (_systemAttributes = new List<string>(ContentAttribute.SystemAttributes)
-        {
-            RealName.ToLower(),
-            Organization.ToLower(),
-            CardType.ToLower(),
-            CardNo.ToLower(),
-            Phone.ToLower(),
-            PostCode.ToLower(),
-            Address.ToLower(),
-            Email.ToLower(),
-            Fax.ToLower(),
-            TypeId.ToLower(),
-            IsPublic.ToLower(), 
-            Content.ToLower(),
-            FileUrl.ToLower(),
-            DepartmentId.ToLower()
-        });
-
-        private static List<string> _excludeAttributes;
-        public static List<string> ExcludeAttributes => _excludeAttributes ?? (_excludeAttributes = new List<string>());
     }
 }
