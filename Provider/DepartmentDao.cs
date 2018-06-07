@@ -130,7 +130,7 @@ namespace SS.GovInteract.Provider
 
             if (string.IsNullOrEmpty(departmentIdCollection)) return list;
 
-            string sqlString =
+            var sqlString =
                 $@"SELECT Id FROM siteserver_Department WHERE Id IN ({departmentIdCollection})";
 
             using (var rdr = _helper.ExecuteReader(_connectionString, sqlString))

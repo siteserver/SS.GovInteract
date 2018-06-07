@@ -103,16 +103,19 @@
     <Compile Include="Pages\ModalApplyReply.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Pages\ModalTypeAdd.cs">
+    <Compile Include="Pages\ModalDepartmentSelectSingle.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Pages\ModalDepartmentSelect.cs">
+    <Compile Include="Pages\ModalConfigTypeAdd.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Pages\ModalAdinistrators.cs">
+    <Compile Include="Pages\ModalConfigDepartments.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Pages\ModalTypeList.cs">
+    <Compile Include="Pages\ModalConfigAdministrators.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\ModalConfigTypes.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Pages\PageAnalysis.cs">
@@ -281,13 +284,14 @@
     <Content Include="assets\tree\vote.gif" />
     <Content Include="index.html" />
     <Content Include="logo.svg" />
-    <Content Include="modalAdinistrators.aspx" />
     <Content Include="modalApplyFlow.aspx" />
     <Content Include="modalApplyReply.aspx" />
     <Content Include="modalApplyView.aspx" />
-    <Content Include="modalDepartmentSelect.aspx" />
-    <Content Include="modalTypeAdd.aspx" />
-    <Content Include="modalTypeList.aspx" />
+    <Content Include="modalConfigAdministrators.aspx" />
+    <Content Include="modalConfigDepartments.aspx" />
+    <Content Include="modalConfigTypeAdd.aspx" />
+    <Content Include="modalConfigTypes.aspx" />
+    <Content Include="modalDepartmentSelectSingle.aspx" />
     <Content Include="pageAnalysis.aspx" />
     <Content Include="pageBlank.html" />
     <Content Include="pageConfiguration.aspx" />

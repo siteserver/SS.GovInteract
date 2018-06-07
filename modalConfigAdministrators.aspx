@@ -1,4 +1,4 @@
-<%@ Page Language="C#" Inherits="SS.GovInteract.Pages.ModalAdinistrators" %>
+<%@ Page Language="C#" Inherits="SS.GovInteract.Pages.ModalConfigAdministrators" %>
   <!DOCTYPE html>
   <html>
 

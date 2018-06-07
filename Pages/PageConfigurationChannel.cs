@@ -49,11 +49,16 @@ namespace SS.GovInteract.Pages
                 var ltlName = (Literal)e.Item.FindControl("ltlName");
                 var ltlAction = (Literal)e.Item.FindControl("ltlAction");
                 ltlName.Text = channelInfo.ChannelName;
-                ltlAction.Text = $@"<a href='javascript:;' onclick=""{ModalDepartmentSelect.GetOpenWindowString(SiteId, channelInfo.Id)}"">负责部门设置</a> &nbsp;&nbsp;&nbsp;&nbsp;
-                                    <a href='javascript:;' onclick=""{ModalAdinistrators.GetOpenWindowString(SiteId, channelInfo.Id)}"">负责人员设置</a> &nbsp;&nbsp;&nbsp;&nbsp;
-                                    <a href='#'>邮件/短信发送</a> &nbsp;&nbsp;&nbsp;&nbsp;
-                                    <a href='javascript:;' onclick=""{ModalTypeList.GetOpenWindowStringToList(SiteId, channelInfo.Id)}"">办件类型管理</a> 
-                                    ";  
+                ltlAction.Text = $@"
+<a href='javascript:;' onclick=""{ModalConfigDepartments.GetOpenWindowString(SiteId, channelInfo.Id)}"">
+负责部门设置</a>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<a href='javascript:;' onclick=""{ModalConfigAdministrators.GetOpenWindowString(SiteId, channelInfo.Id)}"">
+负责人员设置</a>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<a href='javascript:;' onclick=""{ModalConfigTypes.GetOpenWindowStringToList(SiteId, channelInfo.Id)}"">
+办件类型管理</a> 
+";
             }  
         }
     }

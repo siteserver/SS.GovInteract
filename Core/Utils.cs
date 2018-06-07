@@ -248,35 +248,6 @@ namespace SS.GovInteract.Core
             return script;
         }
 
-        public static string GetOpenLayerString(string title, string pageUrl, int width, int height)
-        {
-            string areaWidth = $"'{width}px'";
-            string areaHeight = $"'{height}px'";
-            var offsetLeft = "''";
-            var offsetRight = "''";
-            if (width == 0)
-            {
-                areaWidth = "($(window).width() - 50) +'px'";
-                offsetRight = "'25px'";
-            }
-            if (height == 0)
-            {
-                areaHeight = "($(window).height() - 50) +'px'";
-                offsetLeft = "'25px'";
-            }
-            return
-                $@"$.layer({{type: 2, maxmin: true, shadeClose: true, title: '{title}', shade: [0.1,'#fff'], iframe: {{src: '{pageUrl}'}}, area: [{areaWidth}, {areaHeight}], offset: [{offsetLeft}, {offsetRight}]}});return false;";
-        }
-
-        public static void CloseModalPage(Page page)
-        {
-            page.Response.Clear();
-            page.Response.Write($"<script>window.parent.location.reload(false);{HidePopWin}</script>");
-            //page.Response.End();
-        }
-
-        public const string HidePopWin = "window.parent.layer.closeAll();";
-
         /// <summary> 
         /// 过滤sql攻击脚本 
         /// </summary> 

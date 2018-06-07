@@ -55,14 +55,15 @@ namespace SS.GovInteract.Core
             Main.TypeDao.Insert(typeInfo);
         }
 
-        public static List<int> GetFirstDepartmentIdList(ChannelInfo channelInfo)
+        public static List<int> GetDepartmentIdList(ChannelInfo channelInfo)
         {
-            var list = new List<int>();
-            if (channelInfo == null || string.IsNullOrEmpty(channelInfo.DepartmentIdCollection))
-            {
-                return list;
-            }
-            return Main.DepartmentDao.GetDepartmentIdListByDepartmentIdCollection(channelInfo.DepartmentIdCollection);
+            return Utils.StringCollectionToIntList(channelInfo?.DepartmentIdCollection);
+            //var list = new List<int>();
+            //if (string.IsNullOrEmpty(channelInfo?.DepartmentIdCollection))
+            //{
+            //    return list;
+            //}
+            //return Main.DepartmentDao.GetDepartmentIdListByDepartmentIdCollection(channelInfo.DepartmentIdCollection);
             //return string.IsNullOrEmpty(channelInfo?.DepartmentIdCollection) ? Main.DepartmentDao.GetDepartmentIdListByParentId(0) : Main.DepartmentDao.GetDepartmentIdListByDepartmentIdCollection(channelInfo.DepartmentIdCollection);
         }
 

@@ -5,7 +5,7 @@ using SS.GovInteract.Model;
 
 namespace SS.GovInteract.Pages
 {
-    public class ModalTypeAdd : PageBase
+    public class ModalConfigTypeAdd : PageBase
     {
         public Literal LtlMessage;
         public TextBox TbTypeName;
@@ -15,12 +15,12 @@ namespace SS.GovInteract.Pages
 
         public static string GetOpenWindowStringToAdd(int siteId, int channelId)
         {
-            return Utils.GetOpenLayerString("添加办件类型", $"{nameof(ModalTypeAdd)}.aspx?siteId={siteId}&channelId={channelId}", 450, 350);
+            return LayerUtils.GetOpenScript("添加办件类型", $"{nameof(ModalConfigTypeAdd)}.aspx?siteId={siteId}&channelId={channelId}", 450, 350);
         }
 
         public static string GetOpenWindowStringToEdit(int siteId, int channelId, int id)
         {
-            return Utils.GetOpenLayerString("修改办件类型", $"{nameof(ModalTypeAdd)}.aspx?siteId={siteId}&channelId={channelId}&id={id}", 450, 350);
+            return LayerUtils.GetOpenScript("修改办件类型", $"{nameof(ModalConfigTypeAdd)}.aspx?siteId={siteId}&channelId={channelId}&id={id}", 450, 350);
         }
 
         public void Page_Load(object sender, EventArgs e)
@@ -67,7 +67,7 @@ namespace SS.GovInteract.Pages
                                 typeInfo.TypeName = TbTypeName.Text;
                                 Main.TypeDao.Update(typeInfo);
                                 LtlMessage.Text = Utils.GetMessageHtml("办件类型修改成功！", true);
-                                Utils.CloseModalPage(Page);
+                                LayerUtils.Close(Page);
                             }
                         }  
                     } 
@@ -92,7 +92,7 @@ namespace SS.GovInteract.Pages
                         typeInfo = new TypeInfo(0, TbTypeName.Text, _channelId, SiteId, 0); 
                         Main.TypeDao.Insert(typeInfo);
                         LtlMessage.Text = Utils.GetMessageHtml("办件类型添加成功！", true);
-                        Utils.CloseModalPage(Page);
+                        LayerUtils.Close(Page);
                     }
                     catch (Exception ex)
                     {

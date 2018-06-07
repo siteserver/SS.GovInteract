@@ -77,7 +77,7 @@
             <asp:Literal id="LtlTotalCount" runat="server" />)
           </h4>
 
-          <div class="btn-toolbar mt-4 mb-4" role="toolbar">
+          <!-- <div class="btn-toolbar mt-4 mb-4" role="toolbar">
             <div class="btn-group">
 
               <asp:PlaceHolder id="PhCheck" runat="server">
@@ -95,7 +95,7 @@
               </asp:PlaceHolder>
 
             </div>
-          </div>
+          </div> -->
 
           <div class="table-responsive" data-pattern="priority-columns">
             <table id="contents" class="table">
@@ -104,7 +104,7 @@
                   <th class="text-center">编号</th>
                   <th>办件标题(点击进入操作界面) </th>
                   <th class="text-center">提交日期</th>
-                  <th>意见</th>
+                  <!-- <th>意见</th> -->
                   <th class="text-center">办理部门</th>
                   <th class="text-center">期限</th>
                   <th class="text-center">状态</th>
@@ -127,9 +127,9 @@
                     <td class="text-center">
                       <asp:Literal ID="ltlAddDate" runat="server"></asp:Literal>
                     </td>
-                    <td>
+                    <!-- <td>
                       <asp:Literal ID="ltlRemark" runat="server"></asp:Literal>
-                    </td>
+                    </td> -->
                     <td class="text-center">
                       <asp:Literal ID="ltlDepartment" runat="server"></asp:Literal>
                     </td>

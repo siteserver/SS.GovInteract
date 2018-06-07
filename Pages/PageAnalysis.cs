@@ -107,7 +107,7 @@ namespace SS.GovInteract.Pages
             {
                 var channelInfo = Main.ChannelDao.GetChannelInfo(SiteId, _nodeId);
 
-                departmentIdList = Main.DepartmentDao.GetDepartmentIdListByFirstDepartmentIdList(InteractManager.GetFirstDepartmentIdList(channelInfo));
+                departmentIdList = Main.DepartmentDao.GetDepartmentIdListByFirstDepartmentIdList(InteractManager.GetDepartmentIdList(channelInfo));
             }
 
             if (departmentIdList.Count == 0)

@@ -95,7 +95,7 @@
               <ctrl:DateTimeTextBox ID="TbDateTo" class="form-control" Columns="12" runat="server" />
             </div>
           </div>
-          <div class="form-inline m-t-10">
+          <div class="form-inline m-t-10 m-b-10">
             <div class="form-group m-l-10">
               <label for="TbKeyword" class="mr-sm-2">关键字</label>
               <asp:TextBox ID="TbKeyword" class="form-control" runat="server"></asp:TextBox>
@@ -104,7 +104,7 @@
             <asp:Button OnClick="Search_OnClick" Text="搜 索" class="btn btn-success m-l-10 btn-md" runat="server"></asp:Button>
           </div>
 
-          <div class="btn-toolbar mt-4 mb-4" role="toolbar">
+          <!-- <div class="btn-toolbar mt-4 mb-4" role="toolbar">
             <div class="btn-group">
 
               <asp:PlaceHolder id="PhAccept" runat="server">
@@ -127,7 +127,7 @@
               <asp:HyperLink id="HlExport" class="btn btn-light text-secondary" NavigateUrl="javascript:;" runat="server" Text="导 出"></asp:HyperLink>
 
             </div>
-          </div>
+          </div> -->
 
           <div class="table-responsive">
             <table id="contents" class="table">
@@ -136,7 +136,7 @@
                   <th class="text-center">编号</th>
                   <th>办件标题(点击进入操作界面) </th>
                   <th class="text-center">提交日期</th>
-                  <th>意见</th>
+                  <!-- <th>意见</th> -->
                   <th class="text-center">办理部门</th>
                   <th class="text-center">期限</th>
                   <th class="text-center">状态</th>
@@ -159,9 +159,9 @@
                     <td class="text-center">
                       <asp:Literal ID="ltlAddDate" runat="server"></asp:Literal>
                     </td>
-                    <td>
+                    <!-- <td>
                       <asp:Literal ID="ltlRemark" runat="server"></asp:Literal>
-                    </td>
+                    </td> -->
                     <td class="text-center">
                       <asp:Literal ID="ltlDepartment" runat="server"></asp:Literal>
                     </td>

@@ -1,4 +1,4 @@
-<%@ Page Language="C#" Inherits="SS.GovInteract.Pages.ModalDepartmentSelect" %>
+<%@ Page Language="C#" Inherits="SS.GovInteract.Pages.ModalDepartmentSelectSingle" %>
   <!DOCTYPE html>
   <html>
 

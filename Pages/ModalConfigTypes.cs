@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Web.UI.WebControls;
 using SS.GovInteract.Core;
-using SS.GovInteract.Model;
 
 namespace SS.GovInteract.Pages
 {
-    public class ModalTypeList : PageBase
+    public class ModalConfigTypes : PageBase
     {
         public Literal LtlMessage;
         public DataGrid DgContents;
@@ -15,12 +14,12 @@ namespace SS.GovInteract.Pages
 
         public static string GetRedirectUrl(int siteId, int channelId)
         {
-            return $"{nameof(ModalTypeList)}.aspx?siteId={siteId}&channelId={channelId}";
+            return $"{nameof(ModalConfigTypes)}.aspx?siteId={siteId}&channelId={channelId}";
         }
 
         public static string GetOpenWindowStringToList(int siteId,int channelId)
         {  
-           return Utils.GetOpenLayerString("办件类型管理", Main.Instance.PluginApi.GetPluginUrl($"{nameof(ModalTypeList)}.aspx?siteId={siteId}&channelId={channelId}"), 0, 0);
+           return LayerUtils.GetOpenScript("办件类型管理", Main.Instance.PluginApi.GetPluginUrl($"{nameof(ModalConfigTypes)}.aspx?siteId={siteId}&channelId={channelId}"), 0, 0);
         }
 
         public void Page_Load(object sender, EventArgs e)
@@ -61,7 +60,7 @@ namespace SS.GovInteract.Pages
                 DgContents.ItemDataBound += DgContents_ItemDataBound;
                 DgContents.DataBind();
 
-                BtnAdd.Attributes.Add("onclick", ModalTypeAdd.GetOpenWindowStringToAdd(SiteId, channelId));
+                BtnAdd.Attributes.Add("onclick", ModalConfigTypeAdd.GetOpenWindowStringToAdd(SiteId, channelId));
             }
         }
 
@@ -82,7 +81,7 @@ namespace SS.GovInteract.Pages
 
                 hlUpLinkButton.NavigateUrl = $"{GetRedirectUrl(SiteId, channelId)}&id={id.ToString()}&Up={true.ToString()}";
                 hlDownLinkButton.NavigateUrl = $"{GetRedirectUrl(SiteId,channelId)}&id={id.ToString()}&Down={true.ToString()}";
-                ltlEditUrl.Text = $@"<a href='javascript:;' onclick=""{ModalTypeAdd.GetOpenWindowStringToEdit(SiteId, channelId, id)}"">编辑</a>";  
+                ltlEditUrl.Text = $@"<a href='javascript:;' onclick=""{ModalConfigTypeAdd.GetOpenWindowStringToEdit(SiteId, channelId, id)}"">编辑</a>";  
                 var urlDelete = $"{GetRedirectUrl(SiteId, channelId)}&id={id.ToString()}&Delete={true.ToString()}";
                 ltlDeleteUrl.Text = $@"<a href=""{urlDelete}"" onClick=""javascript:return confirm('此操作将删除办件类型“{typeName}”，确认吗？');"">删除</a>";
             }

@@ -144,9 +144,9 @@
           </asp:PlaceHolder>
           <tr>
             <td colspan="2">
-              <asp:PlaceHolder id="PhBtnSwitchToTranslate" runat="server">
+              <asp:PlaceHolder id="PhBtnSwitchToswitch" runat="server">
                 <input type="button" value="转 办" onClick="showAction('divSwitchTo');return false;" class="btn m-r-5" />
-                <input type="button" value="转 移" onClick="showAction('divTranslate');return false;" class="btn m-r-5" />
+                <input type="button" value="转 移" onClick="showAction('divswitch');return false;" class="btn m-r-5" />
               </asp:PlaceHolder>
               <asp:PlaceHolder id="PhBtnReply" runat="server">
                 <input type="button" value="直接办理" onClick="showAction('divReply');return false;" class="btn m-r-5" />
@@ -218,25 +218,17 @@
               <tr>
                 <td class="text-center" width="120">转办到：</td>
                 <td>
-                  <div class="fill_box" id="switchToDepartmentContainer" style="display:none">
-                    <div class="addr_base addr_normal">
-                      <b id="switchToDepartmentName"></b>
-                      <a class="addr_del" href="javascript:;" onClick="showswitchToDepartment('', '0')"></a>
-                      <input id="switchToDepartmentID" name="switchToDepartmentID" value="0" type="hidden">
-                    </div>
-                  </div>
-                  <div ID="DivAddDepartment" class="btn_pencil" runat="server">
-                    <button class="btn btn-success">选择</button>
-                  </div>
+
+                  <span class="pull-left m-t-5" id="switchToContainer" class="label label-primary p-1 m-r-10">
+                    <span id="switchToDepartmentName"></span>
+                    <input id="switchToDepartmentId" name="switchToDepartmentId" value="0" type="hidden">
+                  </span>
+                  <asp:button id="BtnSwitchTo" Text="选择部门" runat="server" class="btn" />
+
                   <script language="javascript">
-                    function showCategoryDepartment(departmentName, departmentID) {
-                      $('#switchToDepartmentName').html(departmentName);
-                      $('#switchToDepartmentID').val(departmentID);
-                      if (departmentID == '0') {
-                        $('#switchToDepartmentContainer').hide();
-                      } else {
-                        $('#switchToDepartmentContainer').show();
-                      }
+                    function departmentSelect(name, value) {
+                      $('#switchToDepartmentName').text(name);
+                      $('#switchToDepartmentId').val(value);
                     }
                   </script>
                   <asp:Literal ID="LtlScript" runat="server"></asp:Literal>

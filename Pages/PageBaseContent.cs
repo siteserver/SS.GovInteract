@@ -31,7 +31,7 @@ namespace SS.GovInteract.Pages
         public TextBox TbReply;
         public HtmlInputFile HifFileUrl;
         public TextBox TbSwitchToRemark;
-        public HtmlControl DivAddDepartment;
+        public Button BtnSwitchTo;
         public Literal LtlScript;
         public DropDownList DdlTranslateChannelId;
         public TextBox TbTranslateRemark;
@@ -168,16 +168,16 @@ namespace SS.GovInteract.Pages
                 }
             }
 
-            if (DivAddDepartment != null)
+            if (BtnSwitchTo != null)
             {
                 var departmentId = _contentInfo.GetInt(ContentAttribute.DepartmentId);
-                DivAddDepartment.Attributes.Add("onclick", ModalDepartmentSelect.GetOpenWindowString(SiteId, _contentInfo.ChannelId));
+                BtnSwitchTo.Attributes.Add("onclick", ModalDepartmentSelectSingle.GetOpenWindowString(SiteId, _contentInfo.ChannelId));
                 var scriptBuilder = new StringBuilder();
                 if (departmentId > 0)
                 {
                     var departmentName = DepartmentManager.GetDepartmentName(departmentId);
                     scriptBuilder.Append(
-                        $@"<script>showCategoryDepartment('{departmentName}', '{departmentId}');</script>");
+                        $@"<script>departmentSelect('{departmentName}', {departmentId});</script>");
                 }
                 LtlScript.Text = scriptBuilder.ToString();
             }
@@ -279,7 +279,7 @@ namespace SS.GovInteract.Pages
 
         public void SwitchTo_OnClick(object sender, EventArgs e)
         {
-            var switchToDepartmentId = Utils.ToInt(Request.Form["switchToDepartmentID"]);
+            var switchToDepartmentId = Utils.ToInt(Request.Form["switchToDepartmentId"]);
             if (switchToDepartmentId == 0)
             {
                 LtlMessage.Text = Utils.GetMessageHtml("转办失败，必须选择转办部门", false);

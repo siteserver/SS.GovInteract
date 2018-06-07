@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Text;
 using System.Web.UI.WebControls;
 using SS.GovInteract.Core;
@@ -9,16 +7,15 @@ using SS.GovInteract.Model;
 
 namespace SS.GovInteract.Pages
 {
-    public class ModalDepartmentSelect : PageBase
+    public class ModalConfigDepartments : PageBase
     {
-        public Literal LtlMessage;
         public Literal LtlDepartmentTree; 
 
         private int channelId;
 
         public static string GetOpenWindowString(int siteId, int channelId)
         {
-            return Utils.GetOpenLayerString("负责部门设置", $"{nameof(ModalDepartmentSelect)}.aspx?siteId={siteId}&channelId={channelId}", 700, 0);
+            return LayerUtils.GetOpenScript("负责部门设置", $"{nameof(ModalConfigDepartments)}.aspx?siteId={siteId}&channelId={channelId}", 700, 0);
         } 
 
         public void Page_Load(object sender, EventArgs e)
@@ -39,12 +36,12 @@ namespace SS.GovInteract.Pages
             {
                 return htmlBuilder.ToString();
             }
-            var departmentIdList =InteractManager.GetFirstDepartmentIdList(channelInfo);  
+            var departmentIdList =InteractManager.GetDepartmentIdList(channelInfo);  
             var treeDirectoryUrl = Main.Instance.PluginApi.GetPluginUrl("assets/tree");
             htmlBuilder.Append("<span id='DepartmentSelectControl'>");
-            var theDepartmentIdArrayList = DepartmentManager.GetDepartmentIdList();
-            var isLastNodeArray = new bool[theDepartmentIdArrayList.Count];
-            foreach (var theDepartmentId in theDepartmentIdArrayList)
+            var allDepartmentIdList = DepartmentManager.GetDepartmentIdList();
+            var isLastNodeArray = new bool[allDepartmentIdList.Count];
+            foreach (var theDepartmentId in allDepartmentIdList)
             {
                 var departmentInfo = DepartmentManager.GetDepartmentInfo(theDepartmentId);
                 htmlBuilder.Append(GetTitle(departmentInfo, treeDirectoryUrl, isLastNodeArray, departmentIdList));
@@ -106,8 +103,7 @@ namespace SS.GovInteract.Pages
                 var channelInfo = Main.ChannelDao.GetChannelInfo(SiteId, channelId);
                 channelInfo.DepartmentIdCollection = Request.Form["DepartmentIDCollection"];
                 Main.ChannelDao.Update(channelInfo);
-                LtlMessage.Text = Utils.GetMessageHtml("负责部门设置成功！", true);
-                Utils.CloseModalPage(Page);
+                LayerUtils.Close(Page);
             }
         }
     }

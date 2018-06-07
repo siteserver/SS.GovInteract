@@ -32,7 +32,7 @@ namespace SS.GovInteract.Pages
 
 			if (!IsPostBack)
 			{
-                divAddDepartment.Attributes.Add("onclick", ModalDepartmentSelect.GetOpenWindowString(SiteId, _channelId));
+                divAddDepartment.Attributes.Add("onclick", ModalConfigDepartments.GetOpenWindowString(SiteId, _channelId));
                 ltlDepartmentName.Text = DepartmentManager.GetDepartmentName(AuthRequest.AdminInfo.DepartmentId);
                 ltlUserName.Text = AuthRequest.AdminInfo.DisplayName;
 			}

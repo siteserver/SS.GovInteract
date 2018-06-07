@@ -6,7 +6,7 @@ using SS.GovInteract.Model;
 
 namespace SS.GovInteract.Pages
 {
-    public class ModalAdinistrators : PageBase
+    public class ModalConfigAdministrators : PageBase
     {
         public Literal LtlMessage;
         public DataGrid DgContents; 
@@ -15,12 +15,12 @@ namespace SS.GovInteract.Pages
 
         public static string GetRedirectUrl(int siteId, int channelId)
         {
-            return $"{nameof(ModalAdinistrators)}.aspx?siteId={siteId}&channelId={channelId}";
+            return $"{nameof(ModalConfigAdministrators)}.aspx?siteId={siteId}&channelId={channelId}";
         }
 
         public static string GetOpenWindowString(int siteId,int channelId)
         {  
-           return Utils.GetOpenLayerString("负责人员设置", $"{nameof(ModalAdinistrators)}.aspx?siteId={siteId}&channelId={channelId}", 0, 0);
+           return LayerUtils.GetOpenScript("负责人员设置", $"{nameof(ModalConfigAdministrators)}.aspx?siteId={siteId}&channelId={channelId}", 0, 0);
         }
 
         public void Page_Load(object sender, EventArgs e)
@@ -30,7 +30,7 @@ namespace SS.GovInteract.Pages
             if (!IsPostBack && channelId > 0)
             {
                 var channelInfo = Main.ChannelDao.GetChannelInfo(SiteId, channelId);
-                var departmentIdList = InteractManager.GetFirstDepartmentIdList(channelInfo);
+                var departmentIdList = InteractManager.GetDepartmentIdList(channelInfo);
                 var userNameArrayList = new ArrayList();
                 foreach (var departmentId in departmentIdList)
                 {

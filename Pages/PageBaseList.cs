@@ -233,7 +233,7 @@ namespace SS.GovInteract.Pages
             {
                 ltlTitle.Text += "【转移】";
             }
-            ltlAddDate.Text = Utils.GetDateAndTimeString(contentInfo.AddDate);
+            ltlAddDate.Text = Utils.GetDateString(contentInfo.AddDate, EDateFormatType.Day);
             ltlRemark.Text = ApplyManager.GetApplyRemark(SiteId, contentInfo.Id);
             ltlDepartment.Text = departmentName;
             ltlLimit.Text = ELimitTypeUtils.GetText(limitType);
