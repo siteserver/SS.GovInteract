@@ -35,7 +35,13 @@ namespace SS.GovInteract.Pages
 			{
                 LtlDepartmentName.Text = DepartmentManager.GetDepartmentName(AuthRequest.AdminInfo.DepartmentId);
                 LtlUserName.Text = AuthRequest.AdminInfo.DisplayName;
-			}
+
+			    var replyInfo = Main.ReplyDao.GetReplyInfoByContentId(SiteId, _contentId);
+			    if (replyInfo != null)
+			    {
+			        TbReply.Text = replyInfo.Reply;
+			    }
+            }
 		}
 
         public void Submit_OnClick(object sender, EventArgs e)
