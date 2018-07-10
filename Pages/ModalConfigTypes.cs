@@ -33,7 +33,7 @@ namespace SS.GovInteract.Pages
                 {
                     try
                     {
-                        Main.TypeDao.Delete(id);
+                        Main.Instance.TypeDao.Delete(id);
                         LtlMessage.Text = Utils.GetMessageHtml("成功删除分类法", true);
                     }
                     catch (Exception ex)
@@ -46,17 +46,17 @@ namespace SS.GovInteract.Pages
                     var isDown = Request.QueryString["Down"] != null;
                     if (isDown)
                     {
-                        Main.TypeDao.UpdateTaxisToUp(id, channelId);
+                        Main.Instance.TypeDao.UpdateTaxisToUp(id, channelId);
                         LtlMessage.Text = Utils.GetMessageHtml($"排序成功", true);
                     }
                     else
                     {
-                        Main.TypeDao.UpdateTaxisToDown(id, channelId);
+                        Main.Instance.TypeDao.UpdateTaxisToDown(id, channelId);
                         LtlMessage.Text = Utils.GetMessageHtml($"排序成功", true);
                     }
                 }
 
-                DgContents.DataSource = Main.TypeDao.GetDataSource(channelId);
+                DgContents.DataSource = Main.Instance.TypeDao.GetDataSource(channelId);
                 DgContents.ItemDataBound += DgContents_ItemDataBound;
                 DgContents.DataBind();
 

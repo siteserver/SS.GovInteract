@@ -151,7 +151,7 @@ namespace SS.GovInteract.Pages
             {
                 if (state == EState.Denied || state == EState.Replied || state == EState.Redo || state == EState.Checked)
                 {
-                    var replyInfo = Main.ReplyDao.GetReplyInfoByContentId(SiteId, _contentInfo.Id);
+                    var replyInfo = Main.Instance.ReplyDao.GetReplyInfoByContentId(SiteId, _contentInfo.Id);
                     if (replyInfo != null)
                     {
                         PhReply.Visible = true;
@@ -195,13 +195,13 @@ namespace SS.GovInteract.Pages
                 }
             }
 
-            RptRemarks.DataSource = Main.RemarkDao.GetDataSourceByContentId(SiteId, _contentInfo.Id);
+            RptRemarks.DataSource = Main.Instance.RemarkDao.GetDataSourceByContentId(SiteId, _contentInfo.Id);
             RptRemarks.ItemDataBound += RptRemarks_ItemDataBound;
             RptRemarks.DataBind();
 
             if (RptLogs != null)
             {
-                RptLogs.DataSource = Main.LogDao.GetDataSourceByContentId(SiteId, _contentInfo.Id);
+                RptLogs.DataSource = Main.Instance.LogDao.GetDataSourceByContentId(SiteId, _contentInfo.Id);
                 RptLogs.ItemDataBound += RptLogs_ItemDataBound;
                 RptLogs.DataBind();
             }
@@ -216,17 +216,17 @@ namespace SS.GovInteract.Pages
             }
             try
             {
-                Main.ReplyDao.DeleteByContentId(SiteId, _contentInfo.Id);
+                Main.Instance.ReplyDao.DeleteByContentId(SiteId, _contentInfo.Id);
                 var fileUrl = UploadFile(HifFileUrl.PostedFile);
                 var replyInfo = new ReplyInfo(0, SiteId, _contentInfo.ChannelId, _contentInfo.Id, TbReply.Text, fileUrl, AuthRequest.AdminInfo.DepartmentId, AuthRequest.AdminName, DateTime.Now);
-                Main.ReplyDao.Insert(replyInfo);
+                Main.Instance.ReplyDao.Insert(replyInfo);
 
                 ApplyManager.Log(SiteId, _contentInfo.ChannelId, _contentInfo.Id, ELogTypeUtils.GetValue(ELogType.Reply), AuthRequest.AdminName, AuthRequest.AdminInfo.DepartmentId);
                 if (AuthRequest.AdminInfo.DepartmentId > 0)
                 {
-                    Main.ContentDao.UpdateDepartmentId(SiteId, _contentInfo.ChannelId, _contentInfo.Id, AuthRequest.AdminInfo.DepartmentId);
+                    Main.Instance.ContentDao.UpdateDepartmentId(SiteId, _contentInfo.ChannelId, _contentInfo.Id, AuthRequest.AdminInfo.DepartmentId);
                 }
-                Main.ContentDao.UpdateState(SiteId, _contentInfo.ChannelId, _contentInfo.Id, EState.Replied);
+                Main.Instance.ContentDao.UpdateState(SiteId, _contentInfo.ChannelId, _contentInfo.Id, EState.Replied);
 
                 LtlMessage.Text = Utils.GetMessageHtml("办件回复成功", true);
 
@@ -288,10 +288,10 @@ namespace SS.GovInteract.Pages
             var switchToDepartmentName = DepartmentManager.GetDepartmentName(switchToDepartmentId);
             try
             {
-                Main.ContentDao.UpdateDepartmentId(SiteId, _contentInfo.ChannelId, _contentInfo.Id, switchToDepartmentId);
+                Main.Instance.ContentDao.UpdateDepartmentId(SiteId, _contentInfo.ChannelId, _contentInfo.Id, switchToDepartmentId);
 
                 var remarkInfo = new RemarkInfo(0, SiteId, _contentInfo.ChannelId, _contentInfo.Id, ERemarkTypeUtils.GetValue(ERemarkType.SwitchTo), TbSwitchToRemark.Text, AuthRequest.AdminInfo.DepartmentId, AuthRequest.AdminName, DateTime.Now);
-                Main.RemarkDao.Insert(remarkInfo);
+                Main.Instance.RemarkDao.Insert(remarkInfo);
 
                 ApplyManager.LogSwitchTo(SiteId, _contentInfo.ChannelId, _contentInfo.Id, switchToDepartmentName, AuthRequest.AdminName, AuthRequest.AdminInfo.DepartmentId);
 
@@ -325,7 +325,7 @@ namespace SS.GovInteract.Pages
                 if (!string.IsNullOrEmpty(TbTranslateRemark.Text))
                 {
                     var remarkInfo = new RemarkInfo(0, SiteId, _contentInfo.ChannelId, _contentInfo.Id, ERemarkTypeUtils.GetValue(ERemarkType.Translate), TbTranslateRemark.Text, AuthRequest.AdminInfo.DepartmentId, AuthRequest.AdminName, DateTime.Now);
-                    Main.RemarkDao.Insert(remarkInfo);
+                    Main.Instance.RemarkDao.Insert(remarkInfo);
                 }
 
                 ApplyManager.LogTranslate(SiteId, _contentInfo.ChannelId, _contentInfo.Id, Main.Instance.ChannelApi.GetChannelName(SiteId, _contentInfo.ChannelId), AuthRequest.AdminName, AuthRequest.AdminInfo.DepartmentId);
@@ -354,7 +354,7 @@ namespace SS.GovInteract.Pages
                 }
 
                 var remarkInfo = new RemarkInfo(0, SiteId, _contentInfo.ChannelId, _contentInfo.Id, ERemarkTypeUtils.GetValue(ERemarkType.Comment), TbCommentRemark.Text, AuthRequest.AdminInfo.DepartmentId, AuthRequest.AdminName, DateTime.Now);
-                Main.RemarkDao.Insert(remarkInfo);
+                Main.Instance.RemarkDao.Insert(remarkInfo);
 
                 ApplyManager.Log(SiteId, _contentInfo.ChannelId, _contentInfo.Id, ELogTypeUtils.GetValue(ELogType.Comment), AuthRequest.AdminName, AuthRequest.AdminInfo.DepartmentId);
 

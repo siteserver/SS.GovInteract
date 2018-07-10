@@ -40,19 +40,19 @@ namespace SS.GovInteract.Core
         public static void AddDefaultTypeInfos(int siteId, int channelId)
         {
             var typeInfo = new TypeInfo(0, "求决", channelId, siteId, 0);
-            Main.TypeDao.Insert(typeInfo);
+            Main.Instance.TypeDao.Insert(typeInfo);
             typeInfo = new TypeInfo(0, "举报", channelId, siteId, 0);
-            Main.TypeDao.Insert(typeInfo);
+            Main.Instance.TypeDao.Insert(typeInfo);
             typeInfo = new TypeInfo(0, "投诉", channelId, siteId, 0);
-            Main.TypeDao.Insert(typeInfo);
+            Main.Instance.TypeDao.Insert(typeInfo);
             typeInfo = new TypeInfo(0, "咨询", channelId, siteId, 0);
-            Main.TypeDao.Insert(typeInfo);
+            Main.Instance.TypeDao.Insert(typeInfo);
             typeInfo = new TypeInfo(0, "建议", channelId, siteId, 0);
-            Main.TypeDao.Insert(typeInfo);
+            Main.Instance.TypeDao.Insert(typeInfo);
             typeInfo = new TypeInfo(0, "感谢", channelId, siteId, 0);
-            Main.TypeDao.Insert(typeInfo);
+            Main.Instance.TypeDao.Insert(typeInfo);
             typeInfo = new TypeInfo(0, "其他", channelId, siteId, 0);
-            Main.TypeDao.Insert(typeInfo);
+            Main.Instance.TypeDao.Insert(typeInfo);
         }
 
         public static List<int> GetDepartmentIdList(ChannelInfo channelInfo)
@@ -69,7 +69,7 @@ namespace SS.GovInteract.Core
 
         public static string GetTypeName(int typeId)
         {
-            return typeId > 0 ? Main.TypeDao.GetTypeName(typeId) : string.Empty;
+            return typeId > 0 ? Main.Instance.TypeDao.GetTypeName(typeId) : string.Empty;
         }
 
         public static bool IsPermission(int siteId, int channelId, string permission)

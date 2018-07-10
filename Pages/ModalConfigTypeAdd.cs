@@ -32,7 +32,7 @@ namespace SS.GovInteract.Pages
             {
                 if (_id > 0)
                 {
-                    var typeInfo = Main.TypeDao.GetTypeInfo(_id);
+                    var typeInfo = Main.Instance.TypeDao.GetTypeInfo(_id);
                     if (typeInfo != null)
                     {
                         TbTypeName.Text = typeInfo.TypeName;
@@ -48,7 +48,7 @@ namespace SS.GovInteract.Pages
             {
                 try
                 {
-                    typeInfo = Main.TypeDao.GetTypeInfo(_id);
+                    typeInfo = Main.Instance.TypeDao.GetTypeInfo(_id);
                     if (typeInfo != null)
                     {
                         if (typeInfo.TypeName == TbTypeName.Text)
@@ -57,7 +57,7 @@ namespace SS.GovInteract.Pages
                         }
                         else
                         { 
-                            var typeNameArrayList = Main.TypeDao.GetTypeNameArrayList(_channelId);
+                            var typeNameArrayList = Main.Instance.TypeDao.GetTypeNameList(_channelId);
                             if (typeNameArrayList.IndexOf(TbTypeName.Text) != -1)
                             {
                                 LtlMessage.Text = Utils.GetMessageHtml($"办件类型添加失败，办件类型名称已存在！", false);
@@ -65,7 +65,7 @@ namespace SS.GovInteract.Pages
                             else
                             {
                                 typeInfo.TypeName = TbTypeName.Text;
-                                Main.TypeDao.Update(typeInfo);
+                                Main.Instance.TypeDao.Update(typeInfo);
                                 LtlMessage.Text = Utils.GetMessageHtml("办件类型修改成功！", true);
                                 LayerUtils.Close(Page);
                             }
@@ -80,7 +80,7 @@ namespace SS.GovInteract.Pages
             }
             else
             {
-                var typeNameArrayList = Main.TypeDao.GetTypeNameArrayList(_channelId);
+                var typeNameArrayList = Main.Instance.TypeDao.GetTypeNameList(_channelId);
                 if (typeNameArrayList.IndexOf(TbTypeName.Text) != -1)
                 {
                     LtlMessage.Text = Utils.GetMessageHtml($"办件类型添加失败，办件类型名称已存在！", false); 
@@ -89,8 +89,8 @@ namespace SS.GovInteract.Pages
                 {
                     try
                     {
-                        typeInfo = new TypeInfo(0, TbTypeName.Text, _channelId, SiteId, 0); 
-                        Main.TypeDao.Insert(typeInfo);
+                        typeInfo = new TypeInfo(0, TbTypeName.Text, _channelId, SiteId, 0);
+                        Main.Instance.TypeDao.Insert(typeInfo);
                         LtlMessage.Text = Utils.GetMessageHtml("办件类型添加成功！", true);
                         LayerUtils.Close(Page);
                     }

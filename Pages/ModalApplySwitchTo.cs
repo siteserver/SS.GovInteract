@@ -65,7 +65,7 @@ namespace SS.GovInteract.Pages
                         if (!string.IsNullOrEmpty(tbSwitchToRemark.Text))
                         {
                             var remarkInfo = new RemarkInfo(0, SiteId, contentInfo.ChannelId, contentID, ERemarkTypeUtils.GetValue(ERemarkType.SwitchTo), tbSwitchToRemark.Text, AuthRequest.AdminInfo.DepartmentId, AuthRequest.AdminName, DateTime.Now);
-                            Main.RemarkDao.Insert(remarkInfo);
+                            Main.Instance.RemarkDao.Insert(remarkInfo);
                         }
 
                         ApplyManager.LogSwitchTo(SiteId, contentInfo.ChannelId, contentID, switchToDepartmentName, AuthRequest.AdminName, AuthRequest.AdminInfo.DepartmentId);

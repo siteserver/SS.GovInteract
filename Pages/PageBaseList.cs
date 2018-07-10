@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Web;
 using System.Web.UI.WebControls;
 using SiteServer.Plugin;
@@ -151,7 +152,9 @@ namespace SS.GovInteract.Pages
         {
             if (e.Item.ItemType != ListItemType.Item && e.Item.ItemType != ListItemType.AlternatingItem) return;
 
-            var contentInfo = Main.Instance.ContentApi.Parse(e.Item.DataItem);
+            var contentInfo = Main.Instance.ContentApi.NewInstance();
+            var rowView = (DataRowView) e.Item.DataItem;
+            contentInfo.Load(rowView.Row);
 
             var ltlTr = (Literal)e.Item.FindControl("ltlTr");
             var ltlId = (Literal)e.Item.FindControl("ltlID");

@@ -1,0 +1,6 @@
+UPDATE ss_govinteract_content 
+SET
+ss_govinteract_content.ReplyContent = ss_govinteract_reply.Reply,
+ss_govinteract_content.ReplyAddDate = ss_govinteract_reply.AddDate
+FROM ss_govinteract_content, ss_govinteract_reply 
+WHERE ss_govinteract_content.Id = ss_govinteract_reply.ContentId

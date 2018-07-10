@@ -299,16 +299,69 @@ namespace SS.GovInteract.Provider
                     InputType = InputType.Hidden,
                     DisplayName = "IP地址"
                 }
+            },
+            new TableColumn
+            {
+                AttributeName = ContentAttribute.ReplyContent,
+                DataType = DataType.Text,
+                InputStyle = new InputStyle
+                {
+                    InputType = InputType.Hidden,
+                    DisplayName = "回复内容"
+                }
+            },
+            new TableColumn
+            {
+                AttributeName = ContentAttribute.ReplyFileUrl,
+                DataType = DataType.VarChar,
+                DataLength = 255,
+                InputStyle = new InputStyle
+                {
+                    InputType = InputType.Hidden,
+                    DisplayName = "回复附件"
+                }
+            },
+            new TableColumn
+            {
+                AttributeName = ContentAttribute.ReplyDepartmentName,
+                DataType = DataType.VarChar,
+                DataLength = 50,
+                InputStyle = new InputStyle
+                {
+                    InputType = InputType.Hidden,
+                    DisplayName = "回复部门"
+                }
+            },
+            new TableColumn
+            {
+                AttributeName = ContentAttribute.ReplyUserName,
+                DataType = DataType.VarChar,
+                DataLength = 50,
+                InputStyle = new InputStyle
+                {
+                    InputType = InputType.Hidden,
+                    DisplayName = "回复人"
+                }
+            },
+            new TableColumn
+            {
+                AttributeName = ContentAttribute.ReplyAddDate,
+                DataType = DataType.DateTime,
+                InputStyle = new InputStyle
+                {
+                    InputType = InputType.Hidden,
+                    DisplayName = "回复时间"
+                }
             }
         };
 
-        public string ConnectionString { get; }
-        public IDataApi Helper { get; }
+        private string _connectionString { get; }
+        private IDataApi _helper { get; }
 
         public ContentDao()
         {
-            ConnectionString = Main.Instance.ConnectionString;
-            Helper = Main.Instance.DataApi;
+            _connectionString = Main.Instance.ConnectionString;
+            _helper = Main.Instance.DataApi;
         }
         
 //        public static string GetDepartmentsHtml(int siteId, int channelId, IAttributes attributes)
@@ -423,11 +476,11 @@ namespace SS.GovInteract.Provider
             }
             if (!string.IsNullOrEmpty(dateFrom))
             {
-                builder.Append($" AND ({nameof(IContentInfo.AddDate)} >= {Helper.ToDateSqlString(Utils.ToDateTime(dateFrom))})");
+                builder.Append($" AND ({nameof(IContentInfo.AddDate)} >= {_helper.ToDateSqlString(Utils.ToDateTime(dateFrom))})");
             }
             if (!string.IsNullOrEmpty(dateTo))
             {
-                builder.Append($" AND ({nameof(IContentInfo.AddDate)} <= {Helper.ToDateSqlString(Utils.ToDateTime(dateTo))})");
+                builder.Append($" AND ({nameof(IContentInfo.AddDate)} <= {_helper.ToDateSqlString(Utils.ToDateTime(dateTo))})");
             }
             if (!string.IsNullOrEmpty(keyword))
             {
@@ -441,7 +494,7 @@ namespace SS.GovInteract.Provider
         public int GetCountByDepartmentId(int siteId, int departmentId, DateTime begin, DateTime end)
         {
             string sqlString =
-                $"SELECT COUNT(*) AS TotalNum FROM {TableName} WHERE SiteId = {siteId} AND DepartmentId = {departmentId} AND (AddDate BETWEEN {Helper.ToDateSqlString(begin)} AND {Helper.ToDateSqlString(end.AddDays(1))})";
+                $"SELECT COUNT(*) AS TotalNum FROM {TableName} WHERE SiteId = {siteId} AND DepartmentId = {departmentId} AND (AddDate BETWEEN {_helper.ToDateSqlString(begin)} AND {_helper.ToDateSqlString(end.AddDays(1))})";
             return Dao.GetIntResult(sqlString);
         }
 
@@ -455,8 +508,8 @@ namespace SS.GovInteract.Provider
         public int GetCountByDepartmentId(int siteId, int departmentId, int channelId, DateTime begin, DateTime end)
         {
             var sqlString = channelId == 0
-                ? $"SELECT COUNT(*) AS TotalNum FROM {TableName} WHERE SiteId = {siteId} AND DepartmentId = {departmentId} AND (AddDate BETWEEN {Helper.ToDateSqlString(begin)} AND {Helper.ToDateSqlString(end.AddDays(1))})"
-                : $"SELECT COUNT(*) AS TotalNum FROM {TableName} WHERE SiteId = {siteId} AND ChannelId = {channelId} AND DepartmentId = {departmentId} AND (AddDate BETWEEN {Helper.ToDateSqlString(begin)} AND {Helper.ToDateSqlString(end.AddDays(1))})";
+                ? $"SELECT COUNT(*) AS TotalNum FROM {TableName} WHERE SiteId = {siteId} AND DepartmentId = {departmentId} AND (AddDate BETWEEN {_helper.ToDateSqlString(begin)} AND {_helper.ToDateSqlString(end.AddDays(1))})"
+                : $"SELECT COUNT(*) AS TotalNum FROM {TableName} WHERE SiteId = {siteId} AND ChannelId = {channelId} AND DepartmentId = {departmentId} AND (AddDate BETWEEN {_helper.ToDateSqlString(begin)} AND {_helper.ToDateSqlString(end.AddDays(1))})";
             return Dao.GetIntResult(sqlString);
         }
 
@@ -470,15 +523,15 @@ namespace SS.GovInteract.Provider
         public int GetCountByDepartmentIdAndState(int siteId, int departmentId, EState state, DateTime begin, DateTime end)
         {
             string sqlString =
-                $"SELECT COUNT(*) AS TotalNum FROM {TableName} WHERE SiteId = {siteId} AND DepartmentId = {departmentId} AND State = '{EStateUtils.GetValue(state)}' AND (AddDate BETWEEN {Helper.ToDateSqlString(begin)} AND {Helper.ToDateSqlString(end.AddDays(1))})";
+                $"SELECT COUNT(*) AS TotalNum FROM {TableName} WHERE SiteId = {siteId} AND DepartmentId = {departmentId} AND State = '{EStateUtils.GetValue(state)}' AND (AddDate BETWEEN {_helper.ToDateSqlString(begin)} AND {_helper.ToDateSqlString(end.AddDays(1))})";
             return Dao.GetIntResult(sqlString);
         }
 
         public int GetCountByDepartmentIdAndState(int siteId, int departmentId, int channelId, EState state, DateTime begin, DateTime end)
         {
             var sqlString = channelId == 0
-                ? $"SELECT COUNT(*) AS TotalNum FROM {TableName} WHERE SiteId = {siteId} AND DepartmentId = {departmentId} AND State = '{EStateUtils.GetValue(state)}' AND (AddDate BETWEEN {Helper.ToDateSqlString(begin)} AND {Helper.ToDateSqlString(end.AddDays(1))})"
-                : $"SELECT COUNT(*) AS TotalNum FROM {TableName} WHERE SiteId = {siteId} AND DepartmentId = {departmentId} AND ChannelId = {channelId} AND State = '{EStateUtils.GetValue(state)}' AND (AddDate BETWEEN {Helper.ToDateSqlString(begin)} AND {Helper.ToDateSqlString(end.AddDays(1))})";
+                ? $"SELECT COUNT(*) AS TotalNum FROM {TableName} WHERE SiteId = {siteId} AND DepartmentId = {departmentId} AND State = '{EStateUtils.GetValue(state)}' AND (AddDate BETWEEN {_helper.ToDateSqlString(begin)} AND {_helper.ToDateSqlString(end.AddDays(1))})"
+                : $"SELECT COUNT(*) AS TotalNum FROM {TableName} WHERE SiteId = {siteId} AND DepartmentId = {departmentId} AND ChannelId = {channelId} AND State = '{EStateUtils.GetValue(state)}' AND (AddDate BETWEEN {_helper.ToDateSqlString(begin)} AND {_helper.ToDateSqlString(end.AddDays(1))})";
             return Dao.GetIntResult(sqlString);
         }
     }

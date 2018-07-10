@@ -36,8 +36,11 @@
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="SiteServer.Plugin, Version=1.7.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\SiteServer.Plugin.1.7.1\lib\net45\SiteServer.Plugin.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="SiteServer.Plugin, Version=1.7.17.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\SiteServer.Plugin.1.7.17\lib\net45\SiteServer.Plugin.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -130,6 +133,9 @@
     <Compile Include="Pages\PageBaseList.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="Pages\PageFormStyle.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Pages\PageContentCheck.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -187,11 +193,13 @@
     <None Include="assets\plugin-utils\fonts\ionicons.eot" />
     <None Include="assets\plugin-utils\fonts\ionicons.ttf" />
     <None Include="assets\plugin-utils\fonts\ionicons.woff" />
+    <None Include="assets\update.mssql" />
     <None Include="packages.config" />
     <None Include="SS.GovInteract.nuspec" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="assets\add.html" />
     <Content Include="assets\css\bootstrap.min.css" />
     <Content Include="assets\css\components.css" />
     <Content Include="assets\css\core.css" />
@@ -219,7 +227,9 @@
     <Content Include="assets\js\device.min.js" />
     <Content Include="assets\js\jquery.min.js" />
     <Content Include="assets\js\sweetalert.min.js" />
-    <Content Include="assets\js\vue.min.js" />
+    <Content Include="assets\js\validate.js" />
+    <Content Include="assets\js\vee-validate-2.1.0.min.js" />
+    <Content Include="assets\js\vue-2.1.10.min.js" />
     <Content Include="assets\layer\extend\layer.ext.js" />
     <Content Include="assets\layer\layer.min.js" />
     <Content Include="assets\layer\skin\default\icon_ext.png" />
@@ -238,7 +248,9 @@
     <Content Include="assets\plugin-utils\css\plugin-utils.css" />
     <Content Include="assets\plugin-utils\fonts\fontawesome-webfont.svg" />
     <Content Include="assets\plugin-utils\fonts\ionicons.svg" />
+    <Content Include="assets\query.html" />
     <Content Include="assets\sweetalert\sweetalert.min.js" />
+    <Content Include="assets\test.html" />
     <Content Include="assets\tree\brand.gif" />
     <Content Include="assets\tree\category.gif" />
     <Content Include="assets\tree\content.gif" />
@@ -299,6 +311,7 @@
     <Content Include="pageContentAccept.aspx" />
     <Content Include="pageContentCheck.aspx" />
     <Content Include="pageContentReply.aspx" />
+    <Content Include="pageFormStyle.aspx" />
     <Content Include="pageInit.aspx" />
     <Content Include="pageListAccept.aspx" />
     <Content Include="pageListAll.aspx" />

@@ -64,10 +64,10 @@ namespace SS.GovInteract.Provider
                 _helper.GetParameter(nameof(PermissionsInfo.Permissions), permissionsInfo.Permissions)
             };
 
-            if (!Main.ChannelDao.IsExists(permissionsInfo.ChannelId))
+            if (!Main.Instance.ChannelDao.IsExists(permissionsInfo.ChannelId))
             {
                 var channelInfo = new ChannelInfo(0, permissionsInfo.ChannelId, siteId, 0, 0, string.Empty, string.Empty);
-                Main.ChannelDao.Insert(channelInfo);
+                Main.Instance.ChannelDao.Insert(channelInfo);
             }
 
             _helper.ExecuteNonQuery(_connectionString, sqlString, parameters);

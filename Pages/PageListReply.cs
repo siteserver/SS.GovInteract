@@ -18,7 +18,7 @@ namespace SS.GovInteract.Pages
 
         protected override string GetSelectString()
         {
-            return Main.ContentDao.GetSelectStringByState(SiteId, ChannelId, EState.Accepted, EState.Redo);
+            return Main.Instance.ContentDao.GetSelectStringByState(SiteId, ChannelId, EState.Accepted, EState.Redo);
         }
 
         private string _pageUrl;

@@ -23,7 +23,7 @@ namespace SS.GovInteract.Provider
             string sqlSelect = $"SELECT UserName FROM siteserver_Administrator WHERE Id = {departmentId}";
             if (isAll)
             {
-                var departmentIdList = Main.DepartmentDao.GetDepartmentIdListForDescendant(departmentId);
+                var departmentIdList = Main.Instance.DepartmentDao.GetDepartmentIdListForDescendant(departmentId);
                 departmentIdList.Add(departmentId);
                 sqlSelect =
                     $"SELECT UserName FROM siteserver_Administrator WHERE Id IN ({Utils.ObjectCollectionToString(departmentIdList)})";

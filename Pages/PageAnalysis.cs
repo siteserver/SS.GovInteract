@@ -62,13 +62,13 @@ namespace SS.GovInteract.Pages
             int doCount;
             if (_nodeId == 0)
             {
-                totalCount = Main.ContentDao.GetCountByDepartmentId(SiteId, departmentId, TbStartDate.DateTime, TbEndDate.DateTime);
-                doCount = Main.ContentDao.GetCountByDepartmentIdAndState(SiteId, departmentId, EState.Checked, TbStartDate.DateTime, TbEndDate.DateTime);
+                totalCount = Main.Instance.ContentDao.GetCountByDepartmentId(SiteId, departmentId, TbStartDate.DateTime, TbEndDate.DateTime);
+                doCount = Main.Instance.ContentDao.GetCountByDepartmentIdAndState(SiteId, departmentId, EState.Checked, TbStartDate.DateTime, TbEndDate.DateTime);
             }
             else
             {
-                totalCount = Main.ContentDao.GetCountByDepartmentId(SiteId, departmentId, _nodeId, TbStartDate.DateTime, TbEndDate.DateTime);
-                doCount = Main.ContentDao.GetCountByDepartmentIdAndState(SiteId, departmentId, _nodeId, EState.Checked, TbStartDate.DateTime, TbEndDate.DateTime);
+                totalCount = Main.Instance.ContentDao.GetCountByDepartmentId(SiteId, departmentId, _nodeId, TbStartDate.DateTime, TbEndDate.DateTime);
+                doCount = Main.Instance.ContentDao.GetCountByDepartmentIdAndState(SiteId, departmentId, _nodeId, EState.Checked, TbStartDate.DateTime, TbEndDate.DateTime);
             }
             var unDoCount = totalCount - doCount;
 
@@ -105,9 +105,9 @@ namespace SS.GovInteract.Pages
 
             if (_nodeId > 0)
             {
-                var channelInfo = Main.ChannelDao.GetChannelInfo(SiteId, _nodeId);
+                var channelInfo = Main.Instance.ChannelDao.GetChannelInfo(SiteId, _nodeId);
 
-                departmentIdList = Main.DepartmentDao.GetDepartmentIdListByFirstDepartmentIdList(InteractManager.GetDepartmentIdList(channelInfo));
+                departmentIdList = Main.Instance.DepartmentDao.GetDepartmentIdListByFirstDepartmentIdList(InteractManager.GetDepartmentIdList(channelInfo));
             }
 
             if (departmentIdList.Count == 0)

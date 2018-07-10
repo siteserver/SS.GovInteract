@@ -56,7 +56,7 @@ namespace SS.GovInteract.Pages
                     if (state == EState.Replied || state == EState.Redo)
                     {
                         var remarkInfo = new RemarkInfo(0, SiteId, contentInfo.ChannelId, contentInfo.Id, ERemarkTypeUtils.GetValue(ERemarkType.Redo), tbRedoRemark.Text, AuthRequest.AdminInfo.DepartmentId, AuthRequest.AdminName, DateTime.Now);
-                        Main.RemarkDao.Insert(remarkInfo);
+                        Main.Instance.RemarkDao.Insert(remarkInfo);
 
                         ApplyManager.Log(SiteId, contentInfo.ChannelId, contentID, ELogTypeUtils.GetValue(ELogType.Redo), AuthRequest.AdminName, AuthRequest.AdminInfo.DepartmentId);
                         contentInfo.Set(ContentAttribute.State, EStateUtils.GetValue(EState.Redo));

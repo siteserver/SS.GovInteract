@@ -39,7 +39,7 @@ namespace SS.GovInteract.Pages
                 var contentInfo = Main.Instance.ContentApi.GetContentInfo(SiteId, _channelId, _contentId);
 
                 var remarkInfo = new RemarkInfo(0, SiteId, contentInfo.ChannelId, contentInfo.Id, ERemarkTypeUtils.GetValue(ERemarkType.Redo), TbRedoRemark.Text, AuthRequest.AdminInfo.DepartmentId, AuthRequest.AdminName, DateTime.Now);
-                Main.RemarkDao.Insert(remarkInfo);
+                Main.Instance.RemarkDao.Insert(remarkInfo);
 
                 ApplyManager.Log(SiteId, contentInfo.ChannelId, contentInfo.Id, ELogTypeUtils.GetValue(ELogType.Redo), AuthRequest.AdminName, AuthRequest.AdminInfo.DepartmentId);
 

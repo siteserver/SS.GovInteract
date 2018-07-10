@@ -71,7 +71,7 @@ namespace SS.GovInteract.Pages
                     if (!string.IsNullOrEmpty(tbTranslateRemark.Text))
                     {
                         var remarkInfo = new RemarkInfo(0, SiteId, contentInfo.ChannelId, contentID, ERemarkTypeUtils.GetValue(ERemarkType.Translate), tbTranslateRemark.Text, AuthRequest.AdminInfo.DepartmentId, AuthRequest.AdminName, DateTime.Now);
-                        Main.RemarkDao.Insert(remarkInfo);
+                        Main.Instance.RemarkDao.Insert(remarkInfo);
                     }
 
                     ApplyManager.LogTranslate(SiteId, contentInfo.ChannelId, contentID, chananelInfo.ChannelName, AuthRequest.AdminName, AuthRequest.AdminInfo.DepartmentId);

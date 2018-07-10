@@ -23,7 +23,7 @@ namespace SS.GovInteract.Pages
 
             if (!IsPostBack && _channelId > 0)
             {
-                var channelInfo = Main.ChannelDao.GetChannelInfo(SiteId, _channelId);
+                var channelInfo = Main.Instance.ChannelDao.GetChannelInfo(SiteId, _channelId);
                 LtlDepartmentTree.Text = GetDepartmentTreeHtml(channelInfo);
             }
         }

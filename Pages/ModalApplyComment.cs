@@ -50,7 +50,7 @@ namespace SS.GovInteract.Pages
                 foreach (int contentID in _idArrayList)
                 {
                     var remarkInfo = new RemarkInfo(0, SiteId, _channelId, contentID, ERemarkTypeUtils.GetValue(ERemarkType.Comment), tbCommentRemark.Text, AuthRequest.AdminInfo.DepartmentId, AuthRequest.AdminName, DateTime.Now);
-                    Main.RemarkDao.Insert(remarkInfo);
+                    Main.Instance.RemarkDao.Insert(remarkInfo);
 
                     ApplyManager.Log(SiteId, _channelId, contentID, ELogTypeUtils.GetValue(ELogType.Comment), AuthRequest.AdminName, AuthRequest.AdminInfo.DepartmentId);
                 }

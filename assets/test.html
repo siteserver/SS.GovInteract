@@ -1,0 +1,20 @@
+<script>
+var data = JSON.stringify({
+  "siteId": 32
+});
+
+var xhr = new XMLHttpRequest();
+xhr.withCredentials = true;
+
+xhr.addEventListener("readystatechange", function () {
+  if (this.readyState === 4) {
+    document.write(this.responseText)
+  }
+});
+
+xhr.open("POST", "http://api.chinacampus.org/api/plugins/ss.shopping/ApiCartGet");
+xhr.setRequestHeader("X-SS-USER-ACCESS-TOKEN", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2VyTmFtZSI6ImRlbW8iLCJBZGREYXRlIjoiXC9EYXRlKDE1MjkzNjk5NTI4MjUpXC8ifQ.YDCYkjtqvgTQCXQgDJQ4ZpVTrpYnJObiZ0bL6owZ-Ws");
+xhr.setRequestHeader("Content-Type", "application/json");
+
+xhr.send(data);
+</script>

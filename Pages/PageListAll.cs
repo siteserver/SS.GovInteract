@@ -50,9 +50,9 @@ namespace SS.GovInteract.Pages
         {
             if (Request.QueryString["state"] != null || Request.QueryString["dateFrom"] != null || Request.QueryString["dateTo"] != null || Request.QueryString["keyword"] != null)
             {
-                return Main.ContentDao.GetSelectString(SiteId, ChannelId, Request.QueryString["state"], Request.QueryString["dateFrom"], Request.QueryString["dateTo"], Request.QueryString["keyword"]);
+                return Main.Instance.ContentDao.GetSelectString(SiteId, ChannelId, Request.QueryString["state"], Request.QueryString["dateFrom"], Request.QueryString["dateTo"], Request.QueryString["keyword"]);
             }
-            return Main.ContentDao.GetSelectString(SiteId, ChannelId);
+            return Main.Instance.ContentDao.GetSelectString(SiteId, ChannelId);
         }
 
         protected string GetSortMode()

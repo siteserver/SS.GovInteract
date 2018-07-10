@@ -12,15 +12,15 @@ namespace SS.GovInteract
 {
     public class Main : PluginBase
     {
-        public static AdministratorDao AdministratorDao { get; private set; }
-        public static ChannelDao ChannelDao { get; private set; }
-        public static ContentDao ContentDao { get; private set; }
-        public static DepartmentDao DepartmentDao { get; private set; }
-        public static LogDao LogDao { get; private set; }
-        public static PermissionsDao PermissionsDao { get; private set; }
-        public static RemarkDao RemarkDao { get; private set; }
-        public static ReplyDao ReplyDao { get; private set; }
-        public static TypeDao TypeDao { get; private set; }
+        public AdministratorDao AdministratorDao { get; private set; }
+        public ChannelDao ChannelDao { get; private set; }
+        public ContentDao ContentDao { get; private set; }
+        public DepartmentDao DepartmentDao { get; private set; }
+        public LogDao LogDao { get; private set; }
+        public PermissionsDao PermissionsDao { get; private set; }
+        public RemarkDao RemarkDao { get; private set; }
+        public ReplyDao ReplyDao { get; private set; }
+        public TypeDao TypeDao { get; private set; }
 
         private static readonly Dictionary<int, ConfigInfo> ConfigInfoDict = new Dictionary<int, ConfigInfo>();
 
@@ -93,6 +93,11 @@ namespace SS.GovInteract
                         {
                             Text = "互动交流设置",
                             Href = PageInit.GetRedirectUrl(siteId, PageConfiguration.GetRedirectUrl(siteId))
+                        }
+                        ,new Menu
+                        {
+                            Text = "前台页面标签",
+                            Href = PageInit.GetRedirectUrl(siteId, PageFormStyle.GetRedirectUrl(siteId))
                         },
                         new Menu
                         {
@@ -104,7 +109,6 @@ namespace SS.GovInteract
 
             service.ContentFormSubmit += Service_ContentFormSubmited; // 页面提交处理函数
             service.ContentFormLoad += Service_ContentFormLoad; // 页面加载处理函数
-
         }
 
         private string Service_ContentFormLoad(object sender, ContentFormLoadEventArgs e)

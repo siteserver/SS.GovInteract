@@ -171,9 +171,9 @@ namespace SS.GovInteract.Provider
             return enumerable;
         }
 
-        public ArrayList GetTypeInfoArrayList(int channelId)
+        public List<TypeInfo> GetTypeInfoList(int channelId)
         {
-            var arraylist = new ArrayList();
+            var list = new List<TypeInfo>();
 
             var parameters = new[]
             {
@@ -190,19 +190,18 @@ namespace SS.GovInteract.Provider
             using (var rdr = _helper.ExecuteReader(_connectionString, sqlString, parameters))
             {
                 while (rdr.Read())
-                { 
-                    TypeInfo typeInfo = GetTypeInfo(rdr);
-                    arraylist.Add(typeInfo);
+                {
+                    list.Add(GetTypeInfo(rdr));
                 }
                 rdr.Close();
             }
 
-            return arraylist;
+            return list;
         }
 
-        public ArrayList GetTypeNameArrayList(int channelId)
+        public List<string> GetTypeNameList(int channelId)
         {
-            var arraylist = new ArrayList();
+            var arraylist = new List<string>();
 
             var parameters = new[]
             {

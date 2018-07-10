@@ -24,7 +24,7 @@ namespace SS.GovInteract.Pages
 
             if (!IsPostBack && channelId > 0)
             {
-                var channelInfo = Main.ChannelDao.GetChannelInfo(SiteId, channelId);
+                var channelInfo = Main.Instance.ChannelDao.GetChannelInfo(SiteId, channelId);
                 LtlDepartmentTree.Text = GetDepartmentTreeHtml(channelInfo);
             }
         }
@@ -100,9 +100,9 @@ namespace SS.GovInteract.Pages
             if (Page.IsPostBack && Page.IsValid)
             {
                 channelId = Utils.ToInt(Request.QueryString["channelId"]);
-                var channelInfo = Main.ChannelDao.GetChannelInfo(SiteId, channelId);
+                var channelInfo = Main.Instance.ChannelDao.GetChannelInfo(SiteId, channelId);
                 channelInfo.DepartmentIdCollection = Request.Form["DepartmentIDCollection"];
-                Main.ChannelDao.Update(channelInfo);
+                Main.Instance.ChannelDao.Update(channelInfo);
                 LayerUtils.Close(Page);
             }
         }

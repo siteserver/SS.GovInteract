@@ -25,7 +25,7 @@ namespace SS.GovInteract.Pages
 
             if (_contentId > 0)
             {
-                var logInfoList = Main.LogDao.GetLogInfoList(SiteId, _contentId);
+                var logInfoList = Main.Instance.LogDao.GetLogInfoList(SiteId, _contentId);
                 var builder = new StringBuilder();
 
                 var count = logInfoList.Count;

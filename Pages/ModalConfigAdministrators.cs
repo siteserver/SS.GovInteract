@@ -29,12 +29,12 @@ namespace SS.GovInteract.Pages
 
             if (!IsPostBack && channelId > 0)
             {
-                var channelInfo = Main.ChannelDao.GetChannelInfo(SiteId, channelId);
+                var channelInfo = Main.Instance.ChannelDao.GetChannelInfo(SiteId, channelId);
                 var departmentIdList = InteractManager.GetDepartmentIdList(channelInfo);
                 var userNameArrayList = new ArrayList();
                 foreach (var departmentId in departmentIdList)
                 {
-                    userNameArrayList.AddRange(Main.AdministratorDao.GetUserNameArrayList(departmentId, true));
+                    userNameArrayList.AddRange(Main.Instance.AdministratorDao.GetUserNameArrayList(departmentId, true));
                 }
 
                 string userA, userB;
@@ -63,8 +63,8 @@ namespace SS.GovInteract.Pages
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
                 var userName = e.Item.DataItem as string;
-                var administratorInfo = Main.AdministratorDao.GetByUserName(userName);
-                var permissionsInfo = Main.PermissionsDao.GetPermissionsInfo(userName, channelId);
+                var administratorInfo = Main.Instance.AdministratorDao.GetByUserName(userName);
+                var permissionsInfo = Main.Instance.PermissionsDao.GetPermissionsInfo(userName, channelId);
 
                 var ltlDepartmentName = e.Item.FindControl("ltlDepartmentName") as Literal;
                 var ltlUserName = e.Item.FindControl("ltlUserName") as Literal;

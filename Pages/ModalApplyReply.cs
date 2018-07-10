@@ -36,7 +36,7 @@ namespace SS.GovInteract.Pages
                 LtlDepartmentName.Text = DepartmentManager.GetDepartmentName(AuthRequest.AdminInfo.DepartmentId);
                 LtlUserName.Text = AuthRequest.AdminInfo.DisplayName;
 
-			    var replyInfo = Main.ReplyDao.GetReplyInfoByContentId(SiteId, _contentId);
+			    var replyInfo = Main.Instance.ReplyDao.GetReplyInfoByContentId(SiteId, _contentId);
 			    if (replyInfo != null)
 			    {
 			        TbReply.Text = replyInfo.Reply;
@@ -48,20 +48,27 @@ namespace SS.GovInteract.Pages
         {
 			var isChanged = false;
 
-            Main.ReplyDao.DeleteByContentId(SiteId, _contentInfo.Id);
+            Main.Instance.ReplyDao.DeleteByContentId(SiteId, _contentInfo.Id);
             var fileUrl = UploadFile(HtmlFileUrl.PostedFile);
 
             var replyInfo = new ReplyInfo(0, SiteId, _contentInfo.ChannelId, _contentInfo.Id, TbReply.Text, string.Empty,
                 AuthRequest.AdminInfo.DepartmentId, AuthRequest.AdminName, DateTime.Now);
-            Main.ReplyDao.Insert(replyInfo);
+            Main.Instance.ReplyDao.Insert(replyInfo);
 
             ApplyManager.Log(SiteId, _contentInfo.ChannelId, _contentInfo.Id, ELogTypeUtils.GetValue(ELogType.Reply), AuthRequest.AdminName, AuthRequest.AdminInfo.DepartmentId);
+            
+            _contentInfo.Set(ContentAttribute.State, EStateUtils.GetValue(EState.Replied));
+
+            _contentInfo.Set(ContentAttribute.ReplyContent, replyInfo.Reply);
+            _contentInfo.Set(ContentAttribute.ReplyFileUrl, replyInfo.FileUrl);
             if (AuthRequest.AdminInfo.DepartmentId > 0)
             {
                 _contentInfo.Set(ContentAttribute.DepartmentId, AuthRequest.AdminInfo.DepartmentId.ToString());
-                Main.Instance.ContentApi.Update(SiteId, _contentInfo.ChannelId, _contentInfo);
+                _contentInfo.Set(ContentAttribute.ReplyDepartmentName, DepartmentManager.GetDepartmentName(AuthRequest.AdminInfo.DepartmentId));
             }
-            _contentInfo.Set(ContentAttribute.State, EStateUtils.GetValue(EState.Replied));
+            _contentInfo.Set(ContentAttribute.ReplyUserName, AuthRequest.AdminInfo.DisplayName);
+            _contentInfo.Set(ContentAttribute.ReplyAddDate, replyInfo.AddDate);
+
             Main.Instance.ContentApi.Update(SiteId, _contentInfo.ChannelId, _contentInfo);
 
             isChanged = true;
