@@ -328,7 +328,7 @@ namespace SS.GovInteract.Pages
 
         content.queryCode = this.queryCode();
 
-        axios.post('http://localhost/api/v1/contents/{SiteId}/{channelId}', content, {{
+        axios.post('/api/v1/contents/{SiteId}/{channelId}', content, {{
             withCredentials: true,
             headers: {{
               'X-SS-API-KEY': '{apiKey}'
@@ -576,7 +576,7 @@ var govInteractQuery = new Vue({{
         return;
         }}
 
-        axios.get('http://localhost/api/v1/contents/{SiteId}/{channelId}', {{
+        axios.get('/api/v1/contents/{SiteId}/{channelId}', {{
             params: {{
             realName: content.realName,
             queryCode: content.queryCode

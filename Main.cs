@@ -93,8 +93,8 @@ namespace SS.GovInteract
                         {
                             Text = "互动交流设置",
                             Href = PageInit.GetRedirectUrl(siteId, PageConfiguration.GetRedirectUrl(siteId))
-                        }
-                        ,new Menu
+                        },
+                        new Menu
                         {
                             Text = "前台页面标签",
                             Href = PageInit.GetRedirectUrl(siteId, PageFormStyle.GetRedirectUrl(siteId))
