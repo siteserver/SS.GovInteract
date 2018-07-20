@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Web.UI.WebControls;
 using SiteServer.Plugin;
 using SS.GovInteract.Core;
 using SS.GovInteract.Model;
@@ -46,27 +45,27 @@ namespace SS.GovInteract.Provider
                     InputType = InputType.SelectOne,
                     DisplayName = "证件名称",
                     IsRequired = true,
-                    ListItems = new List<ListItem>
+                    ListItems = new List<InputListItem>
                     {
-                        new ListItem
+                        new InputListItem
                         {
                             Text= "身份证",
                             Value = "身份证",
                             Selected = true
                         },
-                        new ListItem
+                        new InputListItem
                         {
                             Text= "学生证",
                             Value = "学生证",
                             Selected = false
                         },
-                        new ListItem
+                        new InputListItem
                         {
                             Text= "军官证",
                             Value = "军官证",
                             Selected = false
                         },
-                        new ListItem
+                        new InputListItem
                         {
                             Text= "工作证",
                             Value = "工作证",
@@ -151,45 +150,45 @@ namespace SS.GovInteract.Provider
                     InputType = InputType.SelectOne,
                     DisplayName =  "类型",
                     IsRequired = true,
-                    ListItems = new List<ListItem>
+                    ListItems = new List<InputListItem>
                     {
-                        new ListItem
+                        new InputListItem
                         {
                             Text= "求决",
                             Value = "15",
                             Selected = false
                         },
-                        new ListItem
+                        new InputListItem
                         {
                             Text= "举报",
                             Value = "16",
                             Selected = false
                         },
-                        new ListItem
+                        new InputListItem
                         {
                             Text= "投诉",
                             Value = "17",
                             Selected = false
                         },
-                        new ListItem
+                        new InputListItem
                         {
                             Text= "咨询",
                             Value = "18",
                             Selected = true
                         },
-                        new ListItem
+                        new InputListItem
                         {
                             Text= "建议",
                             Value = "19",
                             Selected = false
                         },
-                        new ListItem
+                        new InputListItem
                         {
                             Text= "感谢",
                             Value = "20",
                             Selected = false
                         },
-                        new ListItem
+                        new InputListItem
                         {
                             Text= "其他",
                             Value = "21",
@@ -208,15 +207,15 @@ namespace SS.GovInteract.Provider
                     InputType = InputType.Radio,
                      DisplayName = "是否公开",
                     IsRequired = true,
-                    ListItems = new List<ListItem>
+                    ListItems = new List<InputListItem>
                     {
-                        new ListItem
+                        new InputListItem
                         {
                             Text= "公开",
                             Value = true.ToString(),
                             Selected = true
                         },
-                        new ListItem
+                        new InputListItem
                         {
                             Text= "不公开",
                             Value = false.ToString(),
