@@ -152,7 +152,7 @@ namespace SS.GovInteract.Pages
         {
             if (e.Item.ItemType != ListItemType.Item && e.Item.ItemType != ListItemType.AlternatingItem) return;
 
-            var contentInfo = Main.Instance.ContentApi.NewInstance();
+            var contentInfo = Main.Instance.ContentApi.NewInstance(SiteId, ChannelId);
             var rowView = (DataRowView) e.Item.DataItem;
             contentInfo.Load(rowView.Row);
 
@@ -256,7 +256,7 @@ namespace SS.GovInteract.Pages
             if (_isPermissionEdit)
             {
                 ltlEditUrl.Text =
-                    $@"<a class=""{textClass}"" href=""{Main.Instance.FilesApi.GetAdminDirectoryUrl(
+                    $@"<a class=""{textClass}"" href=""{Main.Instance.UtilsApi.GetAdminDirectoryUrl(
                         $"cms/pageContentAdd.aspx?siteId={SiteId}&channelId={contentInfo.ChannelId}&id={contentInfo.Id}&returnUrl={HttpUtility.UrlEncode(Main.Instance.PluginApi.GetPluginUrl(PageUrl))}")}"">编辑</a>";
             }
         }

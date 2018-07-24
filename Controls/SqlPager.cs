@@ -2,8 +2,6 @@
 using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Data;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using SiteServer.Plugin;
@@ -631,7 +629,7 @@ namespace SS.GovInteract.Controls
                 return;
             }
 
-            var dataset = Main.Instance.DataApi.ExecuteDataset(cmd);
+            var dataset = Main.Instance.DatabaseApi.ExecuteDataset(Main.Instance.ConnectionString, cmd);
             var data = dataset.Tables[0];
 
             // Configures the paged data source component
@@ -691,7 +689,7 @@ namespace SS.GovInteract.Controls
         /// <summary>
         /// Prepares and returns the command object for the reader-based query
         /// </summary>
-        private IDbCommand PrepareCommand(VirtualRecordCount countInfo)
+        private string PrepareCommand(VirtualRecordCount countInfo)
         {
             // Determines how many records are to be retrieved.
             // The last page could require less than other pages
@@ -705,13 +703,7 @@ namespace SS.GovInteract.Controls
             {
                 orderString = $"ORDER BY {SortField} {SortMode}";
             }
-            var cmdText = SqlUtils.GetPageSqlString(SelectCommand, orderString, ItemsPerPage, CurrentPageIndex, countInfo.PageCount, countInfo.RecordsInLastPage);
-
-            var conn = Main.Instance.DataApi.GetConnection(Main.Instance.ConnectionString);
-            var cmd = Main.Instance.DataApi.GetCommand();
-            cmd.Connection = conn;
-            cmd.CommandText = cmdText;
-            return cmd;
+            return SqlUtils.GetPageSqlString(SelectCommand, orderString, ItemsPerPage, CurrentPageIndex, countInfo.PageCount, countInfo.RecordsInLastPage);
         }
 
         //private static string AlterSortMode(string mode)
@@ -737,7 +729,7 @@ namespace SS.GovInteract.Controls
             cmdText = Main.Instance.DatabaseType == DatabaseType.Oracle
                 ? $"SELECT COUNT(*) FROM ({cmdText})"
                 : $"SELECT COUNT(*) FROM ({cmdText}) AS T0";
-            return Main.Instance.DataApi.ExecuteInt(Main.Instance.ConnectionString, cmdText);
+            return (int)Main.Instance.DatabaseApi.ExecuteScalar(Main.Instance.ConnectionString, cmdText);
         }
 
         /// <summary>

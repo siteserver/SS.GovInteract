@@ -36,12 +36,12 @@ namespace SS.GovInteract.Provider
         };
 
         private readonly string _connectionString;
-        private readonly IDataApi _helper;
+        private readonly IDatabaseApi _helper;
 
         public PermissionsDao()
         {
             _connectionString = Main.Instance.ConnectionString;
-            _helper = Main.Instance.DataApi;
+            _helper = Main.Instance.DatabaseApi;
         }
 
         public void Insert(int siteId, PermissionsInfo permissionsInfo)

@@ -355,12 +355,12 @@ namespace SS.GovInteract.Provider
         };
 
         private string _connectionString { get; }
-        private IDataApi _helper { get; }
+        private IDatabaseApi _helper { get; }
 
         public ContentDao()
         {
             _connectionString = Main.Instance.ConnectionString;
-            _helper = Main.Instance.DataApi;
+            _helper = Main.Instance.DatabaseApi;
         }
         
 //        public static string GetDepartmentsHtml(int siteId, int channelId, IAttributes attributes)

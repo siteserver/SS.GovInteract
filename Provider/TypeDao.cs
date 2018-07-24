@@ -41,12 +41,12 @@ namespace SS.GovInteract.Provider
         };
 
         private readonly string _connectionString;
-        private readonly IDataApi _helper;
+        private readonly IDatabaseApi _helper;
 
         public TypeDao()
         {
             _connectionString = Main.Instance.ConnectionString;
-            _helper = Main.Instance.DataApi;
+            _helper = Main.Instance.DatabaseApi;
         }
 
         public void Insert(TypeInfo typeInfo)
@@ -283,14 +283,14 @@ namespace SS.GovInteract.Provider
         { 
             string sqlString = $"SELECT MAX({nameof(TypeInfo.Taxis)}) FROM {TableName} WHERE {nameof(TypeInfo.ChannelId)} = {channelId}";
              
-            return _helper.ExecuteInt(_connectionString, sqlString);  
+            return (int)_helper.ExecuteScalar(_connectionString, sqlString);  
         }
 
         private int GetTaxis(int typeId)
         {
             string sqlString = $"SELECT {nameof(TypeInfo.Taxis)} FROM {TableName} WHERE {nameof(TypeInfo.Id)} = {typeId}";
 
-            return _helper.ExecuteInt(_connectionString, sqlString);
+            return (int)_helper.ExecuteScalar(_connectionString, sqlString);
         }
 
         private void SetTaxis(int typeId, int channelId, int taxis)

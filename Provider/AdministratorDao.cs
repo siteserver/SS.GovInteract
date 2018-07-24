@@ -9,12 +9,12 @@ namespace SS.GovInteract.Provider
     public class AdministratorDao
     {  
         private readonly string _connectionString;
-        private readonly IDataApi _helper;
+        private readonly IDatabaseApi _helper;
 
         public AdministratorDao()
         {
             _connectionString = Main.Instance.ConnectionString;
-            _helper = Main.Instance.DataApi;
+            _helper = Main.Instance.DatabaseApi;
         } 
 
         public ArrayList GetUserNameArrayList(int departmentId, bool isAll)
