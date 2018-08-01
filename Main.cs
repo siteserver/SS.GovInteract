@@ -12,6 +12,7 @@ namespace SS.GovInteract
 {
     public class Main : PluginBase
     {
+        public Dao Dao { get; private set; }
         public AdministratorDao AdministratorDao { get; private set; }
         public ChannelDao ChannelDao { get; private set; }
         public ContentDao ContentDao { get; private set; }
@@ -41,6 +42,7 @@ namespace SS.GovInteract
         {
             Instance = this;
 
+            Dao = new Dao();
             AdministratorDao = new AdministratorDao();
             ChannelDao = new ChannelDao();
             ContentDao = new ContentDao();

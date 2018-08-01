@@ -281,21 +281,21 @@ namespace SS.GovInteract.Provider
 
         private int GetMaxTaxis(int channelId)
         { 
-            string sqlString = $"SELECT MAX({nameof(TypeInfo.Taxis)}) FROM {TableName} WHERE {nameof(TypeInfo.ChannelId)} = {channelId}";
+            var sqlString = $"SELECT MAX({nameof(TypeInfo.Taxis)}) FROM {TableName} WHERE {nameof(TypeInfo.ChannelId)} = {channelId}";
              
-            return (int)_helper.ExecuteScalar(_connectionString, sqlString);  
+            return Main.Instance.Dao.GetIntResult(sqlString);  
         }
 
         private int GetTaxis(int typeId)
         {
-            string sqlString = $"SELECT {nameof(TypeInfo.Taxis)} FROM {TableName} WHERE {nameof(TypeInfo.Id)} = {typeId}";
+            var sqlString = $"SELECT {nameof(TypeInfo.Taxis)} FROM {TableName} WHERE {nameof(TypeInfo.Id)} = {typeId}";
 
-            return (int)_helper.ExecuteScalar(_connectionString, sqlString);
+            return Main.Instance.Dao.GetIntResult(sqlString);
         }
 
         private void SetTaxis(int typeId, int channelId, int taxis)
         {
-            string sqlString = $"UPDATE {TableName} SET {nameof(TypeInfo.Taxis)} = {taxis} WHERE {nameof(TypeInfo.Id)} = {typeId} AND {nameof(TypeInfo.ChannelId)} = {channelId}";
+            var sqlString = $"UPDATE {TableName} SET {nameof(TypeInfo.Taxis)} = {taxis} WHERE {nameof(TypeInfo.Id)} = {typeId} AND {nameof(TypeInfo.ChannelId)} = {channelId}";
 
             _helper.ExecuteNonQuery(_connectionString,sqlString);
         }

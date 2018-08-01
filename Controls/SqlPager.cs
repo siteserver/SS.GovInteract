@@ -729,7 +729,7 @@ namespace SS.GovInteract.Controls
             cmdText = Main.Instance.DatabaseType == DatabaseType.Oracle
                 ? $"SELECT COUNT(*) FROM ({cmdText})"
                 : $"SELECT COUNT(*) FROM ({cmdText}) AS T0";
-            return (int)Main.Instance.DatabaseApi.ExecuteScalar(Main.Instance.ConnectionString, cmdText);
+            return Main.Instance.Dao.GetIntResult(cmdText);
         }
 
         /// <summary>
