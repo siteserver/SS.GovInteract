@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using System.Web;
 using System.Web.UI.WebControls;
+using SiteServer.Plugin;
 using SS.GovInteract.Core;
 using SS.GovInteract.Model;
 
@@ -14,6 +15,7 @@ namespace SS.GovInteract.Pages
         private int _channelId;
         private int _contentId;
 	    private string _returnUrl;
+        private IAdministratorInfo _adminInfo;
 
         public static string GetRedirectUrl(int siteId, int channelId, int contentId, string listPageUrl)
         {
@@ -25,6 +27,7 @@ namespace SS.GovInteract.Pages
             _channelId = Utils.ToInt(Request.QueryString["channelId"]);
             _contentId = Utils.ToInt(Request.QueryString["contentId"]);
             _returnUrl = Request.QueryString["returnUrl"];
+            _adminInfo = Main.Instance.AdminApi.GetAdminInfoByUserId(AuthRequest.AdminId);
         }
 
         public void Redo_OnClick(object sender, EventArgs e)
@@ -38,10 +41,10 @@ namespace SS.GovInteract.Pages
             {
                 var contentInfo = Main.Instance.ContentApi.GetContentInfo(SiteId, _channelId, _contentId);
 
-                var remarkInfo = new RemarkInfo(0, SiteId, contentInfo.ChannelId, contentInfo.Id, ERemarkTypeUtils.GetValue(ERemarkType.Redo), TbRedoRemark.Text, AuthRequest.AdminInfo.DepartmentId, AuthRequest.AdminName, DateTime.Now);
+                var remarkInfo = new RemarkInfo(0, SiteId, contentInfo.ChannelId, contentInfo.Id, ERemarkTypeUtils.GetValue(ERemarkType.Redo), TbRedoRemark.Text, _adminInfo.DepartmentId, AuthRequest.AdminName, DateTime.Now);
                 Main.Instance.RemarkDao.Insert(remarkInfo);
 
-                ApplyManager.Log(SiteId, contentInfo.ChannelId, contentInfo.Id, ELogTypeUtils.GetValue(ELogType.Redo), AuthRequest.AdminName, AuthRequest.AdminInfo.DepartmentId);
+                ApplyManager.Log(SiteId, contentInfo.ChannelId, contentInfo.Id, ELogTypeUtils.GetValue(ELogType.Redo), AuthRequest.AdminName, _adminInfo.DepartmentId);
 
                 contentInfo.Set(ContentAttribute.State, EStateUtils.GetValue(EState.Redo));
                 Main.Instance.ContentApi.Update(SiteId, contentInfo.ChannelId, contentInfo);
@@ -67,7 +70,7 @@ namespace SS.GovInteract.Pages
             {
                 var contentInfo = Main.Instance.ContentApi.GetContentInfo(SiteId, _channelId, _contentId);
 
-                ApplyManager.Log(SiteId, contentInfo.ChannelId, contentInfo.Id, ELogTypeUtils.GetValue(ELogType.Check), AuthRequest.AdminName, AuthRequest.AdminInfo.DepartmentId);
+                ApplyManager.Log(SiteId, contentInfo.ChannelId, contentInfo.Id, ELogTypeUtils.GetValue(ELogType.Check), AuthRequest.AdminName, _adminInfo.DepartmentId);
 
                 contentInfo.Set(ContentAttribute.State, EStateUtils.GetValue(EState.Checked));
                 Main.Instance.ContentApi.Update(SiteId, contentInfo.ChannelId, contentInfo);

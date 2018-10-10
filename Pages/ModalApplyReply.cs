@@ -18,6 +18,7 @@ namespace SS.GovInteract.Pages
         private int _channelId;
         private int _contentId;
         private IContentInfo _contentInfo;
+	    private IAdministratorInfo _adminInfo;
 
 	    public static string GetOpenWindowString(int siteId, int channelId, int contentId)
 	    {
@@ -30,11 +31,12 @@ namespace SS.GovInteract.Pages
             _contentId = Utils.ToInt(Request.QueryString["contentId"]);
 
             _contentInfo = Main.Instance.ContentApi.GetContentInfo(SiteId, _channelId, _contentId);
+            _adminInfo = Main.Instance.AdminApi.GetAdminInfoByUserId(AuthRequest.AdminId);
 
-			if (!IsPostBack)
+            if (!IsPostBack)
 			{
-                LtlDepartmentName.Text = DepartmentManager.GetDepartmentName(AuthRequest.AdminInfo.DepartmentId);
-                LtlUserName.Text = AuthRequest.AdminInfo.DisplayName;
+                LtlDepartmentName.Text = DepartmentManager.GetDepartmentName(_adminInfo.DepartmentId);
+                LtlUserName.Text = _adminInfo.DisplayName;
 
 			    var replyInfo = Main.Instance.ReplyDao.GetReplyInfoByContentId(SiteId, _contentId);
 			    if (replyInfo != null)
@@ -52,21 +54,21 @@ namespace SS.GovInteract.Pages
             var fileUrl = UploadFile(HtmlFileUrl.PostedFile);
 
             var replyInfo = new ReplyInfo(0, SiteId, _contentInfo.ChannelId, _contentInfo.Id, TbReply.Text, string.Empty,
-                AuthRequest.AdminInfo.DepartmentId, AuthRequest.AdminName, DateTime.Now);
+                _adminInfo.DepartmentId, AuthRequest.AdminName, DateTime.Now);
             Main.Instance.ReplyDao.Insert(replyInfo);
 
-            ApplyManager.Log(SiteId, _contentInfo.ChannelId, _contentInfo.Id, ELogTypeUtils.GetValue(ELogType.Reply), AuthRequest.AdminName, AuthRequest.AdminInfo.DepartmentId);
+            ApplyManager.Log(SiteId, _contentInfo.ChannelId, _contentInfo.Id, ELogTypeUtils.GetValue(ELogType.Reply), AuthRequest.AdminName, _adminInfo.DepartmentId);
             
             _contentInfo.Set(ContentAttribute.State, EStateUtils.GetValue(EState.Replied));
 
             _contentInfo.Set(ContentAttribute.ReplyContent, replyInfo.Reply);
             _contentInfo.Set(ContentAttribute.ReplyFileUrl, replyInfo.FileUrl);
-            if (AuthRequest.AdminInfo.DepartmentId > 0)
+            if (_adminInfo.DepartmentId > 0)
             {
-                _contentInfo.Set(ContentAttribute.DepartmentId, AuthRequest.AdminInfo.DepartmentId.ToString());
-                _contentInfo.Set(ContentAttribute.ReplyDepartmentName, DepartmentManager.GetDepartmentName(AuthRequest.AdminInfo.DepartmentId));
+                _contentInfo.Set(ContentAttribute.DepartmentId, _adminInfo.DepartmentId.ToString());
+                _contentInfo.Set(ContentAttribute.ReplyDepartmentName, DepartmentManager.GetDepartmentName(_adminInfo.DepartmentId));
             }
-            _contentInfo.Set(ContentAttribute.ReplyUserName, AuthRequest.AdminInfo.DisplayName);
+            _contentInfo.Set(ContentAttribute.ReplyUserName, _adminInfo.DisplayName);
             _contentInfo.Set(ContentAttribute.ReplyAddDate, replyInfo.AddDate);
 
             Main.Instance.ContentApi.Update(SiteId, _contentInfo.ChannelId, _contentInfo);

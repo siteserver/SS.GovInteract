@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
+using SiteServer.Plugin;
 using SS.GovInteract.Model;
 
 namespace SS.GovInteract.Pages
@@ -19,6 +20,7 @@ namespace SS.GovInteract.Pages
 
         private int _channelId;
         private List<int> _idArrayList;
+        private IAdministratorInfo _adminInfo;
 
 	    public static string GetOpenWindowString(int siteId, int channelId)
 	    {
@@ -29,12 +31,13 @@ namespace SS.GovInteract.Pages
         {
             _channelId = Utils.ToInt(Request.QueryString["channelId"]);
             _idArrayList = Utils.StringCollectionToIntList(Request.QueryString["IDCollection"]);
+            _adminInfo = Main.Instance.AdminApi.GetAdminInfoByUserId(AuthRequest.AdminId);
 
-			if (!IsPostBack)
+            if (!IsPostBack)
 			{
                 divAddDepartment.Attributes.Add("onclick", ModalConfigDepartments.GetOpenWindowString(SiteId, _channelId));
-                ltlDepartmentName.Text = DepartmentManager.GetDepartmentName(AuthRequest.AdminInfo.DepartmentId);
-                ltlUserName.Text = AuthRequest.AdminInfo.DisplayName;
+                ltlDepartmentName.Text = DepartmentManager.GetDepartmentName(_adminInfo.DepartmentId);
+                ltlUserName.Text = _adminInfo.DisplayName;
 			}
 		}
 
@@ -64,11 +67,11 @@ namespace SS.GovInteract.Pages
 
                         if (!string.IsNullOrEmpty(tbSwitchToRemark.Text))
                         {
-                            var remarkInfo = new RemarkInfo(0, SiteId, contentInfo.ChannelId, contentID, ERemarkTypeUtils.GetValue(ERemarkType.SwitchTo), tbSwitchToRemark.Text, AuthRequest.AdminInfo.DepartmentId, AuthRequest.AdminName, DateTime.Now);
+                            var remarkInfo = new RemarkInfo(0, SiteId, contentInfo.ChannelId, contentID, ERemarkTypeUtils.GetValue(ERemarkType.SwitchTo), tbSwitchToRemark.Text, _adminInfo.DepartmentId, AuthRequest.AdminName, DateTime.Now);
                             Main.Instance.RemarkDao.Insert(remarkInfo);
                         }
 
-                        ApplyManager.LogSwitchTo(SiteId, contentInfo.ChannelId, contentID, switchToDepartmentName, AuthRequest.AdminName, AuthRequest.AdminInfo.DepartmentId);
+                        ApplyManager.LogSwitchTo(SiteId, contentInfo.ChannelId, contentID, switchToDepartmentName, AuthRequest.AdminName, _adminInfo.DepartmentId);
                     }
                 }
 

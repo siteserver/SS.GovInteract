@@ -30,7 +30,7 @@ namespace SS.GovInteract.Pages
             SiteId = Utils.ToInt(Request.QueryString["siteId"]);
             _redirectUrl = Request.QueryString["redirectUrl"];
 
-            if (!Main.Instance.AdminApi.HasSitePermissions(SiteId, Main.Instance.Id))
+            if (!Main.Instance.Request.AdminPermissions.HasSitePermissions(SiteId, Main.Instance.Id))
             {
                 HttpContext.Current.Response.Write("<h1>未授权访问</h1>");
                 HttpContext.Current.Response.End();
