@@ -13,8 +13,8 @@ namespace SS.GovInteract.Provider
 
         public AdministratorDao()
         {
-            _connectionString = Main.Instance.ConnectionString;
-            _helper = Main.Instance.DatabaseApi;
+            _connectionString = Context.ConnectionString;
+            _helper = Context.DatabaseApi;
         } 
 
         public ArrayList GetUserNameArrayList(int departmentId, bool isAll)
@@ -23,7 +23,7 @@ namespace SS.GovInteract.Provider
             string sqlSelect = $"SELECT UserName FROM siteserver_Administrator WHERE Id = {departmentId}";
             if (isAll)
             {
-                var departmentIdList = Main.Instance.DepartmentDao.GetDepartmentIdListForDescendant(departmentId);
+                var departmentIdList = Main.DepartmentDao.GetDepartmentIdListForDescendant(departmentId);
                 departmentIdList.Add(departmentId);
                 sqlSelect =
                     $"SELECT UserName FROM siteserver_Administrator WHERE Id IN ({Utils.ObjectCollectionToString(departmentIdList)})";

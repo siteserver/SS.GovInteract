@@ -30,15 +30,15 @@ namespace SS.GovInteract.Pages
             _channelId = Utils.ToInt(Request.QueryString["channelId"]);
             _contentId = Utils.ToInt(Request.QueryString["contentId"]);
 
-            _contentInfo = Main.Instance.ContentApi.GetContentInfo(SiteId, _channelId, _contentId);
-            _adminInfo = Main.Instance.AdminApi.GetAdminInfoByUserId(AuthRequest.AdminId);
+            _contentInfo = Main.ContentApi.GetContentInfo(SiteId, _channelId, _contentId);
+            _adminInfo = Main.AdminApi.GetAdminInfoByUserId(AuthRequest.AdminId);
 
             if (!IsPostBack)
 			{
                 LtlDepartmentName.Text = DepartmentManager.GetDepartmentName(_adminInfo.DepartmentId);
                 LtlUserName.Text = _adminInfo.DisplayName;
 
-			    var replyInfo = Main.Instance.ReplyDao.GetReplyInfoByContentId(SiteId, _contentId);
+			    var replyInfo = Main.ReplyDao.GetReplyInfoByContentId(SiteId, _contentId);
 			    if (replyInfo != null)
 			    {
 			        TbReply.Text = replyInfo.Reply;
@@ -50,12 +50,12 @@ namespace SS.GovInteract.Pages
         {
 			var isChanged = false;
 
-            Main.Instance.ReplyDao.DeleteByContentId(SiteId, _contentInfo.Id);
+            Main.ReplyDao.DeleteByContentId(SiteId, _contentInfo.Id);
             var fileUrl = UploadFile(HtmlFileUrl.PostedFile);
 
             var replyInfo = new ReplyInfo(0, SiteId, _contentInfo.ChannelId, _contentInfo.Id, TbReply.Text, string.Empty,
                 _adminInfo.DepartmentId, AuthRequest.AdminName, DateTime.Now);
-            Main.Instance.ReplyDao.Insert(replyInfo);
+            Main.ReplyDao.Insert(replyInfo);
 
             ApplyManager.Log(SiteId, _contentInfo.ChannelId, _contentInfo.Id, ELogTypeUtils.GetValue(ELogType.Reply), AuthRequest.AdminName, _adminInfo.DepartmentId);
             
@@ -71,7 +71,7 @@ namespace SS.GovInteract.Pages
             _contentInfo.Set(ContentAttribute.ReplyUserName, _adminInfo.DisplayName);
             _contentInfo.Set(ContentAttribute.ReplyAddDate, replyInfo.AddDate);
 
-            Main.Instance.ContentApi.Update(SiteId, _contentInfo.ChannelId, _contentInfo);
+            Main.ContentApi.Update(SiteId, _contentInfo.ChannelId, _contentInfo);
 
             isChanged = true;
 

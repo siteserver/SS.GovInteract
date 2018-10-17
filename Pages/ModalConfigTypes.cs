@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.UI.WebControls;
+using SiteServer.Plugin;
 using SS.GovInteract.Core;
 
 namespace SS.GovInteract.Pages
@@ -19,7 +20,7 @@ namespace SS.GovInteract.Pages
 
         public static string GetOpenWindowStringToList(int siteId,int channelId)
         {  
-           return LayerUtils.GetOpenScript("办件类型管理", Main.Instance.PluginApi.GetPluginUrl($"{nameof(ModalConfigTypes)}.aspx?siteId={siteId}&channelId={channelId}"), 0, 0);
+           return LayerUtils.GetOpenScript("办件类型管理", Main.PluginApi.GetPluginUrl($"{nameof(ModalConfigTypes)}.aspx?siteId={siteId}&channelId={channelId}"), 0, 0);
         }
 
         public void Page_Load(object sender, EventArgs e)
@@ -33,7 +34,7 @@ namespace SS.GovInteract.Pages
                 {
                     try
                     {
-                        Main.Instance.TypeDao.Delete(id);
+                        Main.TypeDao.Delete(id);
                         LtlMessage.Text = Utils.GetMessageHtml("成功删除分类法", true);
                     }
                     catch (Exception ex)
@@ -46,17 +47,17 @@ namespace SS.GovInteract.Pages
                     var isDown = Request.QueryString["Down"] != null;
                     if (isDown)
                     {
-                        Main.Instance.TypeDao.UpdateTaxisToUp(id, channelId);
+                        Main.TypeDao.UpdateTaxisToUp(id, channelId);
                         LtlMessage.Text = Utils.GetMessageHtml($"排序成功", true);
                     }
                     else
                     {
-                        Main.Instance.TypeDao.UpdateTaxisToDown(id, channelId);
+                        Main.TypeDao.UpdateTaxisToDown(id, channelId);
                         LtlMessage.Text = Utils.GetMessageHtml($"排序成功", true);
                     }
                 }
 
-                DgContents.DataSource = Main.Instance.TypeDao.GetDataSource(channelId);
+                DgContents.DataSource = Main.TypeDao.GetDataSource(channelId);
                 DgContents.ItemDataBound += DgContents_ItemDataBound;
                 DgContents.DataBind();
 

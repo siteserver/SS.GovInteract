@@ -53,7 +53,7 @@ namespace SS.GovInteract.Pages
                 {
                     foreach (var contentId in list)
                     {
-                        Main.Instance.ContentApi.Delete(SiteId, ChannelId, contentId);
+                        Main.ContentApi.Delete(SiteId, ChannelId, contentId);
                     }
                     LtlScript.Text = AlertUtils.Success("删除成功！", "");
                 }
@@ -63,12 +63,12 @@ namespace SS.GovInteract.Pages
                 var list = Utils.StringCollectionToIntList(Request.QueryString["IDCollection"]);
                 foreach (var contentId in list)
                 {
-                    var contentInfo = Main.Instance.ContentApi.GetContentInfo(SiteId, ChannelId, contentId);
+                    var contentInfo = Main.ContentApi.GetContentInfo(SiteId, ChannelId, contentId);
                     var state = EStateUtils.GetEnumType(contentInfo.GetString(ContentAttribute.State));
                     if (state == EState.New || state == EState.Denied)
                     {
                         contentInfo.Set(ContentAttribute.State, EStateUtils.GetValue(EState.Accepted));
-                        Main.Instance.ContentApi.Update(SiteId, ChannelId, contentInfo);
+                        Main.ContentApi.Update(SiteId, ChannelId, contentInfo);
                     }
                 }
                 LtlScript.Text = AlertUtils.Success("受理申请成功！", "");
@@ -78,12 +78,12 @@ namespace SS.GovInteract.Pages
                 var list = Utils.StringCollectionToIntList(Request.QueryString["IDCollection"]);
                 foreach (var contentId in list)
                 {
-                    var contentInfo = Main.Instance.ContentApi.GetContentInfo(SiteId, ChannelId, contentId);
+                    var contentInfo = Main.ContentApi.GetContentInfo(SiteId, ChannelId, contentId);
                     var state = EStateUtils.GetEnumType(contentInfo.GetString(ContentAttribute.State));
                     if (state == EState.New || state == EState.Accepted)
                     {
                         contentInfo.Set(ContentAttribute.State, EStateUtils.GetValue(EState.Denied));
-                        Main.Instance.ContentApi.Update(SiteId, ChannelId, contentInfo);
+                        Main.ContentApi.Update(SiteId, ChannelId, contentInfo);
                     }
                 }
                 LtlScript.Text = AlertUtils.Success("拒绝受理申请成功！", "");
@@ -93,12 +93,12 @@ namespace SS.GovInteract.Pages
                 var list = Utils.StringCollectionToIntList(Request.QueryString["IDCollection"]);
                 foreach (var contentId in list)
                 {
-                    var contentInfo = Main.Instance.ContentApi.GetContentInfo(SiteId, ChannelId, contentId);
+                    var contentInfo = Main.ContentApi.GetContentInfo(SiteId, ChannelId, contentId);
                     var state = EStateUtils.GetEnumType(contentInfo.GetString(ContentAttribute.State));
                     if (state == EState.Replied)
                     {
                         contentInfo.Set(ContentAttribute.State, EStateUtils.GetValue(EState.Checked));
-                        Main.Instance.ContentApi.Update(SiteId, ChannelId, contentInfo);
+                        Main.ContentApi.Update(SiteId, ChannelId, contentInfo);
                     }
                 }
                 LtlScript.Text = AlertUtils.Success("审核申请成功！", "");
@@ -152,7 +152,7 @@ namespace SS.GovInteract.Pages
         {
             if (e.Item.ItemType != ListItemType.Item && e.Item.ItemType != ListItemType.AlternatingItem) return;
 
-            var contentInfo = Main.Instance.ContentApi.NewInstance(SiteId, ChannelId);
+            var contentInfo = Main.ContentApi.NewInstance(SiteId, ChannelId);
             var rowView = (DataRowView) e.Item.DataItem;
             contentInfo.Load(rowView.Row);
 
@@ -256,8 +256,8 @@ namespace SS.GovInteract.Pages
             if (_isPermissionEdit)
             {
                 ltlEditUrl.Text =
-                    $@"<a class=""{textClass}"" href=""{Main.Instance.UtilsApi.GetAdminDirectoryUrl(
-                        $"cms/pageContentAdd.aspx?siteId={SiteId}&channelId={contentInfo.ChannelId}&id={contentInfo.Id}&returnUrl={HttpUtility.UrlEncode(Main.Instance.PluginApi.GetPluginUrl(PageUrl))}")}"">编辑</a>";
+                    $@"<a class=""{textClass}"" href=""{Main.UtilsApi.GetAdminDirectoryUrl(
+                        $"cms/pageContentAdd.aspx?siteId={SiteId}&channelId={contentInfo.ChannelId}&id={contentInfo.Id}&returnUrl={HttpUtility.UrlEncode(Main.PluginApi.GetPluginUrl(Main.PluginId, PageUrl))}")}"">编辑</a>";
             }
         }
 

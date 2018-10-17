@@ -21,17 +21,17 @@ namespace SS.GovInteract.Pages
 
         private ConfigInfo _configInfo;
 
-        public ConfigInfo ConfigInfo => _configInfo ?? (_configInfo = Main.Instance.GetConfigInfo(SiteId));
+        public ConfigInfo ConfigInfo => _configInfo ?? (_configInfo = Main.GetConfigInfo(SiteId));
 
         protected override void OnInit(EventArgs e)
         {
             base.OnInit(e);
 
-            AuthRequest = Main.Instance.Request;
+            AuthRequest = Main.Request;
 
             SiteId = Convert.ToInt32(Request.QueryString["siteId"]);
 
-            if (!AuthRequest.AdminPermissions.HasSitePermissions(SiteId, Main.Instance.Id))
+            if (!AuthRequest.AdminPermissions.HasSitePermissions(SiteId, Main.PluginId))
             {
                 HttpContext.Current.Response.Write("<h1>未授权访问</h1>");
                 HttpContext.Current.Response.End();

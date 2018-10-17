@@ -31,7 +31,7 @@ namespace SS.GovInteract.Pages
 		    _channelId = Utils.ToInt(Request.QueryString["channelId"]);
             _idArrayList = Utils.StringCollectionToIntList(Request.QueryString["IDCollection"]);
 
-		    _adminInfo = Main.Instance.AdminApi.GetAdminInfoByUserId(AuthRequest.AdminId);
+		    _adminInfo = Main.AdminApi.GetAdminInfoByUserId(AuthRequest.AdminId);
 
             if (!IsPostBack)
 			{
@@ -54,17 +54,17 @@ namespace SS.GovInteract.Pages
 
                 foreach (int contentID in _idArrayList)
                 {
-                    var contentInfo = Main.Instance.ContentApi.GetContentInfo(SiteId, _channelId, contentID);
+                    var contentInfo = Main.ContentApi.GetContentInfo(SiteId, _channelId, contentID);
                     var state = EStateUtils.GetEnumType(contentInfo.GetString(ContentAttribute.State));
 
                     if (state == EState.Replied || state == EState.Redo)
                     {
                         var remarkInfo = new RemarkInfo(0, SiteId, contentInfo.ChannelId, contentInfo.Id, ERemarkTypeUtils.GetValue(ERemarkType.Redo), tbRedoRemark.Text, _adminInfo.DepartmentId, AuthRequest.AdminName, DateTime.Now);
-                        Main.Instance.RemarkDao.Insert(remarkInfo);
+                        Main.RemarkDao.Insert(remarkInfo);
 
                         ApplyManager.Log(SiteId, contentInfo.ChannelId, contentID, ELogTypeUtils.GetValue(ELogType.Redo), AuthRequest.AdminName, _adminInfo.DepartmentId);
                         contentInfo.Set(ContentAttribute.State, EStateUtils.GetValue(EState.Redo));
-                        Main.Instance.ContentApi.Update(SiteId, contentInfo.ChannelId, contentInfo);
+                        Main.ContentApi.Update(SiteId, contentInfo.ChannelId, contentInfo);
                     }
                 }
 

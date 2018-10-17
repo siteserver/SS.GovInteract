@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Text;
 using System.Web.UI.WebControls;
+using SiteServer.Plugin;
 using SS.GovInteract.Core;
 using SS.GovInteract.Model;
 
@@ -24,7 +25,7 @@ namespace SS.GovInteract.Pages
 
             if (!IsPostBack && channelId > 0)
             {
-                var channelInfo = Main.Instance.ChannelDao.GetChannelInfo(SiteId, channelId);
+                var channelInfo = Main.ChannelDao.GetChannelInfo(SiteId, channelId);
                 LtlDepartmentTree.Text = GetDepartmentTreeHtml(channelInfo);
             }
         }
@@ -37,7 +38,7 @@ namespace SS.GovInteract.Pages
                 return htmlBuilder.ToString();
             }
             var departmentIdList =InteractManager.GetDepartmentIdList(channelInfo);  
-            var treeDirectoryUrl = Main.Instance.PluginApi.GetPluginUrl("assets/tree");
+            var treeDirectoryUrl = Main.PluginApi.GetPluginUrl(Main.PluginId, "assets/tree");
             htmlBuilder.Append("<span id='DepartmentSelectControl'>");
             var allDepartmentIdList = DepartmentManager.GetDepartmentIdList();
             var isLastNodeArray = new bool[allDepartmentIdList.Count];
@@ -100,9 +101,9 @@ namespace SS.GovInteract.Pages
             if (Page.IsPostBack && Page.IsValid)
             {
                 channelId = Utils.ToInt(Request.QueryString["channelId"]);
-                var channelInfo = Main.Instance.ChannelDao.GetChannelInfo(SiteId, channelId);
+                var channelInfo = Main.ChannelDao.GetChannelInfo(SiteId, channelId);
                 channelInfo.DepartmentIdCollection = Request.Form["DepartmentIDCollection"];
-                Main.Instance.ChannelDao.Update(channelInfo);
+                Main.ChannelDao.Update(channelInfo);
                 LayerUtils.Close(Page);
             }
         }

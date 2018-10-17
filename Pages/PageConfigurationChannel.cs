@@ -20,16 +20,16 @@ namespace SS.GovInteract.Pages
 
         public void Page_Load(object sender, EventArgs e)
         { 
-            _configInfo = Main.Instance.GetConfigInfo(SiteId);
+            _configInfo = Main.GetConfigInfo(SiteId);
 
             if (!IsPostBack)
             {
-                var channelIdList = Main.Instance.ChannelApi.GetChannelIdList(SiteId);
+                var channelIdList = Main.ChannelApi.GetChannelIdList(SiteId);
                 var channelInfoList = new ArrayList();
                 foreach (var channelId in channelIdList)
                 { 
-                    var channelInfo = Main.Instance.ChannelApi.GetChannelInfo(SiteId, channelId);
-                    if (channelInfo != null & channelInfo.ContentModelPluginId == Main.Instance.Id)
+                    var channelInfo = Main.ChannelApi.GetChannelInfo(SiteId, channelId);
+                    if (channelInfo != null & channelInfo.ContentModelPluginId == Main.PluginId)
                     {
                         channelInfoList.Add(channelInfo);
                     }

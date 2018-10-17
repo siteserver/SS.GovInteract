@@ -4,7 +4,7 @@ namespace SS.GovInteract.Core
 {
     public static class SqlUtils
     {
-        public static string EmptyString => Main.Instance.DatabaseType == DatabaseType.Oracle ? "_EMPTY_" : string.Empty;
+        public static string EmptyString => Context.DatabaseType == DatabaseType.Oracle ? "_EMPTY_" : string.Empty;
 
         public static string GetPageSqlString(string sqlString, string orderString, int itemsPerPage, int currentPageIndex, int pageCount, int recordsInLastPage)
         {
@@ -21,7 +21,7 @@ namespace SS.GovInteract.Core
             orderStringReverse = orderStringReverse.Replace(" ASC", " DESC");
             orderStringReverse = orderStringReverse.Replace(" DESC2", " ASC");
 
-            if (Main.Instance.DatabaseType == DatabaseType.MySql)
+            if (Context.DatabaseType == DatabaseType.MySql)
             {
                 retval = $@"
 SELECT * FROM (
@@ -30,7 +30,7 @@ SELECT * FROM (
     ) AS t1 {orderStringReverse} LIMIT {recsToRetrieve}
 ) AS t2 {orderString}";
             }
-            else if (Main.Instance.DatabaseType == DatabaseType.SqlServer)
+            else if (Context.DatabaseType == DatabaseType.SqlServer)
             {
                 retval = $@"
 SELECT * FROM (
@@ -39,7 +39,7 @@ SELECT * FROM (
     ) AS t1 {orderStringReverse}
 ) AS t2 {orderString}";
             }
-            else if (Main.Instance.DatabaseType == DatabaseType.PostgreSql)
+            else if (Context.DatabaseType == DatabaseType.PostgreSql)
             {
                 retval = $@"
 SELECT * FROM (
@@ -48,7 +48,7 @@ SELECT * FROM (
     ) AS t1 {orderStringReverse} LIMIT {recsToRetrieve}
 ) AS t2 {orderString}";
             }
-            else if (Main.Instance.DatabaseType == DatabaseType.Oracle)
+            else if (Context.DatabaseType == DatabaseType.Oracle)
             {
                 retval = $@"
 SELECT * FROM (

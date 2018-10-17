@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.UI.WebControls;
+using SiteServer.Plugin;
 using SS.GovInteract.Core;
 using SS.GovInteract.Model;
 
@@ -25,7 +26,7 @@ namespace SS.GovInteract.Pages
 
         public void Page_Load(object sender, EventArgs e)
         { 
-            _configInfo = Main.Instance.GetConfigInfo(SiteId);
+            _configInfo = Main.GetConfigInfo(SiteId);
 
             if (!IsPostBack)
             {
@@ -60,7 +61,7 @@ namespace SS.GovInteract.Pages
                 _configInfo.ApplyIsDeleteAllowed = Utils.ToBool(DdlApplyIsDeleteAllowed.SelectedValue);
                 _configInfo.ApplyIsOpenWindow = Utils.ToBool(DdlApplyIsOpenWindow.SelectedValue);
 
-                Main.Instance.ConfigApi.SetConfig(SiteId, _configInfo);
+                Main.ConfigApi.SetConfig(Main.PluginId, SiteId, _configInfo);
                 LtlMessage.Text = Utils.GetMessageHtml("办件预警设置修改成功！", true);
             } 
         }

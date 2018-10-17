@@ -12,36 +12,41 @@ namespace SS.GovInteract
 {
     public class Main : PluginBase
     {
-        public Dao Dao { get; private set; }
-        public AdministratorDao AdministratorDao { get; private set; }
-        public ChannelDao ChannelDao { get; private set; }
-        public ContentDao ContentDao { get; private set; }
-        public DepartmentDao DepartmentDao { get; private set; }
-        public LogDao LogDao { get; private set; }
-        public PermissionsDao PermissionsDao { get; private set; }
-        public RemarkDao RemarkDao { get; private set; }
-        public ReplyDao ReplyDao { get; private set; }
-        public TypeDao TypeDao { get; private set; }
+        public static string PluginId { get; private set; }
+
+        public static IAdminApi AdminApi => Context.AdminApi;
+        public static IContentApi ContentApi => Context.ContentApi;
+        public static IChannelApi ChannelApi => Context.ChannelApi;
+        public static IPluginApi PluginApi => Context.PluginApi;
+        public static IUtilsApi UtilsApi => Context.UtilsApi;
+        public static IConfigApi ConfigApi => Context.ConfigApi;
+        public static IRequest Request => Context.Request;
+
+        public static Dao Dao { get; }
+        public static AdministratorDao AdministratorDao { get; }
+        public static ChannelDao ChannelDao { get; }
+        public static ContentDao ContentDao { get; }
+        public static DepartmentDao DepartmentDao { get; }
+        public static LogDao LogDao { get; }
+        public static PermissionsDao PermissionsDao { get; }
+        public static RemarkDao RemarkDao { get; }
+        public static ReplyDao ReplyDao { get; }
+        public static TypeDao TypeDao { get; }
 
         private static readonly Dictionary<int, ConfigInfo> ConfigInfoDict = new Dictionary<int, ConfigInfo>();
 
         // 插件部分简单的设置，在不新建表的前提下存放在系统特定的位置
-        public ConfigInfo GetConfigInfo(int siteId)
+        public static ConfigInfo GetConfigInfo(int siteId)
         {
             if (!ConfigInfoDict.ContainsKey(siteId))
             {
-                ConfigInfoDict[siteId] = ConfigApi.GetConfig<ConfigInfo>(siteId) ?? new ConfigInfo();
+                ConfigInfoDict[siteId] = Main.ConfigApi.GetConfig<ConfigInfo>(PluginId, siteId) ?? new ConfigInfo();
             }
             return ConfigInfoDict[siteId];
         }
 
-        public static Main Instance { get; private set; }
-
-        // 插件被激活时初始化工作
-        public override void Startup(IService service)
+        static Main()
         {
-            Instance = this;
-
             Dao = new Dao();
             AdministratorDao = new AdministratorDao();
             ChannelDao = new ChannelDao();
@@ -52,6 +57,12 @@ namespace SS.GovInteract
             RemarkDao = new RemarkDao();
             ReplyDao = new ReplyDao();
             TypeDao = new TypeDao();
+        }
+
+        // 插件被激活时初始化工作
+        public override void Startup(IService service)
+        {
+            PluginId = Id;
 
             service.AddContentModel(ContentDao.TableName, ContentDao.Columns) // 插件对应的内容模型表
                 .AddDatabaseTable(ChannelDao.TableName, ChannelDao.Columns) // 插件需要用到的其他表结构

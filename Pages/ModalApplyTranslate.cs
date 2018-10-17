@@ -30,7 +30,7 @@ namespace SS.GovInteract.Pages
         {
             _channelId = Utils.ToInt(Request.QueryString["channelId"]);
             _idArrayList = Utils.StringCollectionToIntList(Request.QueryString["IDCollection"]);
-            _adminInfo = Main.Instance.AdminApi.GetAdminInfoByUserId(AuthRequest.AdminId);
+            _adminInfo = Main.AdminApi.GetAdminInfoByUserId(AuthRequest.AdminId);
 
             if (!IsPostBack)
             {
@@ -61,20 +61,20 @@ namespace SS.GovInteract.Pages
                     return;
                 }
 
-                var chananelInfo = Main.Instance.ChannelApi.GetChannelInfo(SiteId, _channelId);
+                var chananelInfo = Main.ChannelApi.GetChannelInfo(SiteId, _channelId);
 
                 foreach (int contentID in _idArrayList)
                 {
-                    var contentInfo = Main.Instance.ContentApi.GetContentInfo(SiteId, _channelId, contentID);
+                    var contentInfo = Main.ContentApi.GetContentInfo(SiteId, _channelId, contentID);
                     contentInfo.Set(ContentAttribute.TranslateFromChannelId, contentInfo.ChannelId.ToString());
                     contentInfo.ChannelId = translateNodeID;
 
-                    Main.Instance.ContentApi.Update(SiteId, contentInfo.ChannelId, contentInfo);
+                    Main.ContentApi.Update(SiteId, contentInfo.ChannelId, contentInfo);
 
                     if (!string.IsNullOrEmpty(tbTranslateRemark.Text))
                     {
                         var remarkInfo = new RemarkInfo(0, SiteId, contentInfo.ChannelId, contentID, ERemarkTypeUtils.GetValue(ERemarkType.Translate), tbTranslateRemark.Text, _adminInfo.DepartmentId, AuthRequest.AdminName, DateTime.Now);
-                        Main.Instance.RemarkDao.Insert(remarkInfo);
+                        Main.RemarkDao.Insert(remarkInfo);
                     }
 
                     ApplyManager.LogTranslate(SiteId, contentInfo.ChannelId, contentID, chananelInfo.ChannelName, AuthRequest.AdminName, _adminInfo.DepartmentId);

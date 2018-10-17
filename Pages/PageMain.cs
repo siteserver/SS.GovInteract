@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web;
+using SiteServer.Plugin;
 
 namespace SS.GovInteract.Pages
 {
@@ -10,11 +11,11 @@ namespace SS.GovInteract.Pages
             return $"{nameof(PageMain)}.aspx?siteId={siteId}&linkUrl={HttpUtility.UrlEncode(linkUrl)}";
         }
 
-        public string ContentModelPluginId => Main.Instance.Id;
+        public string ContentModelPluginId => Main.PluginId;
 
-        public string LinkUrl => Main.Instance.PluginApi.GetPluginUrl(Request.QueryString["linkUrl"]);
+        public string LinkUrl => Main.PluginApi.GetPluginUrl(Main.PluginId, Request.QueryString["linkUrl"]);
 
-        public string AdminUrl => Main.Instance.UtilsApi.GetAdminDirectoryUrl(string.Empty);
+        public string AdminUrl => Main.UtilsApi.GetAdminDirectoryUrl(string.Empty);
 
         public void Page_Load(object sender, EventArgs e)
         {

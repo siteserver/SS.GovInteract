@@ -102,7 +102,7 @@ namespace SS.GovInteract.Core
             {
                 if (CacheUtils.Get(CacheKey) == null)
                 {
-                    var list = Main.Instance.DepartmentDao.GetDepartmentInfoKeyValuePair();
+                    var list = Main.DepartmentDao.GetDepartmentInfoKeyValuePair();
                     CacheUtils.Max(CacheKey, list);
                     return list;
                 }

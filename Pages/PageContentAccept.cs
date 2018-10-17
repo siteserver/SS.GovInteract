@@ -27,24 +27,24 @@ namespace SS.GovInteract.Pages
             _channelId = Utils.ToInt(Request.QueryString["channelId"]);
             _contentId = Utils.ToInt(Request.QueryString["contentId"]);
             _returnUrl = Request.QueryString["returnUrl"];
-            _adminInfo = Main.Instance.AdminApi.GetAdminInfoByUserId(AuthRequest.AdminId);
+            _adminInfo = Main.AdminApi.GetAdminInfoByUserId(AuthRequest.AdminId);
         }
 
         public void Accept_OnClick(object sender, EventArgs e)
         {
-            var contentInfo = Main.Instance.ContentApi.GetContentInfo(SiteId, _channelId, _contentId);
+            var contentInfo = Main.ContentApi.GetContentInfo(SiteId, _channelId, _contentId);
 
             var remarkInfo = new RemarkInfo(0, SiteId, contentInfo.ChannelId, contentInfo.Id, ERemarkTypeUtils.GetValue(ERemarkType.Accept), TbAcceptRemark.Text, _adminInfo.DepartmentId, AuthRequest.AdminName, DateTime.Now);
-            Main.Instance.RemarkDao.Insert(remarkInfo);
+            Main.RemarkDao.Insert(remarkInfo);
 
             ApplyManager.Log(SiteId, contentInfo.ChannelId, contentInfo.Id, ELogTypeUtils.GetValue(ELogType.Accept), AuthRequest.AdminName, _adminInfo.DepartmentId);
 
             contentInfo.Set(ContentAttribute.State, EStateUtils.GetValue(EState.Accepted));
-            Main.Instance.ContentApi.Update(SiteId, contentInfo.ChannelId, contentInfo);
+            Main.ContentApi.Update(SiteId, contentInfo.ChannelId, contentInfo);
 
             LtlMessage.Text = Utils.GetMessageHtml("申请受理成功", true);
 
-            var configInfo = Main.Instance.GetConfigInfo(SiteId);
+            var configInfo = Main.GetConfigInfo(SiteId);
 
             if (!configInfo.ApplyIsOpenWindow)
             {
@@ -60,22 +60,22 @@ namespace SS.GovInteract.Pages
                 return;
             }
 
-            var contentInfo = Main.Instance.ContentApi.GetContentInfo(SiteId, _channelId, _contentId);
+            var contentInfo = Main.ContentApi.GetContentInfo(SiteId, _channelId, _contentId);
 
-            Main.Instance.ReplyDao.DeleteByContentId(SiteId, contentInfo.Id);
+            Main.ReplyDao.DeleteByContentId(SiteId, contentInfo.Id);
 
             var replyInfo = new ReplyInfo(0, SiteId, contentInfo.ChannelId, contentInfo.Id, TbDenyReply.Text,
                 string.Empty, _adminInfo.DepartmentId, AuthRequest.AdminName, DateTime.Now);
-            Main.Instance.ReplyDao.Insert(replyInfo);
+            Main.ReplyDao.Insert(replyInfo);
 
             ApplyManager.Log(SiteId, contentInfo.ChannelId, contentInfo.Id, ELogTypeUtils.GetValue(ELogType.Deny), AuthRequest.AdminName, _adminInfo.DepartmentId);
 
             contentInfo.Set(ContentAttribute.State, EStateUtils.GetValue(EState.Denied));
-            Main.Instance.ContentApi.Update(SiteId, contentInfo.ChannelId, contentInfo);
+            Main.ContentApi.Update(SiteId, contentInfo.ChannelId, contentInfo);
 
             LtlMessage.Text = Utils.GetMessageHtml("拒绝申请成功", true);
 
-            var configInfo = Main.Instance.GetConfigInfo(SiteId);
+            var configInfo = Main.GetConfigInfo(SiteId);
 
             if (!configInfo.ApplyIsOpenWindow)
             {

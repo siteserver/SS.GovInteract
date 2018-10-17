@@ -67,8 +67,8 @@ namespace SS.GovInteract.Provider
 
         public RemarkDao()
         {
-            _connectionString = Main.Instance.ConnectionString;
-            _helper = Main.Instance.DatabaseApi;
+            _connectionString = Context.ConnectionString;
+            _helper = Context.DatabaseApi;
         }
 
         public void Insert(RemarkInfo remarkInfo)

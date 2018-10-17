@@ -40,8 +40,8 @@ namespace SS.GovInteract.Provider
 
         public PermissionsDao()
         {
-            _connectionString = Main.Instance.ConnectionString;
-            _helper = Main.Instance.DatabaseApi;
+            _connectionString = Context.ConnectionString;
+            _helper = Context.DatabaseApi;
         }
 
         public void Insert(int siteId, PermissionsInfo permissionsInfo)
@@ -64,10 +64,10 @@ namespace SS.GovInteract.Provider
                 _helper.GetParameter(nameof(PermissionsInfo.Permissions), permissionsInfo.Permissions)
             };
 
-            if (!Main.Instance.ChannelDao.IsExists(permissionsInfo.ChannelId))
+            if (!Main.ChannelDao.IsExists(permissionsInfo.ChannelId))
             {
                 var channelInfo = new ChannelInfo(0, permissionsInfo.ChannelId, siteId, 0, 0, string.Empty, string.Empty);
-                Main.Instance.ChannelDao.Insert(channelInfo);
+                Main.ChannelDao.Insert(channelInfo);
             }
 
             _helper.ExecuteNonQuery(_connectionString, sqlString, parameters);
