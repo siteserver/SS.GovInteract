@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using SS.GovInteract.Model;
+using SS.GovInteract.Provider;
 
 namespace SS.GovInteract.Core
 {
@@ -102,7 +103,7 @@ namespace SS.GovInteract.Core
             {
                 if (CacheUtils.Get(CacheKey) == null)
                 {
-                    var list = Main.DepartmentDao.GetDepartmentInfoKeyValuePair();
+                    var list = DepartmentDao.GetDepartmentInfoKeyValuePair();
                     CacheUtils.Max(CacheKey, list);
                     return list;
                 }

@@ -2,9 +2,9 @@
 using System.Collections;
 using System.Text;
 using System.Web.UI.WebControls;
-using SiteServer.Plugin;
 using SS.GovInteract.Core;
 using SS.GovInteract.Model;
+using SS.GovInteract.Provider;
 
 namespace SS.GovInteract.Pages
 {
@@ -25,7 +25,7 @@ namespace SS.GovInteract.Pages
 
             if (!IsPostBack && channelId > 0)
             {
-                var channelInfo = Main.ChannelDao.GetChannelInfo(SiteId, channelId);
+                var channelInfo = ChannelDao.GetChannelInfo(SiteId, channelId);
                 LtlDepartmentTree.Text = GetDepartmentTreeHtml(channelInfo);
             }
         }
@@ -101,9 +101,9 @@ namespace SS.GovInteract.Pages
             if (Page.IsPostBack && Page.IsValid)
             {
                 channelId = Utils.ToInt(Request.QueryString["channelId"]);
-                var channelInfo = Main.ChannelDao.GetChannelInfo(SiteId, channelId);
+                var channelInfo = ChannelDao.GetChannelInfo(SiteId, channelId);
                 channelInfo.DepartmentIdCollection = Request.Form["DepartmentIDCollection"];
-                Main.ChannelDao.Update(channelInfo);
+                ChannelDao.Update(channelInfo);
                 LayerUtils.Close(Page);
             }
         }

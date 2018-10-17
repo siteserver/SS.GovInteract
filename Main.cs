@@ -22,17 +22,6 @@ namespace SS.GovInteract
         public static IConfigApi ConfigApi => Context.ConfigApi;
         public static IRequest Request => Context.Request;
 
-        public static Dao Dao { get; }
-        public static AdministratorDao AdministratorDao { get; }
-        public static ChannelDao ChannelDao { get; }
-        public static ContentDao ContentDao { get; }
-        public static DepartmentDao DepartmentDao { get; }
-        public static LogDao LogDao { get; }
-        public static PermissionsDao PermissionsDao { get; }
-        public static RemarkDao RemarkDao { get; }
-        public static ReplyDao ReplyDao { get; }
-        public static TypeDao TypeDao { get; }
-
         private static readonly Dictionary<int, ConfigInfo> ConfigInfoDict = new Dictionary<int, ConfigInfo>();
 
         // 插件部分简单的设置，在不新建表的前提下存放在系统特定的位置
@@ -40,23 +29,9 @@ namespace SS.GovInteract
         {
             if (!ConfigInfoDict.ContainsKey(siteId))
             {
-                ConfigInfoDict[siteId] = Main.ConfigApi.GetConfig<ConfigInfo>(PluginId, siteId) ?? new ConfigInfo();
+                ConfigInfoDict[siteId] = ConfigApi.GetConfig<ConfigInfo>(PluginId, siteId) ?? new ConfigInfo();
             }
             return ConfigInfoDict[siteId];
-        }
-
-        static Main()
-        {
-            Dao = new Dao();
-            AdministratorDao = new AdministratorDao();
-            ChannelDao = new ChannelDao();
-            ContentDao = new ContentDao();
-            DepartmentDao = new DepartmentDao();
-            LogDao = new LogDao();
-            PermissionsDao = new PermissionsDao();
-            RemarkDao = new RemarkDao();
-            ReplyDao = new ReplyDao();
-            TypeDao = new TypeDao();
         }
 
         // 插件被激活时初始化工作

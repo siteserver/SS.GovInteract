@@ -5,6 +5,7 @@ using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using SS.GovInteract.Core;
 using SS.GovInteract.Model;
+using SS.GovInteract.Provider;
 
 namespace SS.GovInteract.Pages
 {
@@ -38,7 +39,7 @@ namespace SS.GovInteract.Pages
                 LtlDepartmentName.Text = DepartmentManager.GetDepartmentName(_adminInfo.DepartmentId);
                 LtlUserName.Text = _adminInfo.DisplayName;
 
-			    var replyInfo = Main.ReplyDao.GetReplyInfoByContentId(SiteId, _contentId);
+			    var replyInfo = ReplyDao.GetReplyInfoByContentId(SiteId, _contentId);
 			    if (replyInfo != null)
 			    {
 			        TbReply.Text = replyInfo.Reply;
@@ -50,12 +51,12 @@ namespace SS.GovInteract.Pages
         {
 			var isChanged = false;
 
-            Main.ReplyDao.DeleteByContentId(SiteId, _contentInfo.Id);
+            ReplyDao.DeleteByContentId(SiteId, _contentInfo.Id);
             var fileUrl = UploadFile(HtmlFileUrl.PostedFile);
 
             var replyInfo = new ReplyInfo(0, SiteId, _contentInfo.ChannelId, _contentInfo.Id, TbReply.Text, string.Empty,
                 _adminInfo.DepartmentId, AuthRequest.AdminName, DateTime.Now);
-            Main.ReplyDao.Insert(replyInfo);
+            ReplyDao.Insert(replyInfo);
 
             ApplyManager.Log(SiteId, _contentInfo.ChannelId, _contentInfo.Id, ELogTypeUtils.GetValue(ELogType.Reply), AuthRequest.AdminName, _adminInfo.DepartmentId);
             

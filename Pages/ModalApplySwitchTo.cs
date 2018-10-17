@@ -6,6 +6,7 @@ using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using SiteServer.Plugin;
 using SS.GovInteract.Model;
+using SS.GovInteract.Provider;
 
 namespace SS.GovInteract.Pages
 {
@@ -68,7 +69,7 @@ namespace SS.GovInteract.Pages
                         if (!string.IsNullOrEmpty(tbSwitchToRemark.Text))
                         {
                             var remarkInfo = new RemarkInfo(0, SiteId, contentInfo.ChannelId, contentID, ERemarkTypeUtils.GetValue(ERemarkType.SwitchTo), tbSwitchToRemark.Text, _adminInfo.DepartmentId, AuthRequest.AdminName, DateTime.Now);
-                            Main.RemarkDao.Insert(remarkInfo);
+                            RemarkDao.Insert(remarkInfo);
                         }
 
                         ApplyManager.LogSwitchTo(SiteId, contentInfo.ChannelId, contentID, switchToDepartmentName, AuthRequest.AdminName, _adminInfo.DepartmentId);

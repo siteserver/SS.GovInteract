@@ -1,6 +1,7 @@
 ﻿using SS.GovInteract.Core;
 using System;
 using SS.GovInteract.Model;
+using SS.GovInteract.Provider;
 
 namespace SS.GovInteract.Pages
 {
@@ -18,7 +19,7 @@ namespace SS.GovInteract.Pages
 
         protected override string GetSelectString()
         {
-            return Main.ContentDao.GetSelectStringByState(SiteId, ChannelId, EState.New);
+            return ContentDao.GetSelectStringByState(SiteId, ChannelId, EState.New);
         }
 
         private string _pageUrl;

@@ -5,7 +5,7 @@ using SS.GovInteract.Model;
 
 namespace SS.GovInteract.Provider
 {
-    public class ReplyDao
+    public static class ReplyDao
     {
         public const string TableName = "ss_govinteract_reply";
 
@@ -60,16 +60,7 @@ namespace SS.GovInteract.Provider
             }
         };
 
-        private readonly string _connectionString;
-        private readonly IDatabaseApi _helper;
-
-        public ReplyDao()
-        {
-            _connectionString = Context.ConnectionString;
-            _helper = Context.DatabaseApi;
-        }
-
-        public void Insert(ReplyInfo replyInfo)
+        public static void Insert(ReplyInfo replyInfo)
         {
             string sqlString = $@"INSERT INTO {TableName}
             (
@@ -94,33 +85,33 @@ namespace SS.GovInteract.Provider
 
             var parameters = new[]
             {
-                _helper.GetParameter(nameof(ReplyInfo.SiteId), replyInfo.SiteId),
-                _helper.GetParameter(nameof(ReplyInfo.ChannelId), replyInfo.ChannelId),
-                _helper.GetParameter(nameof(ReplyInfo.ContentId), replyInfo.ContentId),
-                _helper.GetParameter(nameof(ReplyInfo.Reply), replyInfo.Reply),
-                _helper.GetParameter(nameof(ReplyInfo.FileUrl), replyInfo.FileUrl),
-                _helper.GetParameter(nameof(ReplyInfo.DepartmentId), replyInfo.DepartmentId),
-                _helper.GetParameter(nameof(ReplyInfo.UserName), replyInfo.UserName),
-                _helper.GetParameter(nameof(ReplyInfo.AddDate), replyInfo.AddDate)
+                Context.DatabaseApi.GetParameter(nameof(ReplyInfo.SiteId), replyInfo.SiteId),
+                Context.DatabaseApi.GetParameter(nameof(ReplyInfo.ChannelId), replyInfo.ChannelId),
+                Context.DatabaseApi.GetParameter(nameof(ReplyInfo.ContentId), replyInfo.ContentId),
+                Context.DatabaseApi.GetParameter(nameof(ReplyInfo.Reply), replyInfo.Reply),
+                Context.DatabaseApi.GetParameter(nameof(ReplyInfo.FileUrl), replyInfo.FileUrl),
+                Context.DatabaseApi.GetParameter(nameof(ReplyInfo.DepartmentId), replyInfo.DepartmentId),
+                Context.DatabaseApi.GetParameter(nameof(ReplyInfo.UserName), replyInfo.UserName),
+                Context.DatabaseApi.GetParameter(nameof(ReplyInfo.AddDate), replyInfo.AddDate)
             };
 
-            _helper.ExecuteNonQuery(_connectionString, sqlString, parameters);
+            Context.DatabaseApi.ExecuteNonQuery(Context.ConnectionString, sqlString, parameters);
         }
 
-        public void Delete(int replyId)
+        public static void Delete(int replyId)
         {
             string sqlString = $"DELETE FROM {TableName} WHERE {nameof(ReplyInfo.Id)} = {replyId}";
-            _helper.ExecuteNonQuery(_connectionString, sqlString);
+            Context.DatabaseApi.ExecuteNonQuery(Context.ConnectionString, sqlString);
         }
 
-        public void DeleteByContentId(int siteId, int contentId)
+        public static void DeleteByContentId(int siteId, int contentId)
         {
             string sqlString =
                 $"DELETE FROM {TableName} WHERE {nameof(ReplyInfo.SiteId)} = {siteId} AND {nameof(ReplyInfo.ContentId)} = {contentId}";
-            _helper.ExecuteNonQuery(_connectionString, sqlString);
+            Context.DatabaseApi.ExecuteNonQuery(Context.ConnectionString, sqlString);
         }
 
-        public ReplyInfo GetReplyInfo(int replayId)
+        public static ReplyInfo GetReplyInfo(int replayId)
         {
             ReplyInfo replyInfo = null;
 
@@ -137,10 +128,10 @@ namespace SS.GovInteract.Provider
 
             var parameters = new[]
             {
-                _helper.GetParameter(nameof(replyInfo.Id), replayId),
+                Context.DatabaseApi.GetParameter(nameof(replyInfo.Id), replayId),
             };
 
-            using (var rdr = _helper.ExecuteReader(_connectionString, sqlString, parameters))
+            using (var rdr = Context.DatabaseApi.ExecuteReader(Context.ConnectionString, sqlString, parameters))
             {
                 if (rdr.Read())
                 {
@@ -152,7 +143,7 @@ namespace SS.GovInteract.Provider
             return replyInfo;
         }
 
-        public ReplyInfo GetReplyInfoByContentId(int siteId, int contentId)
+        public static ReplyInfo GetReplyInfoByContentId(int siteId, int contentId)
         {
             ReplyInfo replyInfo = null;
 
@@ -169,11 +160,11 @@ namespace SS.GovInteract.Provider
 
             var parameters = new[]
             {
-                _helper.GetParameter(nameof(replyInfo.SiteId), siteId),
-                _helper.GetParameter(nameof(replyInfo.ContentId), contentId)
+                Context.DatabaseApi.GetParameter(nameof(replyInfo.SiteId), siteId),
+                Context.DatabaseApi.GetParameter(nameof(replyInfo.ContentId), contentId)
             };
 
-            using (var rdr = _helper.ExecuteReader(_connectionString, sqlString, parameters))
+            using (var rdr = Context.DatabaseApi.ExecuteReader(Context.ConnectionString, sqlString, parameters))
             {
                 if (rdr.Read())
                 {
@@ -185,13 +176,13 @@ namespace SS.GovInteract.Provider
             return replyInfo;
         }
 
-        private ReplyInfo GetReplyInfo(IDataReader rdr)
+        private static ReplyInfo GetReplyInfo(IDataReader rdr)
         {
             if (rdr == null) return null;
             var i = 0;
-            return new ReplyInfo(_helper.GetInt(rdr, i++), _helper.GetInt(rdr, i++), _helper.GetInt(rdr, i++),
-                _helper.GetInt(rdr, i++), _helper.GetString(rdr, i++), _helper.GetString(rdr, i++),
-                _helper.GetInt(rdr, i++), _helper.GetString(rdr, i++), _helper.GetDateTime(rdr, i));
+            return new ReplyInfo(Context.DatabaseApi.GetInt(rdr, i++), Context.DatabaseApi.GetInt(rdr, i++), Context.DatabaseApi.GetInt(rdr, i++),
+                Context.DatabaseApi.GetInt(rdr, i++), Context.DatabaseApi.GetString(rdr, i++), Context.DatabaseApi.GetString(rdr, i++),
+                Context.DatabaseApi.GetInt(rdr, i++), Context.DatabaseApi.GetString(rdr, i++), Context.DatabaseApi.GetDateTime(rdr, i));
         }
     }
 }

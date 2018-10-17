@@ -4,6 +4,7 @@ using System.Web.UI.WebControls;
 using SiteServer.Plugin;
 using SS.GovInteract.Core;
 using SS.GovInteract.Model;
+using SS.GovInteract.Provider;
 
 namespace SS.GovInteract.Pages
 {
@@ -35,7 +36,7 @@ namespace SS.GovInteract.Pages
             var contentInfo = Main.ContentApi.GetContentInfo(SiteId, _channelId, _contentId);
 
             var remarkInfo = new RemarkInfo(0, SiteId, contentInfo.ChannelId, contentInfo.Id, ERemarkTypeUtils.GetValue(ERemarkType.Accept), TbAcceptRemark.Text, _adminInfo.DepartmentId, AuthRequest.AdminName, DateTime.Now);
-            Main.RemarkDao.Insert(remarkInfo);
+            RemarkDao.Insert(remarkInfo);
 
             ApplyManager.Log(SiteId, contentInfo.ChannelId, contentInfo.Id, ELogTypeUtils.GetValue(ELogType.Accept), AuthRequest.AdminName, _adminInfo.DepartmentId);
 
@@ -62,11 +63,11 @@ namespace SS.GovInteract.Pages
 
             var contentInfo = Main.ContentApi.GetContentInfo(SiteId, _channelId, _contentId);
 
-            Main.ReplyDao.DeleteByContentId(SiteId, contentInfo.Id);
+            ReplyDao.DeleteByContentId(SiteId, contentInfo.Id);
 
             var replyInfo = new ReplyInfo(0, SiteId, contentInfo.ChannelId, contentInfo.Id, TbDenyReply.Text,
                 string.Empty, _adminInfo.DepartmentId, AuthRequest.AdminName, DateTime.Now);
-            Main.ReplyDao.Insert(replyInfo);
+            ReplyDao.Insert(replyInfo);
 
             ApplyManager.Log(SiteId, contentInfo.ChannelId, contentInfo.Id, ELogTypeUtils.GetValue(ELogType.Deny), AuthRequest.AdminName, _adminInfo.DepartmentId);
 

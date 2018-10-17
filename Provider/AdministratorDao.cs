@@ -6,51 +6,42 @@ using SS.GovInteract.Model;
 
 namespace SS.GovInteract.Provider
 {
-    public class AdministratorDao
-    {  
-        private readonly string _connectionString;
-        private readonly IDatabaseApi _helper;
-
-        public AdministratorDao()
-        {
-            _connectionString = Context.ConnectionString;
-            _helper = Context.DatabaseApi;
-        } 
-
-        public ArrayList GetUserNameArrayList(int departmentId, bool isAll)
+    public static class AdministratorDao
+    {
+        public static ArrayList GetUserNameArrayList(int departmentId, bool isAll)
         {
             var arraylist = new ArrayList();
             string sqlSelect = $"SELECT UserName FROM siteserver_Administrator WHERE Id = {departmentId}";
             if (isAll)
             {
-                var departmentIdList = Main.DepartmentDao.GetDepartmentIdListForDescendant(departmentId);
+                var departmentIdList = DepartmentDao.GetDepartmentIdListForDescendant(departmentId);
                 departmentIdList.Add(departmentId);
                 sqlSelect =
                     $"SELECT UserName FROM siteserver_Administrator WHERE Id IN ({Utils.ObjectCollectionToString(departmentIdList)})";
             }
 
-            using (var rdr = _helper.ExecuteReader(_connectionString, sqlSelect))
+            using (var rdr = Context.DatabaseApi.ExecuteReader(Context.ConnectionString, sqlSelect))
             {
                 while (rdr.Read())
                 {
-                    arraylist.Add(_helper.GetString(rdr, 0));
+                    arraylist.Add(Context.DatabaseApi.GetString(rdr, 0));
                 }
                 rdr.Close();
             }
             return arraylist;
         }
 
-        public AdministratorInfo GetByUserName(string userName)
+        public static AdministratorInfo GetByUserName(string userName)
         {
             AdministratorInfo info = null;
 
             string sqlString = "SELECT UserName, DisplayName, Id FROM siteserver_Administrator WHERE UserName = @UserName";
             var parameters = new[]
             {
-                _helper.GetParameter("UserName", userName)
+                Context.DatabaseApi.GetParameter("UserName", userName)
             };
 
-            using (var rdr = _helper.ExecuteReader(_connectionString, sqlString, parameters))
+            using (var rdr = Context.DatabaseApi.ExecuteReader(Context.ConnectionString, sqlString, parameters))
             {
                 if (rdr.Read())
                 {
@@ -62,15 +53,15 @@ namespace SS.GovInteract.Provider
             return info;
         }
 
-        private AdministratorInfo GetAdministratorInfo(IDataReader rdr)
+        private static AdministratorInfo GetAdministratorInfo(IDataReader rdr)
         {
             if (rdr == null) return null;
             var i = 0;
             return new AdministratorInfo
             {
-                UserName = _helper.GetString(rdr, i++),
-                DisplayName = _helper.GetString(rdr, i++),
-                DepartmentId = _helper.GetInt(rdr, i) 
+                UserName = Context.DatabaseApi.GetString(rdr, i++),
+                DisplayName = Context.DatabaseApi.GetString(rdr, i++),
+                DepartmentId = Context.DatabaseApi.GetInt(rdr, i) 
             };
         }
     }

@@ -5,6 +5,7 @@ using System.Web.UI.WebControls;
 using SiteServer.Plugin;
 using SS.GovInteract.Core;
 using SS.GovInteract.Model;
+using SS.GovInteract.Provider;
 
 namespace SS.GovInteract.Pages
 {
@@ -74,7 +75,7 @@ namespace SS.GovInteract.Pages
                     if (!string.IsNullOrEmpty(tbTranslateRemark.Text))
                     {
                         var remarkInfo = new RemarkInfo(0, SiteId, contentInfo.ChannelId, contentID, ERemarkTypeUtils.GetValue(ERemarkType.Translate), tbTranslateRemark.Text, _adminInfo.DepartmentId, AuthRequest.AdminName, DateTime.Now);
-                        Main.RemarkDao.Insert(remarkInfo);
+                        RemarkDao.Insert(remarkInfo);
                     }
 
                     ApplyManager.LogTranslate(SiteId, contentInfo.ChannelId, contentID, chananelInfo.ChannelName, AuthRequest.AdminName, _adminInfo.DepartmentId);

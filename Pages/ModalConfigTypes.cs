@@ -2,6 +2,7 @@
 using System.Web.UI.WebControls;
 using SiteServer.Plugin;
 using SS.GovInteract.Core;
+using SS.GovInteract.Provider;
 
 namespace SS.GovInteract.Pages
 {
@@ -34,7 +35,7 @@ namespace SS.GovInteract.Pages
                 {
                     try
                     {
-                        Main.TypeDao.Delete(id);
+                        TypeDao.Delete(id);
                         LtlMessage.Text = Utils.GetMessageHtml("成功删除分类法", true);
                     }
                     catch (Exception ex)
@@ -47,17 +48,17 @@ namespace SS.GovInteract.Pages
                     var isDown = Request.QueryString["Down"] != null;
                     if (isDown)
                     {
-                        Main.TypeDao.UpdateTaxisToUp(id, channelId);
+                        TypeDao.UpdateTaxisToUp(id, channelId);
                         LtlMessage.Text = Utils.GetMessageHtml($"排序成功", true);
                     }
                     else
                     {
-                        Main.TypeDao.UpdateTaxisToDown(id, channelId);
+                        TypeDao.UpdateTaxisToDown(id, channelId);
                         LtlMessage.Text = Utils.GetMessageHtml($"排序成功", true);
                     }
                 }
 
-                DgContents.DataSource = Main.TypeDao.GetDataSource(channelId);
+                DgContents.DataSource = TypeDao.GetDataSource(channelId);
                 DgContents.ItemDataBound += DgContents_ItemDataBound;
                 DgContents.DataBind();
 

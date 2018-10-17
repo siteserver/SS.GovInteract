@@ -8,7 +8,7 @@ using SS.GovInteract.Model;
 
 namespace SS.GovInteract.Provider
 {
-    public class LogDao
+    public static class LogDao
     {
         public const string TableName = "ss_govinteract_log";
 
@@ -70,16 +70,7 @@ namespace SS.GovInteract.Provider
             }
         };
 
-        private readonly string _connectionString;
-        private readonly IDatabaseApi _helper;
-
-        public LogDao()
-        {
-            _connectionString = Context.ConnectionString;
-            _helper = Context.DatabaseApi;
-        }
-
-        public void Insert(LogInfo logInfo)
+        public static void Insert(LogInfo logInfo)
         {
             string sqlString = $@"INSERT INTO {TableName}
             (
@@ -106,66 +97,66 @@ namespace SS.GovInteract.Provider
 
             var parameters = new[]
             {
-                _helper.GetParameter(nameof(LogInfo.SiteId), logInfo.SiteId),
-                _helper.GetParameter(nameof(LogInfo.ChannelId), logInfo.ChannelId),
-                _helper.GetParameter(nameof(LogInfo.ContentId), logInfo.ContentId),
-                _helper.GetParameter(nameof(LogInfo.DepartmentId), logInfo.DepartmentId),
-                _helper.GetParameter(nameof(LogInfo.UserName), logInfo.UserName),
-                _helper.GetParameter(nameof(LogInfo.LogType), logInfo.LogType),
-                _helper.GetParameter(nameof(LogInfo.IpAddress), logInfo.IpAddress),
-                _helper.GetParameter(nameof(LogInfo.AddDate), logInfo.AddDate),
-                _helper.GetParameter(nameof(LogInfo.Summary), logInfo.Summary)
+                Context.DatabaseApi.GetParameter(nameof(LogInfo.SiteId), logInfo.SiteId),
+                Context.DatabaseApi.GetParameter(nameof(LogInfo.ChannelId), logInfo.ChannelId),
+                Context.DatabaseApi.GetParameter(nameof(LogInfo.ContentId), logInfo.ContentId),
+                Context.DatabaseApi.GetParameter(nameof(LogInfo.DepartmentId), logInfo.DepartmentId),
+                Context.DatabaseApi.GetParameter(nameof(LogInfo.UserName), logInfo.UserName),
+                Context.DatabaseApi.GetParameter(nameof(LogInfo.LogType), logInfo.LogType),
+                Context.DatabaseApi.GetParameter(nameof(LogInfo.IpAddress), logInfo.IpAddress),
+                Context.DatabaseApi.GetParameter(nameof(LogInfo.AddDate), logInfo.AddDate),
+                Context.DatabaseApi.GetParameter(nameof(LogInfo.Summary), logInfo.Summary)
             };
 
-            _helper.ExecuteNonQuery(_connectionString, sqlString, parameters);
+            Context.DatabaseApi.ExecuteNonQuery(Context.ConnectionString, sqlString, parameters);
         }
 
-        public void Delete(ArrayList idArrayList)
+        public static void Delete(ArrayList idArrayList)
         {
             if (idArrayList == null || idArrayList.Count <= 0) return;
             string sqlString =
                 $"DELETE FROM {TableName} WHERE {nameof(LogInfo.Summary)} IN ({Utils.ToSqlInStringWithoutQuote(idArrayList)})";
 
-            _helper.ExecuteNonQuery(_connectionString, sqlString);
+            Context.DatabaseApi.ExecuteNonQuery(Context.ConnectionString, sqlString);
         }
 
-        public void DeleteAll(int siteId)
+        public static void DeleteAll(int siteId)
         {
             string sqlString = $"DELETE FROM {TableName} WHERE {nameof(LogInfo.SiteId)} = {siteId}";
 
-            _helper.ExecuteNonQuery(_connectionString, sqlString);
+            Context.DatabaseApi.ExecuteNonQuery(Context.ConnectionString, sqlString);
         }
 
-        public void Delete(int id)
+        public static void Delete(int id)
         {
             string sqlString = $"DELETE FROM {TableName} WHERE {nameof(LogInfo.Id)} = {id}";
-            _helper.ExecuteNonQuery(_connectionString, sqlString);
+            Context.DatabaseApi.ExecuteNonQuery(Context.ConnectionString, sqlString);
         }
 
-        public void DeleteByContentId(int siteId, int contentId)
+        public static void DeleteByContentId(int siteId, int contentId)
         {
             string sqlString =
                 $"DELETE FROM {TableName} WHERE {nameof(LogInfo.SiteId)} = {siteId} AND {nameof(LogInfo.ContentId)} = {contentId}";
-            _helper.ExecuteNonQuery(_connectionString, sqlString);
+            Context.DatabaseApi.ExecuteNonQuery(Context.ConnectionString, sqlString);
         }
 
-        public IEnumerable GetDataSourceByContentId(int siteId, int contentId)
+        public static IEnumerable GetDataSourceByContentId(int siteId, int contentId)
         {
             string sqlString =
                 $"SELECT {nameof(LogInfo.Id)}, {nameof(LogInfo.SiteId)}, {nameof(LogInfo.ChannelId)}, {nameof(LogInfo.ContentId)}, {nameof(LogInfo.DepartmentId)}, {nameof(LogInfo.UserName)}, {nameof(LogInfo.LogType)}, {nameof(LogInfo.IpAddress)}, {nameof(LogInfo.AddDate)}, {nameof(LogInfo.Summary)} FROM {TableName} WHERE {nameof(LogInfo.SiteId)} = {siteId} AND {nameof(LogInfo.ContentId)} = {contentId} ORDER BY {nameof(LogInfo.Id)}";
 
-            var enumerable = (IEnumerable)_helper.ExecuteReader(_connectionString, sqlString);
+            var enumerable = (IEnumerable)Context.DatabaseApi.ExecuteReader(Context.ConnectionString, sqlString);
             return enumerable;
         }
 
-        public List<LogInfo> GetLogInfoList(int siteId, int contentId)
+        public static List<LogInfo> GetLogInfoList(int siteId, int contentId)
         {
             var list = new List<LogInfo>();
 
             string sqlString =
                 $"SELECT {nameof(LogInfo.Id)}, {nameof(LogInfo.SiteId)}, {nameof(LogInfo.ChannelId)}, {nameof(LogInfo.ContentId)}, {nameof(LogInfo.DepartmentId)}, {nameof(LogInfo.UserName)}, {nameof(LogInfo.LogType)}, {nameof(LogInfo.IpAddress)}, {nameof(LogInfo.AddDate)}, {nameof(LogInfo.Summary)} FROM {TableName} WHERE {nameof(LogInfo.SiteId)} = {siteId} AND {nameof(LogInfo.ContentId)} = {contentId} ORDER BY {nameof(LogInfo.Id)}";
 
-            using (var rdr = _helper.ExecuteReader(_connectionString, sqlString))
+            using (var rdr = Context.DatabaseApi.ExecuteReader(Context.ConnectionString, sqlString))
             {
                 while (rdr.Read())
                 { 
@@ -178,13 +169,13 @@ namespace SS.GovInteract.Provider
             return list;
         }
 
-        public string GetSelectCommend(int siteId)
+        public static string GetSelectCommend(int siteId)
         {
             return  $"SELECT {nameof(LogInfo.Id)}, {nameof(LogInfo.SiteId)}, {nameof(LogInfo.ChannelId)}, {nameof(LogInfo.ContentId)}, {nameof(LogInfo.DepartmentId)}, {nameof(LogInfo.UserName)}, {nameof(LogInfo.LogType)}, {nameof(LogInfo.IpAddress)}, {nameof(LogInfo.AddDate)}, {nameof(LogInfo.Summary)} FROM {TableName} WHERE {nameof(LogInfo.SiteId)} = {siteId}";
 
         }
 
-        public string GetSelectCommend(int siteId, string keyword, string dateFrom, string dateTo)
+        public static string GetSelectCommend(int siteId, string keyword, string dateFrom, string dateTo)
         {
             if (string.IsNullOrEmpty(keyword) && string.IsNullOrEmpty(dateFrom) && string.IsNullOrEmpty(dateTo))
             {
@@ -211,7 +202,7 @@ namespace SS.GovInteract.Provider
             return  $"SELECT {nameof(LogInfo.Id)}, {nameof(LogInfo.SiteId)}, {nameof(LogInfo.ChannelId)}, {nameof(LogInfo.ContentId)}, {nameof(LogInfo.DepartmentId)}, {nameof(LogInfo.UserName)}, {nameof(LogInfo.LogType)}, {nameof(LogInfo.IpAddress)}, {nameof(LogInfo.AddDate)}, {nameof(LogInfo.Summary)} FROM {TableName} {whereString}";
         }
 
-        public LogInfo GetLogInfo(int id)
+        public static LogInfo GetLogInfo(int id)
         {
             LogInfo logInfo = null;
 
@@ -229,10 +220,10 @@ namespace SS.GovInteract.Provider
 
             var parameters = new[]
             {
-                _helper.GetParameter(nameof(logInfo.Id), id),
+                Context.DatabaseApi.GetParameter(nameof(logInfo.Id), id),
             };
 
-            using (var rdr = _helper.ExecuteReader(_connectionString, sqlString, parameters))
+            using (var rdr = Context.DatabaseApi.ExecuteReader(Context.ConnectionString, sqlString, parameters))
             {
                 if (rdr.Read())
                 {
@@ -242,16 +233,16 @@ namespace SS.GovInteract.Provider
             }
 
             return logInfo;
-        } 
+        }
 
-        private LogInfo GetLogInfo(IDataReader rdr)
+        private static LogInfo GetLogInfo(IDataReader rdr)
         {
             if (rdr == null) return null;
             var i = 0;
-            return new LogInfo(_helper.GetInt(rdr, i++), _helper.GetInt(rdr, i++), _helper.GetInt(rdr, i++),
-                _helper.GetInt(rdr, i++), _helper.GetInt(rdr, i++), _helper.GetString(rdr, i++),
-                _helper.GetString(rdr, i++), _helper.GetString(rdr, i++), _helper.GetDateTime(rdr, i++),
-                _helper.GetString(rdr, i));
+            return new LogInfo(Context.DatabaseApi.GetInt(rdr, i++), Context.DatabaseApi.GetInt(rdr, i++), Context.DatabaseApi.GetInt(rdr, i++),
+                Context.DatabaseApi.GetInt(rdr, i++), Context.DatabaseApi.GetInt(rdr, i++), Context.DatabaseApi.GetString(rdr, i++),
+                Context.DatabaseApi.GetString(rdr, i++), Context.DatabaseApi.GetString(rdr, i++), Context.DatabaseApi.GetDateTime(rdr, i++),
+                Context.DatabaseApi.GetString(rdr, i));
         }
     }
 }

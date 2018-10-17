@@ -5,6 +5,7 @@ using System.Web.UI.WebControls;
 using SS.GovInteract.Controls;
 using SS.GovInteract.Core;
 using SS.GovInteract.Model;
+using SS.GovInteract.Provider;
 
 namespace SS.GovInteract.Pages
 {
@@ -62,13 +63,13 @@ namespace SS.GovInteract.Pages
             int doCount;
             if (_nodeId == 0)
             {
-                totalCount = Main.ContentDao.GetCountByDepartmentId(SiteId, departmentId, TbStartDate.DateTime, TbEndDate.DateTime);
-                doCount = Main.ContentDao.GetCountByDepartmentIdAndState(SiteId, departmentId, EState.Checked, TbStartDate.DateTime, TbEndDate.DateTime);
+                totalCount = ContentDao.GetCountByDepartmentId(SiteId, departmentId, TbStartDate.DateTime, TbEndDate.DateTime);
+                doCount = ContentDao.GetCountByDepartmentIdAndState(SiteId, departmentId, EState.Checked, TbStartDate.DateTime, TbEndDate.DateTime);
             }
             else
             {
-                totalCount = Main.ContentDao.GetCountByDepartmentId(SiteId, departmentId, _nodeId, TbStartDate.DateTime, TbEndDate.DateTime);
-                doCount = Main.ContentDao.GetCountByDepartmentIdAndState(SiteId, departmentId, _nodeId, EState.Checked, TbStartDate.DateTime, TbEndDate.DateTime);
+                totalCount = ContentDao.GetCountByDepartmentId(SiteId, departmentId, _nodeId, TbStartDate.DateTime, TbEndDate.DateTime);
+                doCount = ContentDao.GetCountByDepartmentIdAndState(SiteId, departmentId, _nodeId, EState.Checked, TbStartDate.DateTime, TbEndDate.DateTime);
             }
             var unDoCount = totalCount - doCount;
 
@@ -105,9 +106,9 @@ namespace SS.GovInteract.Pages
 
             if (_nodeId > 0)
             {
-                var channelInfo = Main.ChannelDao.GetChannelInfo(SiteId, _nodeId);
+                var channelInfo = ChannelDao.GetChannelInfo(SiteId, _nodeId);
 
-                departmentIdList = Main.DepartmentDao.GetDepartmentIdListByFirstDepartmentIdList(InteractManager.GetDepartmentIdList(channelInfo));
+                departmentIdList = DepartmentDao.GetDepartmentIdListByFirstDepartmentIdList(InteractManager.GetDepartmentIdList(channelInfo));
             }
 
             if (departmentIdList.Count == 0)

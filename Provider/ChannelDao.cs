@@ -6,7 +6,7 @@ using SS.GovInteract.Model;
 
 namespace SS.GovInteract.Provider
 {
-    public class ChannelDao
+    public static class ChannelDao
     {
         public const string TableName = "ss_govinteract_channel";
 
@@ -51,16 +51,7 @@ namespace SS.GovInteract.Provider
             }
         };
 
-        private readonly string _connectionString;
-        private readonly IDatabaseApi _helper;
-
-        public ChannelDao()
-        {
-            _connectionString = Context.ConnectionString;
-            _helper = Context.DatabaseApi;
-        }
-
-        public void Insert(ChannelInfo channelInfo)
+        public static void Insert(ChannelInfo channelInfo)
         {
             //channelInfo.ApplyStyleID = DataProvider.TagStyleDao.Insert(new TagStyleInfo(0, channelInfo.ChannelId.ToString(), StlGovInteractApply.ElementName, channelInfo.SiteId, false, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty));
             //channelInfo.QueryStyleID = DataProvider.TagStyleDao.Insert(new TagStyleInfo(0, channelInfo.ChannelId.ToString(), StlGovInteractQuery.ElementName, channelInfo.SiteId, false, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty));
@@ -84,34 +75,34 @@ namespace SS.GovInteract.Provider
 
             var parameters = new[]
             {
-                _helper.GetParameter(nameof(ChannelInfo.ChannelId), channelInfo.ChannelId),
-                _helper.GetParameter(nameof(ChannelInfo.SiteId), channelInfo.SiteId),
-                _helper.GetParameter(nameof(ChannelInfo.ApplyStyleId), channelInfo.ApplyStyleId),
-                _helper.GetParameter(nameof(ChannelInfo.QueryStyleId), channelInfo.QueryStyleId),
-                _helper.GetParameter(nameof(ChannelInfo.DepartmentIdCollection), channelInfo.DepartmentIdCollection),
-                _helper.GetParameter(nameof(ChannelInfo.Summary), channelInfo.Summary)
+                Context.DatabaseApi.GetParameter(nameof(ChannelInfo.ChannelId), channelInfo.ChannelId),
+                Context.DatabaseApi.GetParameter(nameof(ChannelInfo.SiteId), channelInfo.SiteId),
+                Context.DatabaseApi.GetParameter(nameof(ChannelInfo.ApplyStyleId), channelInfo.ApplyStyleId),
+                Context.DatabaseApi.GetParameter(nameof(ChannelInfo.QueryStyleId), channelInfo.QueryStyleId),
+                Context.DatabaseApi.GetParameter(nameof(ChannelInfo.DepartmentIdCollection), channelInfo.DepartmentIdCollection),
+                Context.DatabaseApi.GetParameter(nameof(ChannelInfo.Summary), channelInfo.Summary)
             };
 
-            _helper.ExecuteNonQuery(_connectionString, sqlString, parameters);
+            Context.DatabaseApi.ExecuteNonQuery(Context.ConnectionString, sqlString, parameters);
 
             InteractManager.AddDefaultTypeInfos(channelInfo.SiteId, channelInfo.ChannelId);
         }
 
-        public void Update(ChannelInfo channelInfo)
+        public static void Update(ChannelInfo channelInfo)
         {
             string sqlString = $"UPDATE {TableName} SET {nameof(ChannelInfo.DepartmentIdCollection)} = @{nameof(ChannelInfo.DepartmentIdCollection)}, {nameof(ChannelInfo.Summary)} = @{nameof(ChannelInfo.Summary)} WHERE {nameof(ChannelInfo.Id)} = @{nameof(ChannelInfo.Id)}";
 
             var parameters = new[]
             { 
-                _helper.GetParameter(nameof(ChannelInfo.DepartmentIdCollection), channelInfo.DepartmentIdCollection),
-                _helper.GetParameter(nameof(ChannelInfo.Summary), channelInfo.Summary),
-                _helper.GetParameter(nameof(ChannelInfo.Id), channelInfo.Id)
+                Context.DatabaseApi.GetParameter(nameof(ChannelInfo.DepartmentIdCollection), channelInfo.DepartmentIdCollection),
+                Context.DatabaseApi.GetParameter(nameof(ChannelInfo.Summary), channelInfo.Summary),
+                Context.DatabaseApi.GetParameter(nameof(ChannelInfo.Id), channelInfo.Id)
             };
 
-            _helper.ExecuteNonQuery(_connectionString, sqlString, parameters);
+            Context.DatabaseApi.ExecuteNonQuery(Context.ConnectionString, sqlString, parameters);
         }
 
-        public ChannelInfo GetChannelInfo(int siteId, int channelId)
+        public static ChannelInfo GetChannelInfo(int siteId, int channelId)
         {
             ChannelInfo channelInfo = null;
 
@@ -126,11 +117,11 @@ namespace SS.GovInteract.Provider
 
             var parameters = new[]
             {
-                _helper.GetParameter(nameof(ChannelInfo.SiteId), siteId),
-                _helper.GetParameter(nameof(ChannelInfo.ChannelId), channelId)
+                Context.DatabaseApi.GetParameter(nameof(ChannelInfo.SiteId), siteId),
+                Context.DatabaseApi.GetParameter(nameof(ChannelInfo.ChannelId), channelId)
             };
 
-            using (var rdr = _helper.ExecuteReader(_connectionString, sqlString, parameters))
+            using (var rdr = Context.DatabaseApi.ExecuteReader(Context.ConnectionString, sqlString, parameters))
             {
                 if (rdr.Read())
                 { 
@@ -145,7 +136,7 @@ namespace SS.GovInteract.Provider
 
                 Insert(theChannelInfo);
 
-                using (var rdr = _helper.ExecuteReader(_connectionString, sqlString, parameters))
+                using (var rdr = Context.DatabaseApi.ExecuteReader(Context.ConnectionString, sqlString, parameters))
                 {
                     if (rdr.Read())
                     {
@@ -158,7 +149,7 @@ namespace SS.GovInteract.Provider
             return channelInfo;
         }
 
-        public bool IsExists(int channelId)
+        public static bool IsExists(int channelId)
         {
             var exists = false;
 
@@ -166,10 +157,10 @@ namespace SS.GovInteract.Provider
 
             var parameters = new[]
             {
-                _helper.GetParameter(nameof(ChannelInfo.ChannelId), channelId)
+                Context.DatabaseApi.GetParameter(nameof(ChannelInfo.ChannelId), channelId)
             };
 
-            using (var rdr = _helper.ExecuteReader(_connectionString, sqlString, parameters))
+            using (var rdr = Context.DatabaseApi.ExecuteReader(Context.ConnectionString, sqlString, parameters))
             {
                 if (rdr.Read())
                 {
@@ -183,7 +174,7 @@ namespace SS.GovInteract.Provider
             return exists;
         }
 
-        private ChannelInfo GetChannelInfo(IDataReader rdr)
+        private static ChannelInfo GetChannelInfo(IDataReader rdr)
         {
             if (rdr == null)
                 return null;
@@ -191,13 +182,13 @@ namespace SS.GovInteract.Provider
 
             return new ChannelInfo
             {
-                Id = _helper.GetInt(rdr, i++),
-                ChannelId = _helper.GetInt(rdr, i++),
-                SiteId = _helper.GetInt(rdr, i++),
-                ApplyStyleId = _helper.GetInt(rdr, i++),
-                QueryStyleId = _helper.GetInt(rdr, i++),
-                DepartmentIdCollection = _helper.GetString(rdr, i++),
-                Summary = _helper.GetString(rdr, i) 
+                Id = Context.DatabaseApi.GetInt(rdr, i++),
+                ChannelId = Context.DatabaseApi.GetInt(rdr, i++),
+                SiteId = Context.DatabaseApi.GetInt(rdr, i++),
+                ApplyStyleId = Context.DatabaseApi.GetInt(rdr, i++),
+                QueryStyleId = Context.DatabaseApi.GetInt(rdr, i++),
+                DepartmentIdCollection = Context.DatabaseApi.GetString(rdr, i++),
+                Summary = Context.DatabaseApi.GetString(rdr, i) 
             };
         }
     }

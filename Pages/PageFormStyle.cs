@@ -52,7 +52,7 @@ namespace SS.GovInteract.Pages
                 if (type == "Add")
                 {
                     var departmentBuilder = new StringBuilder();
-                    var departmentInfoList = Main.DepartmentDao.GetDepartmentInfoList();
+                    var departmentInfoList = DepartmentDao.GetDepartmentInfoList();
 
                     foreach (var departmentInfo in departmentInfoList)
                     {
@@ -61,7 +61,7 @@ namespace SS.GovInteract.Pages
                     }
 
                     var typeBuilder = new StringBuilder();
-                    var typeInfoList = Main.TypeDao.GetTypeInfoList(channelId);
+                    var typeInfoList = TypeDao.GetTypeInfoList(channelId);
                     foreach (var typeInfo in typeInfoList)
                     {
                         typeBuilder.Append(

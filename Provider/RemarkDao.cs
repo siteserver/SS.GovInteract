@@ -6,7 +6,7 @@ using SS.GovInteract.Model;
 
 namespace SS.GovInteract.Provider
 {
-    public class RemarkDao
+    public static class RemarkDao
     {
         public const string TableName = "ss_govinteract_remark";
 
@@ -62,16 +62,7 @@ namespace SS.GovInteract.Provider
             }
         };
 
-        private readonly string _connectionString;
-        private readonly IDatabaseApi _helper;
-
-        public RemarkDao()
-        {
-            _connectionString = Context.ConnectionString;
-            _helper = Context.DatabaseApi;
-        }
-
-        public void Insert(RemarkInfo remarkInfo)
+        public static void Insert(RemarkInfo remarkInfo)
         {
             string sqlString = $@"INSERT INTO {TableName}
             (
@@ -96,26 +87,26 @@ namespace SS.GovInteract.Provider
 
             var parameters = new[]
             {
-                _helper.GetParameter(nameof(RemarkInfo.SiteId), remarkInfo.SiteId),
-                _helper.GetParameter(nameof(RemarkInfo.ChannelId), remarkInfo.ChannelId),
-                _helper.GetParameter(nameof(RemarkInfo.ContentId), remarkInfo.ContentId),
-                _helper.GetParameter(nameof(RemarkInfo.RemarkType), remarkInfo.RemarkType),
-                _helper.GetParameter(nameof(RemarkInfo.Remark), remarkInfo.Remark),
-                _helper.GetParameter(nameof(RemarkInfo.DepartmentId), remarkInfo.DepartmentId),
-                _helper.GetParameter(nameof(RemarkInfo.UserName), remarkInfo.UserName),
-                _helper.GetParameter(nameof(RemarkInfo.AddDate), remarkInfo.AddDate)
+                Context.DatabaseApi.GetParameter(nameof(RemarkInfo.SiteId), remarkInfo.SiteId),
+                Context.DatabaseApi.GetParameter(nameof(RemarkInfo.ChannelId), remarkInfo.ChannelId),
+                Context.DatabaseApi.GetParameter(nameof(RemarkInfo.ContentId), remarkInfo.ContentId),
+                Context.DatabaseApi.GetParameter(nameof(RemarkInfo.RemarkType), remarkInfo.RemarkType),
+                Context.DatabaseApi.GetParameter(nameof(RemarkInfo.Remark), remarkInfo.Remark),
+                Context.DatabaseApi.GetParameter(nameof(RemarkInfo.DepartmentId), remarkInfo.DepartmentId),
+                Context.DatabaseApi.GetParameter(nameof(RemarkInfo.UserName), remarkInfo.UserName),
+                Context.DatabaseApi.GetParameter(nameof(RemarkInfo.AddDate), remarkInfo.AddDate)
             };
 
-            _helper.ExecuteNonQuery(_connectionString, sqlString, parameters);
+            Context.DatabaseApi.ExecuteNonQuery(Context.ConnectionString, sqlString, parameters);
         }
 
-        public void Delete(int remarkId)
+        public static void Delete(int remarkId)
         {
             string sqlString = $"DELETE FROM {TableName} WHERE {nameof(RemarkInfo.Id)} = {remarkId}";
-            _helper.ExecuteNonQuery(_connectionString, sqlString);
+            Context.DatabaseApi.ExecuteNonQuery(Context.ConnectionString, sqlString);
         } 
 
-        public RemarkInfo GetRemarkInfo(int remarkId)
+        public static RemarkInfo GetRemarkInfo(int remarkId)
         {
             RemarkInfo remarkInfo = null;
 
@@ -132,10 +123,10 @@ namespace SS.GovInteract.Provider
 
             var parameters = new[]
             {
-                _helper.GetParameter(nameof(RemarkInfo.Id), remarkId),
+                Context.DatabaseApi.GetParameter(nameof(RemarkInfo.Id), remarkId),
             };
 
-            using (var rdr = _helper.ExecuteReader(_connectionString, sqlString, parameters))
+            using (var rdr = Context.DatabaseApi.ExecuteReader(Context.ConnectionString, sqlString, parameters))
             {
                 if (rdr.Read())
                 {
@@ -147,7 +138,7 @@ namespace SS.GovInteract.Provider
             return remarkInfo;
         }
 
-        public RemarkInfo GetRemarkInfoByContentId(int siteId, int contentId)
+        public static RemarkInfo GetRemarkInfoByContentId(int siteId, int contentId)
         {
             RemarkInfo remarkInfo = null;
 
@@ -164,11 +155,11 @@ namespace SS.GovInteract.Provider
 
             var parameters = new[]
             {
-                _helper.GetParameter(nameof(RemarkInfo.SiteId), siteId),
-                _helper.GetParameter(nameof(RemarkInfo.ContentId), contentId)
+                Context.DatabaseApi.GetParameter(nameof(RemarkInfo.SiteId), siteId),
+                Context.DatabaseApi.GetParameter(nameof(RemarkInfo.ContentId), contentId)
             };
 
-            using (var rdr = _helper.ExecuteReader(_connectionString, sqlString, parameters))
+            using (var rdr = Context.DatabaseApi.ExecuteReader(Context.ConnectionString, sqlString, parameters))
             {
                 if (rdr.Read())
                 {
@@ -180,7 +171,7 @@ namespace SS.GovInteract.Provider
             return remarkInfo;
         }
 
-        public ArrayList GetRemarkInfoArrayList(int siteId, int contentId)
+        public static ArrayList GetRemarkInfoArrayList(int siteId, int contentId)
         {
             var arraylist = new ArrayList();
 
@@ -198,11 +189,11 @@ namespace SS.GovInteract.Provider
 
             var parameters = new[]
             {
-                _helper.GetParameter(nameof(RemarkInfo.SiteId), siteId),
-                _helper.GetParameter(nameof(RemarkInfo.ContentId), contentId) 
+                Context.DatabaseApi.GetParameter(nameof(RemarkInfo.SiteId), siteId),
+                Context.DatabaseApi.GetParameter(nameof(RemarkInfo.ContentId), contentId) 
             };
 
-            using (var rdr = _helper.ExecuteReader(_connectionString, sqlString, parameters))
+            using (var rdr = Context.DatabaseApi.ExecuteReader(Context.ConnectionString, sqlString, parameters))
             {
                 while (rdr.Read())
                 { 
@@ -214,7 +205,7 @@ namespace SS.GovInteract.Provider
             return arraylist;
         }
 
-        public IEnumerable GetDataSourceByContentId(int siteId, int contentId)
+        public static IEnumerable GetDataSourceByContentId(int siteId, int contentId)
         {
             var sqlString = $@"SELECT {nameof(RemarkInfo.Id)}, 
                     {nameof(RemarkInfo.SiteId)}, 
@@ -227,25 +218,25 @@ namespace SS.GovInteract.Provider
                     {nameof(RemarkInfo.AddDate)}
                     FROM {TableName} WHERE {nameof(RemarkInfo.SiteId)} = {siteId} AND {nameof(RemarkInfo.ContentId)} = {contentId}";
              
-            var enumerable = (IEnumerable)_helper.ExecuteReader(_connectionString,sqlString);
+            var enumerable = (IEnumerable)Context.DatabaseApi.ExecuteReader(Context.ConnectionString,sqlString);
             return enumerable;
         }
 
-        private RemarkInfo GetRemarkInfo(IDataReader rdr)
+        private static RemarkInfo GetRemarkInfo(IDataReader rdr)
         {
             if (rdr == null) return null;
             var i = 0;
             return new RemarkInfo
             {
-                Id = _helper.GetInt(rdr, i++),
-                SiteId = _helper.GetInt(rdr, i++),
-                ChannelId = _helper.GetInt(rdr, i++),
-                ContentId = _helper.GetInt(rdr, i++),
-                RemarkType = _helper.GetString(rdr, i++),
-                Remark = _helper.GetString(rdr, i++),
-                DepartmentId = _helper.GetInt(rdr, i++),
-                UserName = _helper.GetString(rdr, i++),
-                AddDate = _helper.GetDateTime(rdr, i)
+                Id = Context.DatabaseApi.GetInt(rdr, i++),
+                SiteId = Context.DatabaseApi.GetInt(rdr, i++),
+                ChannelId = Context.DatabaseApi.GetInt(rdr, i++),
+                ContentId = Context.DatabaseApi.GetInt(rdr, i++),
+                RemarkType = Context.DatabaseApi.GetString(rdr, i++),
+                Remark = Context.DatabaseApi.GetString(rdr, i++),
+                DepartmentId = Context.DatabaseApi.GetInt(rdr, i++),
+                UserName = Context.DatabaseApi.GetString(rdr, i++),
+                AddDate = Context.DatabaseApi.GetDateTime(rdr, i)
             };
         }
     }

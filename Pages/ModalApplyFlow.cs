@@ -3,6 +3,7 @@ using System;
 using System.Text;
 using System.Web.UI.WebControls;
 using SS.GovInteract.Model;
+using SS.GovInteract.Provider;
 
 namespace SS.GovInteract.Pages
 {
@@ -25,7 +26,7 @@ namespace SS.GovInteract.Pages
 
             if (_contentId > 0)
             {
-                var logInfoList = Main.LogDao.GetLogInfoList(SiteId, _contentId);
+                var logInfoList = LogDao.GetLogInfoList(SiteId, _contentId);
                 var builder = new StringBuilder();
 
                 var count = logInfoList.Count;

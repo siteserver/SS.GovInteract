@@ -5,6 +5,7 @@ using System.Web.UI.WebControls;
 using SiteServer.Plugin;
 using SS.GovInteract.Core;
 using SS.GovInteract.Model;
+using SS.GovInteract.Provider;
 
 namespace SS.GovInteract.Pages
 {
@@ -53,7 +54,7 @@ namespace SS.GovInteract.Pages
                 foreach (int contentID in _idArrayList)
                 {
                     var remarkInfo = new RemarkInfo(0, SiteId, _channelId, contentID, ERemarkTypeUtils.GetValue(ERemarkType.Comment), tbCommentRemark.Text, _adminInfo.DepartmentId, AuthRequest.AdminName, DateTime.Now);
-                    Main.RemarkDao.Insert(remarkInfo);
+                    RemarkDao.Insert(remarkInfo);
 
                     ApplyManager.Log(SiteId, _channelId, contentID, ELogTypeUtils.GetValue(ELogType.Comment), AuthRequest.AdminName, _adminInfo.DepartmentId);
                 }

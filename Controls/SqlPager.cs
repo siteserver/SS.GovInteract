@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using SiteServer.Plugin;
 using SS.GovInteract.Core;
+using SS.GovInteract.Provider;
 
 namespace SS.GovInteract.Controls
 {
@@ -37,7 +38,7 @@ namespace SS.GovInteract.Controls
 //                orderByString2 = orderByString2.Replace(" ASC", " DESC");
 //                orderByString2 = orderByString2.Replace(" DESC2", " ASC");
 
-//                if (Main.DatabaseType == DatabaseType.MySql)
+//                if (DatabaseType == DatabaseType.MySql)
 //                {
 //                    return $@"
 //SELECT * FROM (
@@ -58,7 +59,7 @@ namespace SS.GovInteract.Controls
 //            }
 //            else
 //            {
-//                if (Main.DatabaseType == DatabaseType.MySql)
+//                if (DatabaseType == DatabaseType.MySql)
 //                {
 //                    return $@"
 //SELECT * FROM (
@@ -729,7 +730,7 @@ namespace SS.GovInteract.Controls
             cmdText = SiteServer.Plugin.Context.DatabaseType == DatabaseType.Oracle
                 ? $"SELECT COUNT(*) FROM ({cmdText})"
                 : $"SELECT COUNT(*) FROM ({cmdText}) AS T0";
-            return Main.Dao.GetIntResult(cmdText);
+            return Dao.GetIntResult(cmdText);
         }
 
         /// <summary>

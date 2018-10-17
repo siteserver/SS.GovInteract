@@ -3,6 +3,7 @@ using System.Text;
 using System.Web.UI.WebControls;
 using SS.GovInteract.Core;
 using SS.GovInteract.Model;
+using SS.GovInteract.Provider;
 
 namespace SS.GovInteract.Pages
 {
@@ -23,7 +24,7 @@ namespace SS.GovInteract.Pages
 
             if (!IsPostBack && _channelId > 0)
             {
-                var channelInfo = Main.ChannelDao.GetChannelInfo(SiteId, _channelId);
+                var channelInfo = ChannelDao.GetChannelInfo(SiteId, _channelId);
                 LtlDepartmentTree.Text = GetDepartmentTreeHtml(channelInfo);
             }
         }

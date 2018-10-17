@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic; 
 using SiteServer.Plugin;
-using SS.GovInteract.Model; 
+using SS.GovInteract.Model;
+using SS.GovInteract.Provider;
 
 namespace SS.GovInteract.Core
 {
@@ -12,11 +13,11 @@ namespace SS.GovInteract.Core
 
         //    if (channelInfoList.Count == 0)
         //    {
-        //        var channelInfo = Main.ChannelApi.NewInstance(siteId);
+        //        var channelInfo = ChannelApi.NewInstance(siteId);
         //        channelInfo.ParentId = siteId;
-        //        channelInfo.ContentModelPluginId = Main.Id;
+        //        channelInfo.ContentModelPluginId = Id;
         //        channelInfo.ChannelName = "互动交流";
-        //        Main.ChannelApi.Insert(siteId, channelInfo);
+        //        ChannelApi.Insert(siteId, channelInfo);
         //    }
         //}
 
@@ -40,19 +41,19 @@ namespace SS.GovInteract.Core
         public static void AddDefaultTypeInfos(int siteId, int channelId)
         {
             var typeInfo = new TypeInfo(0, "求决", channelId, siteId, 0);
-            Main.TypeDao.Insert(typeInfo);
+            TypeDao.Insert(typeInfo);
             typeInfo = new TypeInfo(0, "举报", channelId, siteId, 0);
-            Main.TypeDao.Insert(typeInfo);
+            TypeDao.Insert(typeInfo);
             typeInfo = new TypeInfo(0, "投诉", channelId, siteId, 0);
-            Main.TypeDao.Insert(typeInfo);
+            TypeDao.Insert(typeInfo);
             typeInfo = new TypeInfo(0, "咨询", channelId, siteId, 0);
-            Main.TypeDao.Insert(typeInfo);
+            TypeDao.Insert(typeInfo);
             typeInfo = new TypeInfo(0, "建议", channelId, siteId, 0);
-            Main.TypeDao.Insert(typeInfo);
+            TypeDao.Insert(typeInfo);
             typeInfo = new TypeInfo(0, "感谢", channelId, siteId, 0);
-            Main.TypeDao.Insert(typeInfo);
+            TypeDao.Insert(typeInfo);
             typeInfo = new TypeInfo(0, "其他", channelId, siteId, 0);
-            Main.TypeDao.Insert(typeInfo);
+            TypeDao.Insert(typeInfo);
         }
 
         public static List<int> GetDepartmentIdList(ChannelInfo channelInfo)
@@ -63,13 +64,13 @@ namespace SS.GovInteract.Core
             //{
             //    return list;
             //}
-            //return Main.DepartmentDao.GetDepartmentIdListByDepartmentIdCollection(channelInfo.DepartmentIdCollection);
-            //return string.IsNullOrEmpty(channelInfo?.DepartmentIdCollection) ? Main.DepartmentDao.GetDepartmentIdListByParentId(0) : Main.DepartmentDao.GetDepartmentIdListByDepartmentIdCollection(channelInfo.DepartmentIdCollection);
+            //return DepartmentDao.GetDepartmentIdListByDepartmentIdCollection(channelInfo.DepartmentIdCollection);
+            //return string.IsNullOrEmpty(channelInfo?.DepartmentIdCollection) ? DepartmentDao.GetDepartmentIdListByParentId(0) : DepartmentDao.GetDepartmentIdListByDepartmentIdCollection(channelInfo.DepartmentIdCollection);
         }
 
         public static string GetTypeName(int typeId)
         {
-            return typeId > 0 ? Main.TypeDao.GetTypeName(typeId) : string.Empty;
+            return typeId > 0 ? TypeDao.GetTypeName(typeId) : string.Empty;
         }
 
         public static bool IsPermission(int siteId, int channelId, string permission)

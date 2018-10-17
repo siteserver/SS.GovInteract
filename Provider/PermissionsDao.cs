@@ -6,7 +6,7 @@ using SS.GovInteract.Model;
 
 namespace SS.GovInteract.Provider
 {
-    public class PermissionsDao
+    public static class PermissionsDao
     {
         public const string TableName = "ss_govinteract_permissions"; 
 
@@ -35,16 +35,7 @@ namespace SS.GovInteract.Provider
             }  
         };
 
-        private readonly string _connectionString;
-        private readonly IDatabaseApi _helper;
-
-        public PermissionsDao()
-        {
-            _connectionString = Context.ConnectionString;
-            _helper = Context.DatabaseApi;
-        }
-
-        public void Insert(int siteId, PermissionsInfo permissionsInfo)
+        public static void Insert(int siteId, PermissionsInfo permissionsInfo)
         { 
             string sqlString = $@"INSERT INTO {TableName}
             (
@@ -59,47 +50,47 @@ namespace SS.GovInteract.Provider
 
             var parameters = new[]
             {
-                _helper.GetParameter(nameof(PermissionsInfo.UserName), permissionsInfo.UserName),
-                _helper.GetParameter(nameof(PermissionsInfo.ChannelId), permissionsInfo.ChannelId),
-                _helper.GetParameter(nameof(PermissionsInfo.Permissions), permissionsInfo.Permissions)
+                Context.DatabaseApi.GetParameter(nameof(PermissionsInfo.UserName), permissionsInfo.UserName),
+                Context.DatabaseApi.GetParameter(nameof(PermissionsInfo.ChannelId), permissionsInfo.ChannelId),
+                Context.DatabaseApi.GetParameter(nameof(PermissionsInfo.Permissions), permissionsInfo.Permissions)
             };
 
-            if (!Main.ChannelDao.IsExists(permissionsInfo.ChannelId))
+            if (!ChannelDao.IsExists(permissionsInfo.ChannelId))
             {
                 var channelInfo = new ChannelInfo(0, permissionsInfo.ChannelId, siteId, 0, 0, string.Empty, string.Empty);
-                Main.ChannelDao.Insert(channelInfo);
+                ChannelDao.Insert(channelInfo);
             }
 
-            _helper.ExecuteNonQuery(_connectionString, sqlString, parameters);
+            Context.DatabaseApi.ExecuteNonQuery(Context.ConnectionString, sqlString, parameters);
         }
 
-        public void Delete(string userName, int channelId)
+        public static void Delete(string userName, int channelId)
         {
             string sqlString = $"DELETE FROM {TableName} WHERE {nameof(PermissionsInfo.UserName)} = @{nameof(PermissionsInfo.UserName)} AND {nameof(PermissionsInfo.ChannelId)} = @{nameof(PermissionsInfo.ChannelId)}";
 
             var parameters = new[]
             {
-                _helper.GetParameter(nameof(PermissionsInfo.UserName), userName),
-                _helper.GetParameter(nameof(PermissionsInfo.ChannelId), channelId)
+                Context.DatabaseApi.GetParameter(nameof(PermissionsInfo.UserName), userName),
+                Context.DatabaseApi.GetParameter(nameof(PermissionsInfo.ChannelId), channelId)
             };
 
-            _helper.ExecuteNonQuery(_connectionString, sqlString, parameters);
+            Context.DatabaseApi.ExecuteNonQuery(Context.ConnectionString, sqlString, parameters);
         }
 
-        public void Update(PermissionsInfo permissionsInfo)
+        public static void Update(PermissionsInfo permissionsInfo)
         {
             string sqlString = $"UPDATE {TableName} SET {nameof(PermissionsInfo.Permissions)} = @{nameof(PermissionsInfo.Permissions)} WHERE {nameof(PermissionsInfo.Id)} = @{nameof(PermissionsInfo.Id)}";
 
             var parameters = new[]
             {
-                _helper.GetParameter(nameof(PermissionsInfo.Permissions), permissionsInfo.Permissions),
-                _helper.GetParameter(nameof(PermissionsInfo.Id), permissionsInfo.Id)
+                Context.DatabaseApi.GetParameter(nameof(PermissionsInfo.Permissions), permissionsInfo.Permissions),
+                Context.DatabaseApi.GetParameter(nameof(PermissionsInfo.Id), permissionsInfo.Id)
             };
 
-            _helper.ExecuteNonQuery(_connectionString, sqlString, parameters);
+            Context.DatabaseApi.ExecuteNonQuery(Context.ConnectionString, sqlString, parameters);
         }
 
-        public PermissionsInfo GetPermissionsInfo(string userName, int channelId)
+        public static PermissionsInfo GetPermissionsInfo(string userName, int channelId)
         {
             PermissionsInfo permissionsInfo = null;
 
@@ -107,11 +98,11 @@ namespace SS.GovInteract.Provider
 
             var parameters = new[]
             {
-                _helper.GetParameter(nameof(PermissionsInfo.UserName), userName),
-                _helper.GetParameter(nameof(PermissionsInfo.ChannelId), channelId)
+                Context.DatabaseApi.GetParameter(nameof(PermissionsInfo.UserName), userName),
+                Context.DatabaseApi.GetParameter(nameof(PermissionsInfo.ChannelId), channelId)
             };
 
-            using (var rdr = _helper.ExecuteReader(_connectionString, sqlString, parameters))
+            using (var rdr = Context.DatabaseApi.ExecuteReader(Context.ConnectionString, sqlString, parameters))
             {
                 if (rdr.Read())
                 {
@@ -123,18 +114,18 @@ namespace SS.GovInteract.Provider
             return permissionsInfo;
         }
 
-        public List<PermissionsInfo> GetPermissionsInfoList(string userName)
+        public static List<PermissionsInfo> GetPermissionsInfoList(string userName)
         {
             var list = new List<PermissionsInfo>();
 
             var parameters = new[]
            {
-                _helper.GetParameter(nameof(PermissionsInfo.UserName), userName) 
+                Context.DatabaseApi.GetParameter(nameof(PermissionsInfo.UserName), userName) 
            };
 
             string sqlString = $"SELECT {nameof(PermissionsInfo.Id)}, {nameof(PermissionsInfo.UserName)}, {nameof(PermissionsInfo.ChannelId)}, {nameof(PermissionsInfo.Permissions)} FROM {TableName} WHERE {nameof(PermissionsInfo.UserName)} = @{nameof(PermissionsInfo.UserName)}";
 
-            using (var rdr = _helper.ExecuteReader(_connectionString, sqlString, parameters))
+            using (var rdr = Context.DatabaseApi.ExecuteReader(Context.ConnectionString, sqlString, parameters))
             {
                 while (rdr.Read())
                 {
@@ -147,7 +138,7 @@ namespace SS.GovInteract.Provider
             return list;
         }
 
-        public Dictionary<int, List<string>> GetPermissionSortedList(string userName)
+        public static Dictionary<int, List<string>> GetPermissionSortedList(string userName)
         {
             var sortedlist = new Dictionary<int, List<string>>();
 
@@ -172,17 +163,17 @@ namespace SS.GovInteract.Provider
             return sortedlist;
         }
 
-        private PermissionsInfo GetPermissionsInfo(IDataReader rdr)
+        private static PermissionsInfo GetPermissionsInfo(IDataReader rdr)
         {
             if (rdr == null) return null;
             var i = 0;
 
             return new PermissionsInfo
             {
-                Id = _helper.GetInt(rdr, i++),
-                UserName = _helper.GetString(rdr, i++),
-                ChannelId = _helper.GetInt(rdr, i++),
-                Permissions = _helper.GetString(rdr, i) 
+                Id = Context.DatabaseApi.GetInt(rdr, i++),
+                UserName = Context.DatabaseApi.GetString(rdr, i++),
+                ChannelId = Context.DatabaseApi.GetInt(rdr, i++),
+                Permissions = Context.DatabaseApi.GetString(rdr, i) 
             };
         }
     }
