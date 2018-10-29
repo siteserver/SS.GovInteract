@@ -15,7 +15,7 @@ namespace SS.GovInteract.Pages
 
         public string LinkUrl => Main.PluginApi.GetPluginUrl(Main.PluginId, Request.QueryString["linkUrl"]);
 
-        public string AdminUrl => Main.UtilsApi.GetAdminDirectoryUrl(string.Empty);
+        public string AdminUrl => Main.UtilsApi.GetAdminUrl(string.Empty);
 
         public void Page_Load(object sender, EventArgs e)
         {

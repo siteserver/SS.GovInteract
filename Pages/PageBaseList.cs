@@ -256,7 +256,7 @@ namespace SS.GovInteract.Pages
             if (_isPermissionEdit)
             {
                 ltlEditUrl.Text =
-                    $@"<a class=""{textClass}"" href=""{Main.UtilsApi.GetAdminDirectoryUrl(
+                    $@"<a class=""{textClass}"" href=""{Main.UtilsApi.GetAdminUrl(
                         $"cms/pageContentAdd.aspx?siteId={SiteId}&channelId={contentInfo.ChannelId}&id={contentInfo.Id}&returnUrl={HttpUtility.UrlEncode(Main.PluginApi.GetPluginUrl(Main.PluginId, PageUrl))}")}"">编辑</a>";
             }
         }

@@ -20,7 +20,6 @@ namespace SS.GovInteract
         public static IPluginApi PluginApi => Context.PluginApi;
         public static IUtilsApi UtilsApi => Context.UtilsApi;
         public static IConfigApi ConfigApi => Context.ConfigApi;
-        public static IRequest Request => Context.Request;
 
         private static readonly Dictionary<int, ConfigInfo> ConfigInfoDict = new Dictionary<int, ConfigInfo>();
 

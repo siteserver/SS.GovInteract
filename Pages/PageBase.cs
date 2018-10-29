@@ -27,9 +27,9 @@ namespace SS.GovInteract.Pages
         {
             base.OnInit(e);
 
-            AuthRequest = Main.Request;
+            AuthRequest = SiteServer.Plugin.Context.GetCurrentRequest();
 
-            SiteId = Convert.ToInt32(Request.QueryString["siteId"]);
+            SiteId = AuthRequest.GetQueryInt("siteId");
 
             if (!AuthRequest.AdminPermissions.HasSitePermissions(SiteId, Main.PluginId))
             {

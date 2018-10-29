@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using SiteServer.Plugin;
 using SS.GovInteract.Core;
 
 namespace SS.GovInteract.Pages
@@ -19,7 +18,7 @@ namespace SS.GovInteract.Pages
         private string _redirectUrl;
 
         public string UrlModalChannelSelect
-            => Main.UtilsApi.GetAdminDirectoryUrl($"cms/modalchannelselect.aspx?siteId={SiteId}");
+            => Main.UtilsApi.GetAdminUrl($"cms/modalchannelselect.aspx?siteId={SiteId}");
 
         public static string GetRedirectUrl(int siteId, string redirectUrl)
         {
@@ -28,10 +27,11 @@ namespace SS.GovInteract.Pages
 
         public void Page_Load(object sender, EventArgs e)
         {
-            SiteId = Utils.ToInt(Request.QueryString["siteId"]);
-            _redirectUrl = Request.QueryString["redirectUrl"];
+            var request = SiteServer.Plugin.Context.GetCurrentRequest();
+            SiteId = request.GetQueryInt("siteId");
+            _redirectUrl = request.GetQueryString("redirectUrl");
 
-            if (!Main.Request.AdminPermissions.HasSitePermissions(SiteId, Main.PluginId))
+            if (!request.AdminPermissions.HasSitePermissions(SiteId, Main.PluginId))
             {
                 HttpContext.Current.Response.Write("<h1>未授权访问</h1>");
                 HttpContext.Current.Response.End();
