@@ -15,7 +15,9 @@ namespace SS.GovInteract.Provider
             new TableColumn
             {
                 AttributeName = nameof(RemarkInfo.Id),
-                DataType = DataType.Integer
+                DataType = DataType.Integer,
+                IsPrimaryKey = true,
+                IsIdentity = true
             },
             new TableColumn
             {
