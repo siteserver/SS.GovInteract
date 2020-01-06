@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiteServer.API", "..\..\..\SiteServer.API.csproj", "{69C00F60-F28A-4CBC-B1A4-2DB73BB97471}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SS.GovInteract", "SS.GovInteract.csproj", "{666A9AB7-B525-49BC-B05E-1B6286B1A32F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SS.GovInteract", "SS.GovInteract.csproj", "{B9868C93-B15E-4310-8108-5B7018FF2F37}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{69C00F60-F28A-4CBC-B1A4-2DB73BB97471}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69C00F60-F28A-4CBC-B1A4-2DB73BB97471}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{69C00F60-F28A-4CBC-B1A4-2DB73BB97471}.Release|Any CPU.Build.0 = Release|Any CPU
-		{666A9AB7-B525-49BC-B05E-1B6286B1A32F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{666A9AB7-B525-49BC-B05E-1B6286B1A32F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{666A9AB7-B525-49BC-B05E-1B6286B1A32F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{666A9AB7-B525-49BC-B05E-1B6286B1A32F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9868C93-B15E-4310-8108-5B7018FF2F37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9868C93-B15E-4310-8108-5B7018FF2F37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9868C93-B15E-4310-8108-5B7018FF2F37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9868C93-B15E-4310-8108-5B7018FF2F37}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

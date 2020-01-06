@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html class="bg-white">
+
+<head>
+  <meta charset="utf-8" />
+  <title>信件结果查询</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <script type="text/javascript" src="../../assets/lib/iframe-resizer-3.6.3/iframeResizer.contentWindow.min.js"></script>
+</head>
+
+<body class="p-0 bg-white">
+  <link href="../../assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+  <link href="../../assets/css/siteserver.min.css" rel="stylesheet" type="text/css" />
+  <div id="main" class="m-t-15 m-b-15 m-l-15 m-r-15">
+    <template v-if="pageType === 'form'">
+      <div v-if="isNoResult" class="text-center my-5">
+        <img class="mt-3" src="../../assets/images/error.png" />
+        <p class="lead mt-3 text-nowrap text-danger">未查询到指定条件的信件，请确保输入正确的查询条件！</p>
+      </div>
+      <form v-on:submit="btnSubmitClick">
+        <p class="lead mt-3 text-nowrap">信件结果查询</p>
+        <div class="form-group">
+          <label> 信件人类型 <span class="text-danger">*</span>
+          </label>
+          <div class="mt-2 ml-2">
+            <div class="radio radio-primary form-check-inline">
+              <input v-model="isOrganization" name="isOrganization" type="radio" id="isOrganization_false" :value="false">
+              <label for="isOrganization_false"> 公民 </label>
+            </div>
+            <div class="radio radio-primary form-check-inline">
+              <input v-model="isOrganization" name="isOrganization" type="radio" id="isOrganization_true" :value="true">
+              <label for="isOrganization_true"> 法人/其他组织 </label>
+            </div>
+          </div>
+          <small class="form-text text-muted">请在此输入您提交信件时选择的信件人类型</small>
+        </div>
+        <div v-show="isOrganization" class="form-group">
+          <label> 名称 <span class="text-danger">*</span>
+          </label>
+          <input v-model="orgName" :class="{'is-invalid': (isSubmit && !orgName) }" type="text" class="form-control form-control-sm" />
+          <small v-if="(isSubmit && !orgName)" class="text-danger">名称不能为空</small>
+          <small v-else class="form-text text-muted">请在此输入您提交信件时填写的名称</small>
+        </div>
+        <div v-show="!isOrganization" class="form-group">
+          <label> 姓名 <span class="text-danger">*</span>
+          </label>
+          <input v-model="civicName" :class="{'is-invalid': (isSubmit && !civicName) }" type="text" class="form-control form-control-sm" />
+          <small v-if="(isSubmit && !civicName)" class="text-danger">姓名不能为空</small>
+          <small v-else class="form-text text-muted">请在此输入您提交信件时填写的姓名</small>
+        </div>
+        <div class="form-group">
+          <label> 查询码 <span class="text-danger">*</span>
+          </label>
+          <input v-model="queryCode" :class="{'is-invalid': (isSubmit && !queryCode) }" type="text" class="form-control form-control-sm">
+          <small v-if="(isSubmit && !queryCode)" class="text-danger">查询码不能为空</small>
+          <small v-else class="form-text text-muted">请在此输入您提交信件时返回的查询码</small>
+        </div>
+        <div class="text-center mt-3">
+          <button type="button" @click="btnSubmitClick" class="btn btn-primary w-md mr-2">查 询</button>
+        </div>
+      </form>
+    </template>
+    <template v-else-if="pageType === 'success'">
+      <p class="lead mt-3 text-nowrap">信件结果查询</p>
+      <div class="row">
+        <div class="col-md-12">
+          <table class="table table-bordered bg-white">
+            <tbody>
+              <tr>
+                <td class="text-center align-middle text-danger" rowspan="6">申<br>请<br>人<br>信<br>息</td>
+                <td class="align-middle"> 信件人类型 </td>
+                <td class="align-middle" colspan="3"> {{ (dataInfo.isOrganization ? '法人/其他组织' : '公民') }} </td>
+              </tr>
+              <tr v-if="!dataInfo.isOrganization">
+                <td class="align-middle" style="width:25%"> 姓名 </td>
+                <td class="align-middle" style="width:25%"> {{ dataInfo.civicName }} </td>
+                <td class="align-middle" style="width:25%">工作单位</td>
+                <td class="align-middle" style="width:25%"> {{ dataInfo.civicOrganization }} </td>
+              </tr>
+              <tr v-if="!dataInfo.isOrganization">
+                <td class="align-middle">证件名称</td>
+                <td class="align-middle"> {{ dataInfo.civicCardType }} </td>
+                <td class="align-middle"> 证件号码 </td>
+                <td class="align-middle"> {{ dataInfo.civicCardNo }} </td>
+              </tr>
+              <tr v-if="!dataInfo.isOrganization">
+                <td class="align-middle"> 联系电话 </td>
+                <td class="align-middle"> {{ dataInfo.civicPhone }} </td>
+                <td class="align-middle"> 邮政编码 </td>
+                <td class="align-middle"> {{ dataInfo.civicPostCode }} </td>
+              </tr>
+              <tr v-if="!dataInfo.isOrganization">
+                <td class="align-middle"> 联系地址 </td>
+                <td class="align-middle" colspan="3"> {{ dataInfo.civicAddress }} </td>
+              </tr>
+              <tr v-if="!dataInfo.isOrganization">
+                <td class="align-middle"> 电子邮件 </td>
+                <td class="align-middle"> {{ dataInfo.civicEmail }} </td>
+                <td class="align-middle">传真</td>
+                <td class="align-middle"> {{ dataInfo.civicFax }} </td>
+              </tr>
+              <tr v-if="dataInfo.isOrganization">
+                <td class="align-middle"> 名称 </td>
+                <td class="align-middle"> {{ dataInfo.orgName }} </td>
+                <td class="align-middle">组织机构代码</td>
+                <td class="align-middle"> {{ dataInfo.orgUnitCode }} </td>
+              </tr>
+              <tr v-if="dataInfo.isOrganization">
+                <td class="align-middle"> 法人代表 </td>
+                <td class="align-middle"> {{ dataInfo.orgLegalPerson }} </td>
+                <td class="align-middle"> 联系人姓名 </td>
+                <td class="align-middle"> {{ dataInfo.orgLinkName }} </td>
+              </tr>
+              <tr v-if="dataInfo.isOrganization">
+                <td class="align-middle"> 联系电话 </td>
+                <td class="align-middle"> {{ dataInfo.orgPhone }} </td>
+                <td class="align-middle"> 邮政编码 </td>
+                <td class="align-middle"> {{ dataInfo.orgPostCode }} </td>
+              </tr>
+              <tr v-if="dataInfo.isOrganization">
+                <td class="align-middle"> 联系地址 </td>
+                <td class="align-middle" colspan="3"> {{ dataInfo.orgAddress }} </td>
+              </tr>
+              <tr v-if="dataInfo.isOrganization">
+                <td class="align-middle"> 电子邮件 </td>
+                <td class="align-middle"> {{ dataInfo.orgEmail }} </td>
+                <td class="align-middle">传真</td>
+                <td class="align-middle"> {{ dataInfo.orgFax }} </td>
+              </tr>
+              <tr>
+                <td class="text-center align-middle text-danger" rowspan="5"> 所<br> 需<br> 信<br> 息<br> 情<br> 况 </td>
+                <td class="align-middle"> 标题 </td>
+                <td class="align-middle" colspan="3"> {{ dataInfo.title }} </td>
+              </tr>
+              <tr>
+                <td class="align-middle"> 所需信息的<br /> 内容描述 </td>
+                <td class="align-middle" colspan="3"> {{ dataInfo.content }} </td>
+              </tr>
+              <tr>
+                <td class="align-middle"> 所需信息的<br /> 用途 </td>
+                <td class="align-middle" colspan="3"> {{ dataInfo.purpose }} </td>
+              </tr>
+              <tr>
+                <td class="align-middle"> 是否信件减免费用 </td>
+                <td class="align-middle" colspan="2"> 所需信息的指定提供方式（可选） </td>
+                <td class="align-middle"> 获取信息的方式（可选） </td>
+              </tr>
+              <tr>
+                <td> {{ (dataInfo.isApplyFree ? '信件' : '不信件') }} </td>
+                <td colspan="2"> {{ dataInfo.provideType }} </td>
+                <td> {{ dataInfo.obtainType }} </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <hr />
+      <div class="form-horizontal" role="form">
+        <div class="form-group row">
+          <label class="col-2 col-form-label">信件状态</label>
+          <label class="col-10 col-form-label" v-html="getStateText(dataInfo.isCompleted, dataInfo.state)"></label>
+        </div>
+        <div v-if="dataInfo.isCompleted && dataInfo.state == 'Denied' && dataInfo.denyReason" class="form-group row">
+          <label class="col-2 col-form-label"> 拒绝理由 </label>
+          <label class="col-10 col-form-label"> {{ dataInfo.denyReason }} </label>
+        </div>
+        <div v-if="dataInfo.isCompleted && dataInfo.replyContent" class="form-group row">
+          <label class="col-2 col-form-label"> 答复内容 </label>
+          <label class="col-10 col-form-label"> {{ dataInfo.replyContent }} </label>
+        </div>
+        <div v-if="dataInfo.isCompleted && fileInfoList && fileInfoList.length > 0" class="form-group row">
+          <label class="col-2 col-form-label"> 答复附件 </label>
+          <div class="row col-10 pt-2">
+            <div class="col-sm-4 col-lg-3 col-xs-12" v-for="fileInfo in fileInfoList">
+              <div class="card m-b-20">
+                <div class="card-body">
+                  <p class="card-text">{{ fileInfo.fileName }}</p>
+                  <a :href="fileInfo.fileUrl" target="_blank" class="card-link">下 载</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-if="dataInfo.isCompleted && dataInfo.replyContent" class="form-group row">
+          <label class="col-2 col-form-label"> 答复时间 </label>
+          <label class="col-10 col-form-label"> {{ dataInfo.replyDate }} </label>
+        </div>
+      </div>
+    </template>
+    <template v-else>
+      <div class="text-center my-5">
+        <img class="mt-3" src="../../assets/images/loading.gif" />
+        <p class="lead mt-3 text-nowrap">查询中，请稍后...</p>
+      </div>
+    </template>
+  </div>
+  <script src="../../assets/lib/vue-2.5.16.min.js" type="text/javascript"></script>
+  <script src="../../assets/lib/es6-promise.auto.min.js"></script>
+  <script src="../../assets/lib/axios-0.18.0.min.js"></script>
+  <script src="../../assets/js/query.js" type="text/javascript"></script>
+</body>
+
+</html>
