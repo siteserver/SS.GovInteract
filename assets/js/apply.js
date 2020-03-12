@@ -24,6 +24,8 @@ var getPageAlert = function (error) {
   };
 };
 
+var $urlCaptcha = '/captcha';
+
 var $api = axios.create({
   baseURL: (getQueryString('apiUrl') || $apiUrl) + '/SS.GovInteract/',
   withCredentials: true
@@ -39,6 +41,7 @@ var data = {
   categories: null,
   departments: null,
   settings: null,
+  captchaUrl: null,
   dataInfo: {
     name: '',
     gender: '',
@@ -92,6 +95,7 @@ var methods = {
       $this.categories = res.categories;
       $this.departments = res.departments;
       $this.settings = res.settings;
+      $this.captchaUrl = $api.defaults.baseURL + $urlCaptcha + '?r=' + new Date().getTime();
       if ($this.settings.isClosed) {
         $this.pageType = 'error';
         $this.errorMessage = '互动交流已暂时关闭！';
@@ -114,10 +118,15 @@ var methods = {
       $this.dataInfo = res.value;
       $this.pageType = 'success';
     }).catch(function (error) {
+      $this.captchaUrl = $api.defaults.baseURL + $urlCaptcha + '?r=' + new Date().getTime();
       $this.pageAlert = getPageAlert(error);
     }).then(function () {
       $this.pageLoad = true;
     });
+  },
+
+  reload: function () {
+    this.captchaUrl = $api.defaults.baseURL + $urlCaptcha + '?r=' + new Date().getTime();
   },
 
   btnSubmitClick: function(formName) {

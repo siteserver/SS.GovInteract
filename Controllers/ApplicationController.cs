@@ -46,6 +46,19 @@ namespace SS.GovInteract.Controllers
                 var request = Context.AuthenticatedRequest;
                 var siteId = request.GetQueryInt("siteId");
 
+                var authCode = request.GetPostString("authCode");
+                var code = CookieUtils.GetCookie(CaptchaController.CookieName);
+                if (string.IsNullOrEmpty(code) || CacheUtils.Exists($"{CaptchaController.CookieName}.{code}"))
+                {
+                    return BadRequest("验证码已超时，请点击刷新验证码！");
+                }
+                CookieUtils.Erase(CaptchaController.CookieName);
+                CacheUtils.InsertMinutes($"{CaptchaController.CookieName}.{code}", true, 10);
+                if (!StringUtils.EqualsIgnoreCase(code, authCode))
+                {
+                    return BadRequest("验证码不正确，请重新输入！");
+                }
+
                 var categoryId = request.GetPostInt("categoryId");
                 var departmentId = request.GetPostInt("departmentId");
                 var categoryInfo = CategoryManager.GetCategoryInfo(siteId, categoryId);

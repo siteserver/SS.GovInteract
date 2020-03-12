@@ -1,4 +1,5 @@
 var $url = '/pages/add';
+var $urlCaptcha = '/captcha';
 
 var data = {
   apiUrl: utils.getQueryString('apiUrl'),
@@ -10,6 +11,7 @@ var data = {
   categories: null,
   departments: null,
   settings: null,
+  captchaUrl: null,
   dataInfo: {
     name: '',
     gender: '',
@@ -67,6 +69,7 @@ var methods = {
       $this.categories = res.categories;
       $this.departments = res.departments;
       $this.settings = res.settings;
+      $this.captchaUrl = $api.defaults.baseURL + $urlCaptcha + '?r=' + new Date().getTime();
     }).catch(function (error) {
       $this.pageAlert = utils.getPageAlert(error);
     }).then(function () {
@@ -86,10 +89,15 @@ var methods = {
         location.href = 'contents.html?siteId=' + $this.siteId + '&state=New&apiUrl=' + encodeURIComponent($this.apiUrl);
       }, 2000);
     }).catch(function (error) {
+      $this.captchaUrl = $api.defaults.baseURL + $urlCaptcha + '?r=' + new Date().getTime();
       $this.pageAlert = utils.getPageAlert(error);
     }).then(function () {
       utils.loading(false);
     });
+  },
+
+  reload: function () {
+    this.captchaUrl = $api.defaults.baseURL + $urlCaptcha + '?r=' + new Date().getTime();
   },
 
   btnSubmitClick: function(formName) {

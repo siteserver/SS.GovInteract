@@ -41,6 +41,11 @@ namespace SS.GovInteract.Core.Utils
         {
             return Cache.Get(key) as T;
         }
-        
+
+        public static bool Exists(string key)
+        {
+            var val = Cache?.Get(key);
+            return val != null;
+        }
     }
 }

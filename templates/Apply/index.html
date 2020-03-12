@@ -21,7 +21,8 @@
           <el-alert
             v-if="pageAlert"
             :title="pageAlert.title"
-            type="pageAlert.type"
+            :type="pageAlert.type"
+            style="margin-bottom: 10px;"
           ></el-alert>
   
           <el-form :model="dataInfo" status-icon :rules="rules" ref="dataInfo" label-width="100px">
@@ -68,6 +69,9 @@
             </el-form-item>
             <el-form-item label="验证码" prop="authCode">
               <el-input v-model="dataInfo.authCode" style="width: 150px;"></el-input>
+              <a href="javascript:;" v-on:click="reload">
+                <img v-show="captchaUrl" style="display: none" class="float-right rounded" v-bind:src="captchaUrl" align="absmiddle">
+              </a>
             </el-form-item>
   
             <el-form-item>

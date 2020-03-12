@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Web.Http;
 using SiteServer.Plugin;
 using SS.GovInteract.Core;
@@ -47,6 +46,19 @@ namespace SS.GovInteract.Controllers.Pages
                 var request = Context.AuthenticatedRequest;
                 var siteId = request.GetPostInt("siteId");
                 if (!request.IsAdminLoggin || !request.AdminPermissions.HasSitePermissions(siteId, ApplicationUtils.PluginId)) return Unauthorized();
+
+                var authCode = request.GetPostString("authCode");
+                var code = CookieUtils.GetCookie(CaptchaController.CookieName);
+                if (string.IsNullOrEmpty(code) || CacheUtils.Exists($"{CaptchaController.CookieName}.{code}"))
+                {
+                    return BadRequest("验证码已超时，请点击刷新验证码！");
+                }
+                CookieUtils.Erase(CaptchaController.CookieName);
+                CacheUtils.InsertMinutes($"{CaptchaController.CookieName}.{code}", true, 10);
+                if (!StringUtils.EqualsIgnoreCase(code, authCode))
+                {
+                    return BadRequest("验证码不正确，请重新输入！");
+                }
 
                 var categoryId = request.GetPostInt("categoryId");
                 var departmentId = request.GetPostInt("departmentId");
