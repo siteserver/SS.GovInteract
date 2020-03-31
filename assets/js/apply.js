@@ -107,7 +107,7 @@ var methods = {
     });
   },
 
-  submit: function () {
+  apiSubmit: function () {
     var $this = this;
 
     $this.pageLoad = false;

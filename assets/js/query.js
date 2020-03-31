@@ -24,9 +24,7 @@ var $apiUrl = (getQueryString('apiUrl') || $apiUrl) + '/SS.GovInteract/actions/q
 var data = {
   pageConfig: null,
   pageType: 'form',
-  isOrganization: false,
-  civicName: null,
-  orgName: null,
+  name: null,
   queryCode: null,
   isSubmit: false,
   isNoResult: false,
@@ -39,18 +37,11 @@ var methods = {
     var $this = this;
     this.isSubmit = true;
     this.isNoResult = false;
-    if (this.isOrganization) {
-      if (!this.orgName) return;
-    } else {
-      if (!this.civicName) return;
-    }
-    if (!this.queryCode) return;
+    if (!this.name || !this.queryCode) return;
 
     $this.pageType = 'loading';
     $api.post($apiUrl, {
-      isOrganization: $this.isOrganization,
-      civicName: $this.civicName,
-      orgName: $this.orgName,
+      name: $this.name,
       queryCode: $this.queryCode
     }).then(function (response) {
       var res = response.data;

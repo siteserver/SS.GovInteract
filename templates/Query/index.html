@@ -21,32 +21,10 @@
       <form v-on:submit="btnSubmitClick">
         <p class="lead mt-3 text-nowrap">信件结果查询</p>
         <div class="form-group">
-          <label> 信件人类型 <span class="text-danger">*</span>
-          </label>
-          <div class="mt-2 ml-2">
-            <div class="radio radio-primary form-check-inline">
-              <input v-model="isOrganization" name="isOrganization" type="radio" id="isOrganization_false" :value="false">
-              <label for="isOrganization_false"> 公民 </label>
-            </div>
-            <div class="radio radio-primary form-check-inline">
-              <input v-model="isOrganization" name="isOrganization" type="radio" id="isOrganization_true" :value="true">
-              <label for="isOrganization_true"> 法人/其他组织 </label>
-            </div>
-          </div>
-          <small class="form-text text-muted">请在此输入您提交信件时选择的信件人类型</small>
-        </div>
-        <div v-show="isOrganization" class="form-group">
-          <label> 名称 <span class="text-danger">*</span>
-          </label>
-          <input v-model="orgName" :class="{'is-invalid': (isSubmit && !orgName) }" type="text" class="form-control form-control-sm" />
-          <small v-if="(isSubmit && !orgName)" class="text-danger">名称不能为空</small>
-          <small v-else class="form-text text-muted">请在此输入您提交信件时填写的名称</small>
-        </div>
-        <div v-show="!isOrganization" class="form-group">
           <label> 姓名 <span class="text-danger">*</span>
           </label>
-          <input v-model="civicName" :class="{'is-invalid': (isSubmit && !civicName) }" type="text" class="form-control form-control-sm" />
-          <small v-if="(isSubmit && !civicName)" class="text-danger">姓名不能为空</small>
+          <input v-model="name" :class="{'is-invalid': (isSubmit && !name) }" type="text" class="form-control form-control-sm" />
+          <small v-if="(isSubmit && !name)" class="text-danger">姓名不能为空</small>
           <small v-else class="form-text text-muted">请在此输入您提交信件时填写的姓名</small>
         </div>
         <div class="form-group">
@@ -68,88 +46,34 @@
           <table class="table table-bordered bg-white">
             <tbody>
               <tr>
-                <td class="text-center align-middle text-danger" rowspan="6">申<br>请<br>人<br>信<br>息</td>
-                <td class="align-middle"> 信件人类型 </td>
-                <td class="align-middle" colspan="3"> {{ (dataInfo.isOrganization ? '法人/其他组织' : '公民') }} </td>
-              </tr>
-              <tr v-if="!dataInfo.isOrganization">
-                <td class="align-middle" style="width:25%"> 姓名 </td>
-                <td class="align-middle" style="width:25%"> {{ dataInfo.civicName }} </td>
-                <td class="align-middle" style="width:25%">工作单位</td>
-                <td class="align-middle" style="width:25%"> {{ dataInfo.civicOrganization }} </td>
-              </tr>
-              <tr v-if="!dataInfo.isOrganization">
-                <td class="align-middle">证件名称</td>
-                <td class="align-middle"> {{ dataInfo.civicCardType }} </td>
-                <td class="align-middle"> 证件号码 </td>
-                <td class="align-middle"> {{ dataInfo.civicCardNo }} </td>
-              </tr>
-              <tr v-if="!dataInfo.isOrganization">
-                <td class="align-middle"> 联系电话 </td>
-                <td class="align-middle"> {{ dataInfo.civicPhone }} </td>
-                <td class="align-middle"> 邮政编码 </td>
-                <td class="align-middle"> {{ dataInfo.civicPostCode }} </td>
-              </tr>
-              <tr v-if="!dataInfo.isOrganization">
-                <td class="align-middle"> 联系地址 </td>
-                <td class="align-middle" colspan="3"> {{ dataInfo.civicAddress }} </td>
-              </tr>
-              <tr v-if="!dataInfo.isOrganization">
-                <td class="align-middle"> 电子邮件 </td>
-                <td class="align-middle"> {{ dataInfo.civicEmail }} </td>
-                <td class="align-middle">传真</td>
-                <td class="align-middle"> {{ dataInfo.civicFax }} </td>
-              </tr>
-              <tr v-if="dataInfo.isOrganization">
-                <td class="align-middle"> 名称 </td>
-                <td class="align-middle"> {{ dataInfo.orgName }} </td>
-                <td class="align-middle">组织机构代码</td>
-                <td class="align-middle"> {{ dataInfo.orgUnitCode }} </td>
-              </tr>
-              <tr v-if="dataInfo.isOrganization">
-                <td class="align-middle"> 法人代表 </td>
-                <td class="align-middle"> {{ dataInfo.orgLegalPerson }} </td>
-                <td class="align-middle"> 联系人姓名 </td>
-                <td class="align-middle"> {{ dataInfo.orgLinkName }} </td>
-              </tr>
-              <tr v-if="dataInfo.isOrganization">
-                <td class="align-middle"> 联系电话 </td>
-                <td class="align-middle"> {{ dataInfo.orgPhone }} </td>
-                <td class="align-middle"> 邮政编码 </td>
-                <td class="align-middle"> {{ dataInfo.orgPostCode }} </td>
-              </tr>
-              <tr v-if="dataInfo.isOrganization">
-                <td class="align-middle"> 联系地址 </td>
-                <td class="align-middle" colspan="3"> {{ dataInfo.orgAddress }} </td>
-              </tr>
-              <tr v-if="dataInfo.isOrganization">
-                <td class="align-middle"> 电子邮件 </td>
-                <td class="align-middle"> {{ dataInfo.orgEmail }} </td>
-                <td class="align-middle">传真</td>
-                <td class="align-middle"> {{ dataInfo.orgFax }} </td>
+                <td class="text-center align-middle text-danger" rowspan="4">个<br>人<br>信<br>息</td>
+                <td class="align-middle"> 姓名 </td>
+                <td class="align-middle" colspan="3"> {{ dataInfo.name }} </td>
               </tr>
               <tr>
-                <td class="text-center align-middle text-danger" rowspan="5"> 所<br> 需<br> 信<br> 息<br> 情<br> 况 </td>
-                <td class="align-middle"> 标题 </td>
+                <td class="align-middle" style="width:25%"> 性别 </td>
+                <td class="align-middle" style="width:25%"> {{ dataInfo.gender }} </td>
+                <td class="align-middle" style="width:25%">联系电话</td>
+                <td class="align-middle" style="width:25%"> {{ dataInfo.phone }} </td>
+              </tr>
+              <tr>
+                <td class="align-middle"> 电子邮箱</td>
+                <td class="align-middle"> {{ dataInfo.email }} </td>
+                <td class="align-middle"> 邮政编码 </td>
+                <td class="align-middle"> {{ dataInfo.zip }} </td>
+              </tr>
+              <tr>
+                <td class="align-middle"> 联系地址 </td>
+                <td class="align-middle" colspan="3"> {{ dataInfo.address }} </td>
+              </tr>
+              <tr>
+                <td class="text-center align-middle text-danger" rowspan="2"> 信<br> 件<br> 信<br> 息<br> </td>
+                <td class="align-middle"> 信件标题 </td>
                 <td class="align-middle" colspan="3"> {{ dataInfo.title }} </td>
               </tr>
               <tr>
-                <td class="align-middle"> 所需信息的<br /> 内容描述 </td>
+                <td class="align-middle"> 信件内容 </td>
                 <td class="align-middle" colspan="3"> {{ dataInfo.content }} </td>
-              </tr>
-              <tr>
-                <td class="align-middle"> 所需信息的<br /> 用途 </td>
-                <td class="align-middle" colspan="3"> {{ dataInfo.purpose }} </td>
-              </tr>
-              <tr>
-                <td class="align-middle"> 是否信件减免费用 </td>
-                <td class="align-middle" colspan="2"> 所需信息的指定提供方式（可选） </td>
-                <td class="align-middle"> 获取信息的方式（可选） </td>
-              </tr>
-              <tr>
-                <td> {{ (dataInfo.isApplyFree ? '信件' : '不信件') }} </td>
-                <td colspan="2"> {{ dataInfo.provideType }} </td>
-                <td> {{ dataInfo.obtainType }} </td>
               </tr>
             </tbody>
           </table>

@@ -22,13 +22,13 @@ namespace SS.GovInteract.Controllers
                 var siteId = request.GetQueryInt("siteId");
 
                 var settings = ApplicationUtils.GetSettings(siteId);
-                var dataInfo = new DataInfo();
-                var departmentInfoList = DepartmentManager.GetDepartmentInfoList(siteId);
+                var categories = CategoryManager.GetCategoryInfoList(siteId);
+                var departments = DepartmentManager.GetDepartmentInfoList(siteId);
 
                 return Ok(new
                 {
-                    Value = dataInfo,
-                    DepartmentInfoList = departmentInfoList,
+                    Categories = categories,
+                    Departments = departments,
                     Settings = settings
                 });
             }
