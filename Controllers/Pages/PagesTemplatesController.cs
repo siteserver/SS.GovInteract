@@ -19,7 +19,7 @@ namespace SS.GovInteract.Controllers.Pages
             {
                 var request = Context.AuthenticatedRequest;
                 var siteId = request.GetQueryInt("siteId");
-                if (!request.IsAdminLoggin || !request.AdminPermissions.HasSitePermissions(siteId, ApplicationUtils.PluginId)) return Unauthorized();
+                if (!request.IsAdminLoggin) return Unauthorized();
                 
                 return Ok(new
                 {
@@ -39,7 +39,7 @@ namespace SS.GovInteract.Controllers.Pages
             {
                 var request = Context.AuthenticatedRequest;
                 var siteId = request.GetQueryInt("siteId");
-                if (!request.IsAdminLoggin || !request.AdminPermissions.HasSitePermissions(siteId, ApplicationUtils.PluginId)) return Unauthorized();
+                if (!request.IsAdminLoggin) return Unauthorized();
 
                 var name = request.GetQueryString("name");
                 var templateInfo = TemplateManager.GetTemplateInfo(name);
@@ -63,7 +63,7 @@ namespace SS.GovInteract.Controllers.Pages
             {
                 var request = Context.AuthenticatedRequest;
                 var siteId = request.GetQueryInt("siteId");
-                if (!request.IsAdminLoggin || !request.AdminPermissions.HasSitePermissions(siteId, ApplicationUtils.PluginId)) return Unauthorized();
+                if (!request.IsAdminLoggin) return Unauthorized();
 
                 var name = request.GetPostString("name");
                 var templateHtml = request.GetPostString("templateHtml");
@@ -89,7 +89,7 @@ namespace SS.GovInteract.Controllers.Pages
             {
                 var request = Context.AuthenticatedRequest;
                 var siteId = request.GetQueryInt("siteId");
-                if (!request.IsAdminLoggin || !request.AdminPermissions.HasSitePermissions(siteId, ApplicationUtils.PluginId)) return Unauthorized();
+                if (!request.IsAdminLoggin) return Unauthorized();
 
                 var name = request.GetQueryString("name");
                 TemplateManager.DeleteTemplate(name);

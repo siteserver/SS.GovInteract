@@ -19,7 +19,7 @@ namespace SS.GovInteract.Controllers.Pages
             {
                 var request = Context.AuthenticatedRequest;
                 var siteId = request.GetQueryInt("siteId");
-                if (!request.IsAdminLoggin || !request.AdminPermissions.HasSitePermissions(siteId, ApplicationUtils.PluginId)) return Unauthorized();
+                if (!request.IsAdminLoggin) return Unauthorized();
 
                 var dataId = request.GetQueryInt("dataId");
                 

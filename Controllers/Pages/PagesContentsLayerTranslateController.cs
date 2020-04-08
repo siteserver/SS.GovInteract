@@ -21,7 +21,7 @@ namespace SS.GovInteract.Controllers.Pages
             {
                 var request = Context.AuthenticatedRequest;
                 var siteId = request.GetQueryInt("siteId");
-                if (!request.IsAdminLoggin || !request.AdminPermissions.HasSitePermissions(siteId, ApplicationUtils.PluginId)) return Unauthorized();
+                if (!request.IsAdminLoggin) return Unauthorized();
 
                 var contentIdList = TranslateUtils.StringCollectionToIntList(request.GetQueryString("contentIds"));
 
@@ -55,7 +55,7 @@ namespace SS.GovInteract.Controllers.Pages
             {
                 var request = Context.AuthenticatedRequest;
                 var siteId = request.GetQueryInt("siteId");
-                if (!request.IsAdminLoggin || !request.AdminPermissions.HasSitePermissions(siteId, ApplicationUtils.PluginId)) return Unauthorized();
+                if (!request.IsAdminLoggin) return Unauthorized();
 
                 var contentIdList = TranslateUtils.StringCollectionToIntList(request.GetPostString("contentIds"));
                 var departmentId = request.GetPostInt("departmentId");

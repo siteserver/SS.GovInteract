@@ -20,7 +20,7 @@ namespace SS.GovInteract.Controllers.Pages
             {
                 var request = Context.AuthenticatedRequest;
                 var siteId = request.GetQueryInt("siteId");
-                if (!request.IsAdminLoggin || !request.AdminPermissions.HasSitePermissions(siteId, ApplicationUtils.PluginId)) return Unauthorized();
+                if (!request.IsAdminLoggin) return Unauthorized();
 
                 var name = request.GetQueryString("name");
                 var templateInfoList = TemplateManager.GetTemplateInfoList();
@@ -45,7 +45,7 @@ namespace SS.GovInteract.Controllers.Pages
             {
                 var request = Context.AuthenticatedRequest;
                 var siteId = request.GetQueryInt("siteId");
-                if (!request.IsAdminLoggin || !request.AdminPermissions.HasSitePermissions(siteId, ApplicationUtils.PluginId)) return Unauthorized();
+                if (!request.IsAdminLoggin) return Unauthorized();
 
                 var nameToClone = request.GetPostString("nameToClone");
                 var name = request.GetPostString("name");
@@ -89,7 +89,7 @@ namespace SS.GovInteract.Controllers.Pages
         //    {
         //        var request = Context.AuthenticatedRequest;
         //        var siteId = request.GetQueryInt("siteId");
-        //        if (!request.IsAdminLoggin || !request.AdminPermissions.HasSitePermissions(siteId, ApplicationUtils.PluginId)) return Unauthorized();
+        //        if (!request.IsAdminLoggin) return Unauthorized();
 
         //        var templateId = request.GetPostString("templateId");
         //        var templateInfoList = TemplateManager.GetTemplateInfoList();

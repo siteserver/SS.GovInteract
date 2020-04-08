@@ -24,6 +24,7 @@ var getPageAlert = function (error) {
   };
 };
 
+var $url = '';
 var $urlCaptcha = '/captcha';
 
 var $api = axios.create({
@@ -89,7 +90,11 @@ var methods = {
   load: function () {
     var $this = this;
 
-    $api.get('?siteId=' + this.siteId).then(function (response) {
+    $api.get($url, {
+      params: {
+        siteId: this.siteId
+      }
+    }).then(function (response) {
       var res = response.data;
 
       $this.categories = res.categories;
@@ -111,7 +116,7 @@ var methods = {
     var $this = this;
 
     $this.pageLoad = false;
-    $api.post(_.assign({}, this.dataInfo, {
+    $api.post($url, _.assign({}, this.dataInfo, {
       siteId: this.siteId
     })).then(function (response) {
       var res = response.data;

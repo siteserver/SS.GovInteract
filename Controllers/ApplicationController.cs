@@ -44,7 +44,7 @@ namespace SS.GovInteract.Controllers
             try
             {
                 var request = Context.AuthenticatedRequest;
-                var siteId = request.GetQueryInt("siteId");
+                var siteId = request.GetPostInt("siteId");
 
                 var authCode = request.GetPostString("authCode");
                 var code = CookieUtils.GetCookie(CaptchaController.CookieName);

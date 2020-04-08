@@ -22,7 +22,7 @@ namespace SS.GovInteract.Controllers.Pages
             {
                 var request = Context.AuthenticatedRequest;
                 var siteId = request.GetQueryInt("siteId");
-                if (!request.IsAdminLoggin || !request.AdminPermissions.HasSitePermissions(siteId, ApplicationUtils.PluginId)) return Unauthorized();
+                if (!request.IsAdminLoggin) return Unauthorized();
 
                 var pageType = request.GetQueryString("pageType");
                 var stateList = new List<DataState>();
@@ -169,7 +169,7 @@ namespace SS.GovInteract.Controllers.Pages
         //    {
         //        var request = Context.AuthenticatedRequest;
         //        var siteId = request.GetPostInt("siteId");
-        //        if (!request.IsAdminLoggin || !request.AdminPermissions.HasSitePermissions(siteId, ApplicationUtils.PluginId)) return Unauthorized();
+        //        if (!request.IsAdminLoggin) return Unauthorized();
 
         //        var state = request.GetPostString("state");
         //        var count = DataCountManager.GetCount(siteId, state);
@@ -215,7 +215,7 @@ namespace SS.GovInteract.Controllers.Pages
         //    {
         //        var request = Context.AuthenticatedRequest;
         //        var siteId = request.GetPostInt("siteId");
-        //        if (!request.IsAdminLoggin || !request.AdminPermissions.HasSitePermissions(siteId, ApplicationUtils.PluginId)) return Unauthorized();
+        //        if (!request.IsAdminLoggin) return Unauthorized();
 
         //        var attributeName = request.GetPostString("attributeName");
 

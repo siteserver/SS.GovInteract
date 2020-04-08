@@ -27,48 +27,48 @@ namespace SS.GovInteract
             service
                 .AddSiteMenu(siteId =>
                 {
-                    var request = Context.AuthenticatedRequest;
-                    if (!request.AdminPermissions.IsSiteAdmin(siteId))
-                    {
-                        var userDepartmentIdList = DepartmentManager.GetDepartmentIdList(siteId, request.AdminName);
-                        if (userDepartmentIdList.Count == 0) return null;
+                    //var request = Context.AuthenticatedRequest;
+                    //if (!request.AdminPermissions.IsSiteAdmin(siteId))
+                    //{
+                    //    var userDepartmentIdList = DepartmentManager.GetDepartmentIdList(siteId, request.AdminName);
+                    //    if (userDepartmentIdList.Count == 0) return null;
 
-                        var acceptCount = DataRepository.GetUserCount(siteId, new List<DataState>
-                        {
-                            DataState.New
-                        }, string.Empty, 0, userDepartmentIdList);
-                        var replyCount = DataRepository.GetUserCount(siteId, new List<DataState>
-                        {
-                            DataState.Accepted,
-                            DataState.Redo
-                        }, string.Empty, 0, userDepartmentIdList);
+                    //    var acceptCount = DataRepository.GetUserCount(siteId, new List<DataState>
+                    //    {
+                    //        DataState.New
+                    //    }, string.Empty, 0, userDepartmentIdList);
+                    //    var replyCount = DataRepository.GetUserCount(siteId, new List<DataState>
+                    //    {
+                    //        DataState.Accepted,
+                    //        DataState.Redo
+                    //    }, string.Empty, 0, userDepartmentIdList);
 
-                        return new Menu
-                        {
-                            Text = "互动交流",
-                            IconClass = "fa fa-envelope",
-                            Menus = new List<Menu>
-                            {
-                                new Menu
-                                {
-                                    Text = $"待受理信件 ({acceptCount})",
-                                    Href = $"pages/contents.html?pageType={ApplicationUtils.PageTypeAccept}"
-                                },
-                                new Menu
-                                {
-                                    Text = $"待办理信件 ({replyCount})",
-                                    Href = $"pages/contents.html?pageType={ApplicationUtils.PageTypeReply}"
-                                },
-                                new Menu
-                                {
-                                    Text = "新增信件",
-                                    Href = "pages/add.html"
-                                }
-                            }
-                        };
-                    }
-                    else
-                    {
+                    //    return new Menu
+                    //    {
+                    //        Text = "互动交流",
+                    //        IconClass = "fa fa-envelope",
+                    //        Menus = new List<Menu>
+                    //        {
+                    //            new Menu
+                    //            {
+                    //                Text = $"待受理信件 ({acceptCount})",
+                    //                Href = $"pages/contents.html?pageType={ApplicationUtils.PageTypeAccept}"
+                    //            },
+                    //            new Menu
+                    //            {
+                    //                Text = $"待办理信件 ({replyCount})",
+                    //                Href = $"pages/contents.html?pageType={ApplicationUtils.PageTypeReply}"
+                    //            },
+                    //            new Menu
+                    //            {
+                    //                Text = "新增信件",
+                    //                Href = "pages/add.html"
+                    //            }
+                    //        }
+                    //    };
+                    //}
+                    //else
+                    //{
                         var acceptCount = DataCountManager.GetCount(siteId, new List<DataState>
                         {
                             DataState.New
@@ -92,52 +92,61 @@ namespace SS.GovInteract
                             {
                                 new Menu
                                 {
+                                    Id = ApplicationUtils.PageTypeAccept,
                                     Text = $"待受理信件 ({acceptCount})",
                                     Href = $"pages/contents.html?pageType={ApplicationUtils.PageTypeAccept}"
                                 },
                                 new Menu
                                 {
+                                    Id = ApplicationUtils.PageTypeReply,
                                     Text = $"待办理信件 ({replyCount})",
                                     Href = $"pages/contents.html?pageType={ApplicationUtils.PageTypeReply}"
                                 },
                                 new Menu
                                 {
+                                    Id = ApplicationUtils.PageTypeCheck,
                                     Text = $"待审核信件 ({checkCount})",
                                     Href = $"pages/contents.html?pageType={ApplicationUtils.PageTypeCheck}"
                                 },
                                 new Menu
                                 {
+                                    Id = "all",
                                     Text = $"所有信件 ({totalCount})",
                                     Href = "pages/contents.html"
                                 },
                                 new Menu
                                 {
+                                    Id = "add",
                                     Text = "新增信件",
                                     Href = "pages/add.html"
                                 },
                                 new Menu
                                 {
+                                    Id = "categories",
                                     Text = "分类设置",
                                     Href = "pages/categories.html"
                                 },
                                 new Menu
                                 {
+                                    Id = "departments",
                                     Text = "部门设置",
                                     Href = "pages/departments.html"
                                 },
                                 new Menu
                                 {
+                                    Id = "settings",
                                     Text = "互动交流设置",
                                     Href = "pages/settings.html"
                                 },
                                 new Menu
                                 {
+                                    Id = "templates",
                                     Text = "互动交流模板",
                                     Href = "pages/templates.html"
                                 }
                             }
                         };
-                    }
+                    //}
                 })
                 .AddDatabaseTable(DataRepository.TableName, DataRepository.TableColumns)
                 .AddDatabaseTable(CategoryRepository.TableName, CategoryRepository.TableColumns)
