@@ -13,7 +13,7 @@
     <Description>SiteServer CMS 互动交流插件</Description>
     <PackageLicense>GPL-3.0</PackageLicense>
     <PackageProjectUrl>https://github.com/siteserver/SS.GovInteract</PackageProjectUrl>
-    <PackageIconUrl>https://www.siteserver.cn/docs/ss/application/logo.png</PackageIconUrl>
+    <PackageIconUrl>https://storage.sscms.com/plugins/ss.govinteract/logo.png</PackageIconUrl>
     <Copyright>Copyright © SiteServer CMS</Copyright>
     <PackageTags>SiteServer CMS Application Plugin</PackageTags>
     <RepositoryUrl>https://github.com/siteserver/SS.GovInteract</RepositoryUrl>
